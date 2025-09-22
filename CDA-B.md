@@ -113,7 +113,7 @@
   - During process creation, program and any system libraries it relies on are loaded into virtual memory.
   - When process lter needs to access or change data held in virtual memory, it does so via _virtual memory address_
   - Dedicated MMU translates these into _physical memory addresses_
-  <img width="1135" height="1022" alt="image" src="https://github.com/user-attachments/assets/2d8acd16-092b-400e-8cc4-2e281b37c0dc" />
+  <img width="900" height="700" alt="image" src="https://github.com/user-attachments/assets/2d8acd16-092b-400e-8cc4-2e281b37c0dc" />
 
 - Memory Paging
   - In order to accomplish this, the OS must take over managing memory for a process, which offers the following advantages:
@@ -197,10 +197,10 @@
   - minimum capability required for a kernel to operate is the ability to facilitate the execution of software instructions on the system’s hardware
 
 ### Windows and Linux Architecture
-<img width="1135" height="619" alt="image" src="https://github.com/user-attachments/assets/07c655dc-0252-477a-b18f-909dc3b2ec76" />
+<img width="900" height="425" alt="image" src="https://github.com/user-attachments/assets/07c655dc-0252-477a-b18f-909dc3b2ec76" />
 
 - Windows Architecture
-<img width="1597" height="2047" alt="image" src="https://github.com/user-attachments/assets/e5a449d7-f19a-4089-93c3-019f5216eb11" />
+<img width="700" height="900" alt="image" src="https://github.com/user-attachments/assets/e5a449d7-f19a-4089-93c3-019f5216eb11" />
 
   - User Mode
     - consists of OS-integral subsystems and several environment subsystems designed to support different application environments
