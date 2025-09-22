@@ -139,8 +139,48 @@
   - VFS is abstract layer that lies between client appllications and concrete filesystem.
   - Implemented as a kernel module within OS kernel, and defines common language that client applications and filesystems can use to comm, regardless of specifics of underlying filesystems.
 
+### Types of Filesystems
+- File Allocation Table (FAT)
 
+- New Technology File System (NTFS)
 
+- Resilient File System (ReFS)
 
+### Linux Filesystems
+- Extended Filesystem (ext)
+
+- XFS
+
+- ZFS
+
+- Index Nodes
+
+- Hard Links
+
+- Symbolic Links
+
+### Network Management
+- _Network devices/interfaces_ are specialized hardware peripherals that enable transmission of data btwn 2+ systems.
+- In modern systems, basic net interfaces are build directly into system's hardware.
+- Sockets
+  - Virtual construct that acts as endpoint for comm link on the system.
+  - Many sockets can be open at a given time
+  - Client application that is running on the system can request socket from kernel, and use system calls to read/write data to socket.
+
+- Socket System Calls (syscalls)
+  - _bind_: app requests kernel to bind a previously instantiated socket to a _network port_ or to a local file.
+    - Used for communication within local system only
+    - must be used if socket intends to listen for incoming connections, and does not need to be used otherwise
+  - _listen_: Application puts socket into listening state, meaning client app using socket is actively ready to handle incoming connections.
+    - Application must choose to accept connection or terminate it
+  - _accept_: App accepts incoming connection to listening socket.
+    - does not affect listening socket.
+    - mainly used by listening socket wishing to establish a TCP connection, not for UDP.
+  - _connect_: Uses socket to establish connection with different listening socket, which may be on local system or on external net.
+    - to connect over net to a socket present on external system, socket must reference external system's address, and net port that listening socket is bound ti.
+    - Mainly used by connecting socket wishing to make TCP connection to a listening socket, not for UDP
+  - _recv or recvfrom_: App reads data from soccket; can be used as shortcut by certain apps that already establieshed connection wht another socket
+  - _send or sendto_: App sends data over the socket, which is transmitted to corresponding socket on other end of connection.
+  - _close_: closes socket
 
 
