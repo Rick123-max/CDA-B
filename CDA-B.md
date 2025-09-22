@@ -107,5 +107,40 @@
       - In legacy systems that use init, _runlevels_ are used to define desired state.
       - Standard runlevels are defined between 0-6, each number defines a different state for the system. (level 6 is reboot)
 
+### Memory Management
+- Virtual Memory
+  - memory management technique used in order to more effectively manage and secure key system resource
+  - During process creation, program and any system libraries it relies on are loaded into virtual memory.
+  - When process lter needs to access or change data held in virtual memory, it does so via _virtual memory address_
+  - Dedicated MMU translates these into _physical memory addresses_
+  <img width="1135" height="1022" alt="image" src="https://github.com/user-attachments/assets/2d8acd16-092b-400e-8cc4-2e281b37c0dc" />
+
+- Memory Paging
+  - In order to accomplish this, the OS must take over managing memory for a process, which offers the following advantages:
+    - Memory can be utilized more efficiently across the entire system
+    - System security is increased since applications can usually only access their own virtual memory
+    - Applications do not need to contain extra code to manage memory themselves
+    - Applications can use more memory than the system hardware actually has available
+  - Page Files and Swap Files
+    - Windows stores all inactive memory pages inside a page file named _pagefile.sys_ located in _C:\pagefile.sys_
+    - Linux uses _swap space_ to refer to locations on the disk where inactive memory pages are stored.
+    - Two separate spaces exist
+      - _swap partition_: special location for swapping operations that is reserved directly by the filesystem
+      - Generic Swap files within accessible portions of the filesystem created by system admin to allow for more swap space.
+
+### File Management
+- Filesystem internals
+  <img width="621" height="286" alt="image" src="https://github.com/user-attachments/assets/7c1074de-b119-4015-9a38-377c70ae8c92" />
+  - When the kernel receives a request to access a file, it searches through the filesystem’s directory for the appropriately named file, using the directory to determine the location of that file’s associated record in a record list
+- Metadata in Filesystems
+  - Stored within a file's record.
+  - May include file's physical location on disk, size, any associated permissions, and set of timestamps.
+- Virtual Filesystems
+  - VFS is abstract layer that lies between client appllications and concrete filesystem.
+  - Implemented as a kernel module within OS kernel, and defines common language that client applications and filesystems can use to comm, regardless of specifics of underlying filesystems.
+
+
+
+
 
 
