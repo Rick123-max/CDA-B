@@ -94,6 +94,9 @@
     - Delegates some of these responsibilities by spawning otehr processes known as _daemon processes_, which manage certain componenets across the entire OS.
     - On Windows, Daemons are referred to as _services_
 
+### Windows Process Genealogy
+<img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/b5c39508-d189-4521-b904-2812acef0ef6" />
+
 
 
 
