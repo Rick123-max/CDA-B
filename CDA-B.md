@@ -289,4 +289,10 @@
       - **DOS Stub**: small program or piece of code executed by default when app execution begins. "This cannot be run in DOS mode"
       - **PE File Header**: contains actual start of PE file, which begins telling OS how to load rest of executable code into memory.
 
+## SCRIPTING PRIMER
+- Scrpting Languages Used in this course:
+  - Windows batch files: usable on all modern versions of Windows. can be a bit limited and awkward from a modern scripting perspective. Used for legacy reasons or for simple tasks.
+  - PowerShell: .NET-based, 
+  - Bash
+  - Python
 
