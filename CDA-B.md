@@ -183,4 +183,45 @@
   - _send or sendto_: App sends data over the socket, which is transmitted to corresponding socket on other end of connection.
   - _close_: closes socket
 
+### Additional Kernel Capabilities
+- Peripheral and I/O Device Management
+  - modern computers support keyboards, mice, speakers, etc.
+  - Generally known as I/O Devices, since they ultimately provide input or output streams.
+  - A _Device Driver_ nneds to be installed for each device
+  - A process wishing to comm with a peripheral device must use the system's kernel as an interface between the process and peripheral device.
+- Security Management
+  - Handled by a kernel component known as _security subsystem or security kernel_
+  - Can be a portion of the kernel implements basic security procedures within the system.
+  - Frequently involved in many other operations that kernel performs.
+- Kernel Drivers
+  - minimum capability required for a kernel to operate is the ability to facilitate the execution of software instructions on the system’s hardware
+
+### Windows and Linux Architecture
+<img width="1135" height="619" alt="image" src="https://github.com/user-attachments/assets/07c655dc-0252-477a-b18f-909dc3b2ec76" />
+
+- Windows Architecture
+<img width="1597" height="2047" alt="image" src="https://github.com/user-attachments/assets/e5a449d7-f19a-4089-93c3-019f5216eb11" />
+
+  - User Mode
+    - consists of OS-integral subsystems and several environment subsystems designed to support different application environments
+  - Kernel Mode
+    - Kernel mode has complete access to the system's hardware resources.
+    - It is made up of the Executive, the microkernel, any kernel mode drivers, and the Hardware Abstraction Layer (HAL).
+    - In Windows, core kernel functions such as multiprocessor synchronization and initializing the system during boot time are contained within the microkernel, which only performs this small set of functions.
+    - Additional functionality is implemented into the kernel via the installation and loading of various kernel drivers, several of which come pre-installed with the OS.
+    - HAL is used as an interface between the kernel and the actual system hardware.
+   
+- Linux Architecture
+  <img width="711" height="671" alt="image" src="https://github.com/user-attachments/assets/2568a1d1-9d87-4ba6-b233-c8d78e02033c" />
+
+  - Everything is a file
+    - many system resources are exposed to the system’s applications via file descriptors.
+    - These file descriptors allow other applications to interact with a large variety of different resources
+   
+### Windows Registry
+- Windows OSs make use of a construct called the registry to store system and user configuration information.
+- _registry_ hierarchical database that stores information in key:value pairs, persists through system reboots by being saved to the system’s hard disk, quickly referenced by both user mode and kernel mode processes running on the system.
+- Information contained in the registry can be secured with a standard set of permissions; create, read, update, and delete permissions can be assigned by the owner of a particular registry key in order to limit others' access to the key.
+
+
 
