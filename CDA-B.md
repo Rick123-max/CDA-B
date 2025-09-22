@@ -12,6 +12,7 @@
 - Software or files located in C:\ProgramData\PuppetLabs\
 - Software or files located in C:\Program Files (x86)\SimSpace\
 - ruby.exe on Windows and ruby on Linux
+- Binary paths are **C:\...\.exe**
 
 ### OS ARCHITECTURE
 
@@ -97,6 +98,14 @@
 ### Windows Process Genealogy
 <img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/b5c39508-d189-4521-b904-2812acef0ef6" />
 
+### Core Processes | Linux
+- Daemon Process in Linux
+  - Init and Systemd
+    - In Linux systems built on top of System V archtecture, the _init_ process is the root process that initializes the rest of the OS.
+    - Typically assigned a PID of 1, but it has been deprecated in favor of _systemd_ process on most modern Linux distributions.
+    - Runlevels
+      - In legacy systems that use init, _runlevels_ are used to define desired state.
+      - Standard runlevels are defined between 0-6, each number defines a different state for the system. (level 6 is reboot)
 
 
 
