@@ -87,7 +87,7 @@
   - PID's are unique only for currently executing processes within a single system.
 
 - Process Trees
-  <img width="1135" height="640" alt="image" src="https://github.com/user-attachments/assets/b58bcea1-6830-4319-9042-fbf36d457f1e" />
+  <img width="900" height="500" alt="image" src="https://github.com/user-attachments/assets/b58bcea1-6830-4319-9042-fbf36d457f1e" />
   - Within an OS, processes are never created out of thin air.
   - Daemon Processes
     - Root process is responsible for loading every other process necessary for system to function.
