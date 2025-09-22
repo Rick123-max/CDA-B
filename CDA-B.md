@@ -292,7 +292,7 @@
 ## SCRIPTING PRIMER
 - Scrpting Languages Used in this course:
   - Windows batch files: usable on all modern versions of Windows. can be a bit limited and awkward from a modern scripting perspective. Used for legacy reasons or for simple tasks.
-  - PowerShell: .NET-based, 
-  - Bash
-  - Python
+  - PowerShell: .NET-based, cross-platform scripting solution that has native support for remote execution and is deployed by default on modern versions of Windows, and versions of which are deployable on Unix-like platforms
+  - Bash:  used on Unix-like systems,  can be deployed to Windows systems through Windows Subsystem for Linux (WSL), Cygwin, or other similar tools
+  - Python: cross-platform, and often installed on Unix-like operating systems as well as being deployed on Windows workstations and servers where it is a dependency. 
 
