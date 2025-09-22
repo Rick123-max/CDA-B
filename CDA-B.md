@@ -224,4 +224,47 @@
 - Information contained in the registry can be secured with a standard set of permissions; create, read, update, and delete permissions can be assigned by the owner of a particular registry key in order to limit others' access to the key.
 
 
+### Forensic Principals
+
+- Stages of Digital Forensics
+  - **Identification** of evidence sources
+  - **Preservation** of evidence sources
+  - **Acquisition** of data from evidence sources
+  - **Analysis** and interpretation of the acquired data
+  - **Presentation** of the analysis results
+
+- Chain of Custody
+  - strict set of procedures that document all the actions that have been taken involving a particular evidence source during and after its retrieval from a crime scene
+  - crucial in order to prove that evidence being presented in court has not been altered or tampered with in any way.
+  - Failure to follow chain of custody could entirely invalidate the results of an investigation and subsequent trial, and may lead to the unsuccessful prosecution of an otherwise guilty offender
+  - investigators must use a tool called a write blocker to prevent any modifications to the data contained on an original evidence source such as a hard drive or thumb drive.
+
+- File Carving
+  -  process of reconstructing files by scanning the raw bytes of a disk, and attempting to piece together the files without the metadata information normally tracked by the filesystem.
+  -  requires determining the type of filesystem represented by the data on the disk, then using this knowledge to locate and reconstruct the directory and record list held within the filesystem
+
+### Metadata
+- Most common types are:
+  - Creation date and time
+  - Program or processes used to create the data
+  - Data creator or author
+  - Technical standards used Location on a device where the data was created
+  - File size
+  - Data source Data quality
+  - File modifications or programs used to modify
+
+- For Windows in NTFS, three Metadata pieces are accessible from _Properties_ tab:
+  - **File Created**: The date on which the file was first created on the filesystem.
+  - **File Accessed**: The most recent time the file was accessed. Anti-virus scanners and Windows system processes, which frequently interact with files across the entire system, can also trigger this timestamp to update.
+  - **File Modified**: The most recent time that the file’s contents were modified.
+  - **MFT Last Written**: The most recent time that the file’s record within the MFT was updated. Not included within the standard Windows interface, and necessitates direct inspection of the MFT record, usually via a forensics tool.
+ 
+- Exchangeable Image File Format Data
+  - EXIF data can be extemely useful, and can include the below info:
+    - Camera make and model used to take the picture
+    - Geographical coordinates of where the picture was taken
+    - Editing software used to manipulate the picture
+    - Image dimensions
+
+
 
