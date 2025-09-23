@@ -13,6 +13,7 @@
 - Software or files located in C:\Program Files (x86)\SimSpace\
 - ruby.exe on Windows and ruby on Linux
 - Binary paths are **C:\...\.exe**
+- TESTING PASSWORD: GreenBayPackers!@#321
 
 # MODULE 1
 ## OS ARCHITECTURE
