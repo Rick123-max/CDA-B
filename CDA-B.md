@@ -351,6 +351,42 @@
     - If/Else: performs the else statement if the "if" statement is not met.
 
 
+## NETWORKING REVIEW
+
+### OSI Model Layers and Devices
+
+<img width="576" height="1000" alt="image" src="https://github.com/user-attachments/assets/85f86019-a378-459a-b6a5-86f6757661e4" />
+  
+  - **OSI Model**: describes and standardizes functions and characteristics of communications across various devices, media, and abstractly between applications.
+
+- Implementations use encapsulation to wrap higher-level layers in order to transmit over physical medium.
+- Concepts of OSI model are helpful for breaking down how comms should happen, but don't always translate into implementation solutions that are as clearly defined.
+- `Data Link Layer`: handles frame addressing and the transmission/receiving of bits across the medium.
+
+  <img width="587" height="273" alt="image" src="https://github.com/user-attachments/assets/2b4c0548-a8c5-4b81-b455-528b57d0cf24" />
+
+- OSI Layer 2 Devices
+  - Devices that operate on layer 2 stack, perform switching ops on frames.
+  - Each frame contains addressing associated with a hardware NIC (DMAC and SMAC), an indicator of the next protocol, and data being sent.
+  - Most standards include a preamble and checksum (FCS) to detect errors that may have been introduced during transmission of the frame.
+  - Most common devices at this layer are **Switches**, and **Bridges**
+  - Both of these devices include a MAC address table, known as a Content Addressable Memory (CAM) table, that tracks which MAC addresses are associated with each port on the switch
+  - Layer 2 devices rely on broadcasts and the SMAC from transmitted frames to build the MAC address table.
+  - **Bridges** operate in the same manner as **switches**, but are used to connect **two or more different transmission medium**, linking them together into an aggregate network.
+  - A **WAP** that has a **hard-wired connection** as well as **wireless** is usually operating as a bridge as well — linking the Radio Frequency (RF) medium with the electrical or optical medium other devices may operate on.
+ 
+### MAC ADDRESS TABLE EXAMPLE
+<img width="363" height="268" alt="image" src="https://github.com/user-attachments/assets/b5b5c6b6-6d29-48fd-8a3f-e2f252400bf4" />
+
+  - When a frame reaches a switch, if the DMAC does not match a known MAC address in the CAM table, the switch forwards a copy to all ports/paths to attempt to reach the addressed device.
+  - Layer 2 devices separate _collision domains_. **Collision domains** can be compared to communications with a two-way radio where only one person can talk at a time.
+  - If more than one person — or device on the physical medium — tries to talk at the same time, the communications collide and is lost for all parties.
+  - A DMAC of FFFF:FFFF:FFFF (Layer 2 BROADCAST ADDRESS) is forwarded to all ports/paths by all layer 2 devices, except the port it was received on. `_Do not confuse this with Layer 3 Broadcast address._`
+
+- Spanning Tree
+  - 
+
+
 
 
 
