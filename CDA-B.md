@@ -14,6 +14,7 @@
 - ruby.exe on Windows and ruby on Linux
 - Binary paths are **C:\...\.exe**
 
+# MODULE 1
 ## OS ARCHITECTURE
 
 <img width="283" height="250" alt="image" src="https://github.com/user-attachments/assets/9e5b1702-5d41-4fa9-8d48-eff0fac7a49a" />
@@ -478,6 +479,157 @@
 - Each VLAN has its own broadcast domain and communication between two VLANs require a router that is connected to both networks.
 - Specific ports on a switch can be designated to a specific VLAN, known as **VLAN tagging**.
 - VLANs are described by multiple standards, primarily based on IEEE standard 802.1Q.
+
+# MODULE 2
+
+## Operations Process
+### Policies, Procedures, and Regulations
+  - Title 10: outlines the role of the armed forces and military operations. It provides the legal basis for the roles, missions, and organization of each of the services as well as the DoD
+  - Title 50: outlines the role of war and national defense.
+    - Title 50 governs many different activities in support of national defense, however in regard to CPT operations it provides guidance as to the manner in which intelligence gathering efforts may be carried out
+  - Title 32: outline the role of reserve force military ops.
+<img width="1590" height="366" alt="image" src="https://github.com/user-attachments/assets/b1046e91-df58-4774-99a0-58cd2ad499e6" />
+
+### Operations Process
+
+<img width="1564" height="982" alt="image" src="https://github.com/user-attachments/assets/f59208c4-aaa9-4246-9f55-5430ee438fe4" />
+
+- Step 1: Objectives, Effects, and Guidance
+  - Genereates high-level obj. that the CPT attempts to achieve in course of thier mission.
+  - CWP States:
+    - The first step of the OP is Objectives, Effects, and Guidance. When conditions or requirements trigger a CPT mission, the operational planning section determines the appropriate CPT functions and capabilities before developing preliminary objectives, intended effects, and commander’s guidance. The operational planning section is also responsible for assessing existing command relationships and making recommendations for potential additions or changes to facilitate and enable the CPT mission.
+  - These details are communicated in a Planning Order (**PLANORD**) followed closely by a Tasking Order (**TASKORD**). That **TASKORD** should clearly communicate intent and requirements to ensure the operational level planning element, CPT, and supported command have necessary information to drive accurate and effective CPT mission planning.
+
+<img width="1564" height="586" alt="image" src="https://github.com/user-attachments/assets/1d2fa077-3e87-4a8e-9e59-015b39537366" />
+
+  - Three triggers for CPT operations:
+    -  Threat Intelligence: A Threat Intelligence report or warning may trigger CPT hunt, clear, enable hardening, and assessment functions.
+    -  Campaign Plan: CPT employment, in support of Combatant Command (CCMD) campaign plans, increases critical asset protection prior to operational need.
+    -  Detect (MCA): Whether discovered by local network protection assets, network owners, or indicated by threat intelligence reporting, CPT hunting and clearing entails conducting recon/counter-recon on supported commanders’ networks or systems to gain and maintain contact with an adversary, or further develop a situation.
+   
+-  Step 2: Terrain ID and Prioritization:
+  - Identifies key network terrain and determines which areas should be prioritized.
+  - CWP States:
+    - Terrain Identification and Prioritization defines mission scope as it pertains to initial objectives, intended effects, and commander guidance. Analysis of the supported organization’s mission and resources during Mission Analysis (MA) will result in validation and assessment of Mission Relevant Terrain in Cyberspace (MRT-C), and assessment of the local network or system security. MRT-C assessments are based on, and conducted in conjunction with, the mission owner’s detailed understanding of their network terrain. Although not a standalone CPT function, a prerequisite to successful CPT missions is the ability to validate or verify mission owners’ identification, enumeration, and characterization of the protected networks, systems, or assets to ensure an accurate common operating picture and identify specific terrain in cyberspace.
+
+<img width="1564" height="750" alt="image" src="https://github.com/user-attachments/assets/65f38c36-3053-4c95-91c8-ae3db93a0989" />
+
+  - Actions taken during this step include CPT receipt and analysis of the supported organization’s network diagrams, terrain information, and configuration documents as per the TASKORD. If these documents do not exist, gather basic network maps and terrain information in conjunction with the mission partner during the following activities:
+
+- Mission Analysis
+  - CPT plays important role in MA process.
+  - During MA, CPt conducts technical survery, site survey, terrain mapping and analysis, and adversary analysis.
+    - Technical Survey
+      - purpose of the survey is to identify MRT-C.
+      - This identification process assists leaders in understanding how the supported commander’s organization relies on cyberspace.
+      - The outputs of MA determine which areas of the network are mission essential.
+      - MA also aids in understanding which parts of the supported commander’s network, if disrupted, seized, or lost, risks operational culmination or mission failure (CWP 3-33.4).
+    - Site Survey
+      - The CPT conducts a site survey with a focus on understanding the supported organization’s mission statement, mission essential functions and priorities, and meeting with key leadership (CWP 3-33.4). The site survey includes a leader’s reconnaissance by the CPT, mission element, or crew lead, or other designated CPT leader, to secure necessary information, assess requirements and challenges, and broker relationships prior to the operation (CWP 3-33.4).
+    - Terrain Mapping and Analysis
+      - The mission partner and the CPT work together to conduct terrain mapping and analysis.
+      - Appendix B of CWP 3-33.4 states, A detailed logical network map is the CPT’s foundational visualization tool, must scale appropriately to the situation, and will guide CPT internal planning and mission conduct (CWP 3-33.4).
+      
+      <img width="1224" height="1508" alt="image" src="https://github.com/user-attachments/assets/692e7929-9db8-42ec-b695-cbe7036b35e0" />
+
+    - Adersary Analysis
+      - Adversarial analysis is used to determine adversarial intent relative to specific terrain by evaluating the adversary’s capabilities and limitations, current situation, patterns of operation, and observed Tactics, Techniques, and Procedures (TTP) (CWP 3-33.4).
+      - The construction of a model portraying how the adversary normally executes operations, or how the adversary previously reacted to specific situations in the past helps guide the development of indicators and analytics based on anticipated or expected adversary courses of action (CWP 3-33.4).
+
+        <img width="1530" height="808" alt="image" src="https://github.com/user-attachments/assets/09392251-a9c6-4989-978e-9421d1258f26" />
+
+- Step 3: Capability Analysis and Force Allocation
+  - Outlines the capability analysis and force allocation of activities internal and external to the CPT.
+  - CWP States:
+    - The CPT analyzes the PLANORD or TASKORD, MA results, MRT- C, and the supported commander’s existing risk management, mission defense, and incident response plan(s), if available. Using the PLANORD or TASKORD, the CPT develops a tactical mission statement and end state, defines initial tactical objectives, and determines initial capabilities for the mission. The CPT coordinates with the Operational Planning section and supports the commander’s staff to coordinate mission rules of engagement (ROE) informed by the initial capabilities analysis. ROE in the context of CPT operations refers to the constraints and limitations under which the CPT hunts and/or clears when MCA is encountered as agreed on by the supported network owner and the supporting commander. For example, the CPT needs to know if they are allowed to employ agent-based solutions, deploy compiled code to hosts, or interrupt service(s) during mission conduct. CPT leadership also conducts a troops-to-task assessment to determine personnel requirements based on mission scope and scale.
+
+<img width="1490" height="1140" alt="image" src="https://github.com/user-attachments/assets/9ff068a8-5961-4b32-9593-c0bfe1e8c492" />
+
+  - Force Availability, Selection, Preparation
+    - Once CPT MA is completed, CPT forces are examined to determine mission accopmlishemnt capability.
+    - The scope of the proposed mission and other on-going CPT requirements factor into mission element and crew selection.
+      - Specifically, CPT leadership examines the team members’ experience, proficiency, and training levels, as well as administrative readiness status against the number of personnel required to complete the mission as determined during CPT MA.
+    - The scope of the terrain and operational-level mission completion date drive the number of personnel required. Once selected, personnel prepare for mission execution.
+    - The CPT also analyzes available equipment based on locally protected network or system configurations to determine necessary hardware and applications.
+    - This step also includes assessing the potential for on-site or remote operations, and selecting equipment and hardware to enable mission conduct across multiple domains or classification levels.
+
+- Step 4: Orders Production and Dissemination
+  - defines the order production process and provides the manner in which orders are disseminated.
+  - CWP States:
+    - During the Orders Production and Dissemination, the operational-level orders production team receives the final outputs from the capability analysis and force allocation. Outputs are developed into a formal operations order or TASKORD (or service specific mission type order). The Operational Control (OPCON) headquarters’ Operational Planning section maintains the responsibility to develop and publish orders (including coordinating or special instructions, or similar guidance) to direct and guide CPT operations. Once produced, the final order and special instructions are published and disseminated to the CPT for action; to the supported commander if a formal command relationship exists; or as a courtesy copy to the supported commander if a formal command relationship does not exist.
+  - Once the order is pubhishedl, OP section retains responsibility for coordinating logistics, systems access, CPT workspace, power for CPT equipment, and administrative-level credentials to MRT-C with the supported commander
+  - Due to the lengthy process associated with coordinating system access and logistics, this action is initiated in this stage of the CPT operations process to mitigate, prevent, or minimize delays to CPT mission execution.
+  - Organizations to whom CPTs are OPCON with no operational or tasking control authority over the supported commander or organization must communicate with the relevant authority to coordinate, synchronize, and deconflict required support or actions required by the supported organization to enable CPT mission execution.
+  - Coordination and deconfliction may be required with one or more operational-level planning elements.
+
+- Step 5: Tactical Planning and Mission Execution
+<img width="1496" height="1004" alt="image" src="https://github.com/user-attachments/assets/fc054938-1fc3-48c8-8733-f853f6c1385f" />
+
+  - outlines the contents of a tactical mission plan and directs members through the mission execution phase
+  - CWP States:
+    - Tactical Planning and Mission Execution is largely the responsibility of and conducted by the CPT. Depending on operational-level requirements and internal CPT process, the CPT may generate a Tactical Mission Plan document. This document takes the form of an informational briefing or report for CPT operators or the mission partner. This tactical plan may be shared with the Operational Planning section.
+  - CPT tactical mission plan normally:
+    - Articulates tactical objectives and tasks
+    - Pairs capabilities to tactical tasks
+    - Finalizes sensor placement schemes
+    - Establishes a data collection and sensor management plan
+    - Establishes (tactical) mission phases
+    - Develops contingencies
+    - Develop tactical assessments
+    - Establishes contracts
+    - Establishes the communications plan.
+  - Coordination with the mission partner is common during planning and leading up to execution depending on the mission tasking and ROEs
+  - During this step, the supported commander and local network protection personnel provide the CPT access to their terrain in cyberspace
+  - The OP section must verify CPT access to the supported organization’s protected network(s) or system(s) directed (or required) in the PLANORD or TASKORD published in the Objectives, Effects, and Guidance step, and the order published in the Orders Production and Dissemination step.
+  - Following the completion of tactical planning, the CPT executes the mission plan.
+  - CPTs may conduct daily briefs or huddles prior to operational commencement, and may conclude daily operations with a debrief.
+  - Duration of the mission tasking, new Fragmentary Orders (FRAGORD) from the OP section, entering a new phase or contingency operation, or new intelligence may drive the CPT to conduct further mission planning during mission execution.
+
+- Mission Execution Outputs
+  - CPT may generate routine Situation Reports (SITREP) during mission execution.
+  - additional reports may be required or generated by the CPT during the mission or at mission conclusion.
+  - Daily, weekly, per-phase, or other reports may be generated when requested or as required.
+  - Upon completion of a mission phase, or at mission conclusion, the CPT conducts assessment of tactical objectives and tasks.
+  - Tactical Measures of Effectiveness (MOE) and Measures of Performance (MOP), as well as collected data requested by the operational-level collection plan, are submitted to the OP section in preparation for the next phase, or to enable operational assessments by the OP section.
+  - If tasked, the CPT develops a Risk Mitigation Plan (RMP) following mission execution and submits it to the OP section.
+    - The RMP is also furnished to the supported commander at mission conclusion.
+
+- Step 6: Assessment
+<img width="1134" height="1040" alt="image" src="https://github.com/user-attachments/assets/50a5b62a-1623-4f7c-b75b-4309eb9f1705" />
+
+  - OP section assessment team analyzes MOPs to determine whether operational tasks were satisfied to create desired effects, and analyzes MOEs to determine whether creation of desired effects achieved operational objectives
+  - OP section assessment team reviews data and information reported by the CPT in accordance with the operational assessment plan
+  - Additional inputs from the CPT, the supported organization, and potentially the intelligence community may be used to facilitate accurate operational assessments.
+  - As a result of operational assessments, the OP section may make recommendations for future actions.
+  - These actions may include, but are not limited to
+    - additional hardening of the supported commander’s networks and systems
+    - recapitalization or redesigning part or all of MRT-C
+    - deployment of the CPT to other portions of a supported commander’s network, system, or asset not covered in the current mission
+    - CPT redeployment based on other priorities, contingencies, or crises.
+  - When permissible, and where feasible, products developed during all steps should be added to the Joint Lessons Learned System (JLLS) to enable future assessments and planning.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
