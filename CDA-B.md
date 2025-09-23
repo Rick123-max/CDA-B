@@ -375,7 +375,7 @@
   - **Bridges** operate in the same manner as **switches**, but are used to connect **two or more different transmission medium**, linking them together into an aggregate network.
   - A **WAP** that has a **hard-wired connection** as well as **wireless** is usually operating as a bridge as well — linking the Radio Frequency (RF) medium with the electrical or optical medium other devices may operate on.
  
-### MAC ADDRESS TABLE EXAMPLE
+#### MAC ADDRESS TABLE EXAMPLE
 <img width="363" height="268" alt="image" src="https://github.com/user-attachments/assets/b5b5c6b6-6d29-48fd-8a3f-e2f252400bf4" />
 
   - When a frame reaches a switch, if the DMAC does not match a known MAC address in the CAM table, the switch forwards a copy to all ports/paths to attempt to reach the addressed device.
@@ -384,7 +384,46 @@
   - A DMAC of FFFF:FFFF:FFFF (Layer 2 BROADCAST ADDRESS) is forwarded to all ports/paths by all layer 2 devices, except the port it was received on. `_Do not confuse this with Layer 3 Broadcast address._`
 
 - Spanning Tree
-  - 
+  - Multiple layer 2 devices may be connected together in such a manner that loops could be created.
+  - To prevent an overwhelming amount of transmitted frames — also known as a **broadcast storm** — most layer 2 devices use a protocol like **STP** to identify themselves to the other devices they may be connected to.
+  - Layer 2 protocols do not have a TTL value to indicate when a frame should no longer be forwarded
+  - Through the use of STP, certain ports that are redundant or cause loops may be put into a **blocking state** to prevent loops and broadcast storms.
+  - This blocking port prevents the switch from forwarding out broadcasts on that port.
+  - STP has an election process where one device is designated as the **Root Bridge**. The lowest cost — or shortest path — to the Root Bridge determines if a port is designated as **forwarding** or **blocking**. There are additional states like **Listening** and **Learning** to allow for faster topology changes and to update MAC address tables. The lowest cost path from a switch’s port to the **Root Bridge** is designated to be a **Root Port**.
+  - A **designated port** is a port on a switch with the lowest cost on a specific LAN segment to the root bridge.
+  - Each vendor has their own implementation of the standard, which operates slightly differently, but the end result is to create a logical layer 2 topology that prevents switch loops and duplicate frames.
+  - STP introduces a large amount of extra traffic on network segments as it has a very frequent update interval to check/verify if any loops still exist so it can make the appropriate changes to both allow traffic and prevent loops.
+ 
+### Layer 3 Devices
+- Devices that operate on layer 3 operate on packets.
+  <img width="706" height="631" alt="image" src="https://github.com/user-attachments/assets/1810b5cd-eb4c-4eeb-a54b-59fec4e061c2" />
+
+- IP Network Components
+  - IP Networks have several components and terms:
+    - **Network Identifier** (ID) (also sometimes known as subnet ID): # of bits of an IP address that designates the network on which a host resides — also the base IP address in a network
+    - **Host ID**: # of bits of an IP address that designates the host within its network
+    - **Subnet mask**: Mask that specifies which bits are network (binary one) and which bits are host (binary zero)
+    - **Broadcast address**: Last IP address within a network that is reserved to address all hosts in the same network
+    - **Gateway** (also known as next-hop): IP address assigned to a layer 3 device — router — that connects multiple networks together and can route packets between them
+    - **Default gateway**: Layer 3 device used for routing when there is not a more specific gateway specified in the routing table
+  - Configured gateway is not required for a host to comm won local net, but is required to comm with other networks.
+
+  - Public and Private IP Addresses
+    - **IANA** is responsible for defining and apportioning IP addresses
+    - IANA apportioned large blocks of IP addresses to Regional Internet Registries (RIR) who then assign IP address ranges to large organizations.
+    - Typically these are registered to very large organizations, governments, and ISP. The owners of the IP address ranges use them as needed for their networks.
+    - Due to the shortage of public IPv4 addresses, IANA reserved several network ranges and designated them for private use, and use NAT to communicate with public addresses.
+    - This allows a network to have virtually unlimited private hosts and translate them to a much smaller range of public IP addresses for use on the internet.
+
+<img width="963" height="1034" alt="image" src="https://github.com/user-attachments/assets/d6595ddc-ee04-46d8-85b0-013fd37a3319" />
+
+
+
+     
+
+
+
+
 
 
 
