@@ -291,8 +291,27 @@
 
 ## SCRIPTING PRIMER
 - Scrpting Languages Used in this course:
-  - Windows batch files: usable on all modern versions of Windows. can be a bit limited and awkward from a modern scripting perspective. Used for legacy reasons or for simple tasks.
-  - PowerShell: .NET-based, cross-platform scripting solution that has native support for remote execution and is deployed by default on modern versions of Windows, and versions of which are deployable on Unix-like platforms
-  - Bash:  used on Unix-like systems,  can be deployed to Windows systems through Windows Subsystem for Linux (WSL), Cygwin, or other similar tools
-  - Python: cross-platform, and often installed on Unix-like operating systems as well as being deployed on Windows workstations and servers where it is a dependency. 
+  - **Windows batch files**: usable on all modern versions of Windows. can be a bit limited and awkward from a modern scripting perspective. Used for legacy reasons or for simple tasks.
+  - **PowerShell**: .NET-based, cross-platform scripting solution that has native support for remote execution and is deployed by default on modern versions of Windows, and versions of which are deployable on Unix-like platforms
+  - **Bash**:  used on Unix-like systems,  can be deployed to Windows systems through Windows Subsystem for Linux (WSL), Cygwin, or other similar tools
+  - **Python**: cross-platform, and often installed on Unix-like operating systems as well as being deployed on Windows workstations and servers where it is a dependency.
+
+- Script Editing
+  - Below are different edition features to make scripting easier:
+    - **Syntax Highlighting**: Changes the color of text to indicate the category of item that is represented by that text.
+    - **Autocompletion**: Allows the editor to provide probable completions to the text currently being entered (based upon the syntax of the scripting language in use), which can speed up development.
+    - **Debugging**: Allows the pausing of execution of a script or program to view the current state of the environment or manually direct program flow.
+    - **Script Execution via Hotkey**: Executes the script being edited via selecting a button or hotkey, allowing for more rapid execution and development.
+
+   - Below are different editors that can be used along with their features:
+    - **Notepad**: A simple text editor included in Windows by default; only supports editing.
+    - **Gedit**: default editor for Gnome; included by default on some Linux distributions. Supports editing and syntax highlighting for any included languages.
+    - **Nano/Pico**: A simple, easy to use command line text editor, commonly available or able to be installed on Unix-like machines. Only supports basic editing, however it may support some syntax highlighting.
+    - **PowerShell ISE**: Integrated into some versions of PowerShell; supports all these features and many more, such as block code execution and help files for PowerShell features.
+    - **Sublime Text**: supports syntax highlighting for some scripting languages, and limited autocompletion.
+    - **Notepad++**: open-source text editor with many features similar to Sublime Text. Supports highlighting for some languages, and supports additional languages via plugins or editing the configuration.
+    - **Visual Studio Code**: This editor behaves as a full-blown Integrated Development Environment (IDE) for many languages. It supports many features to assist development, such as syntax highlighting, autocompletion, debugger support, and many hotkeys and configurations to assist development.
+    - **Vi/Vim**: While this command line text editor has rich configuration support, if used during this course, it is generally used as a basic text editor. 
+
+
 
