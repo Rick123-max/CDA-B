@@ -43,14 +43,14 @@
     - device driver running higher-priv ring than application that called it is responsible for safely implementing instructions that allow system to communicate with peripheral device.
     - drivers may need to execute their own calls, some of which may be system calls to move to higher-priv rings and fully perfomr intended function.
 
-## THE KERNEL
+### THE KERNEL
 - Most modern OSs provide the following capabilities within their kernels:
   - Process managementMemory management
   - File management
   - Peripheral and Input/Output (I/O) device management
   - Security management
 
-## PROCESS MANAGEMENT
+### PROCESS MANAGEMENT
 - Programs, Executables, processes and Threads
   - _Program_: set of human-readable instructions intended rfor eventual execution on a computer. Referred to as source code
   - _Executable_: known as an _image_ type of file that contains machine instructions that CPU can execute.
@@ -71,7 +71,7 @@
       - If process has multiple threads, each thread is given own stack.
   <img width="500" height="475" alt="image" src="https://github.com/user-attachments/assets/c5f02a8b-aed0-4917-906c-8d5ee9c7fb58" />
 
-## Lifecycle of a Process
+### Lifecycle of a Process
 - 5 main states that a process can be in:
   - _Created/New_: Waiting to be loaded into main memory (RAM). OS has not yet allocated resources to the process or beginning to allocate resources
   - _Ready/Waiting_: Fully loaded and is waiting to be scheduled for execution.
@@ -95,10 +95,10 @@
     - Delegates some of these responsibilities by spawning otehr processes known as _daemon processes_, which manage certain componenets across the entire OS.
     - On Windows, Daemons are referred to as _services_
 
-## Windows Process Genealogy
+### Windows Process Genealogy
 <img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/b5c39508-d189-4521-b904-2812acef0ef6" />
 
-## Core Processes | Linux
+### Core Processes | Linux
 - Daemon Process in Linux
   - Init and Systemd
     - In Linux systems built on top of System V archtecture, the _init_ process is the root process that initializes the rest of the OS.
@@ -107,7 +107,7 @@
       - In legacy systems that use init, _runlevels_ are used to define desired state.
       - Standard runlevels are defined between 0-6, each number defines a different state for the system. (level 6 is reboot)
 
-## Memory Management
+### Memory Management
 - Virtual Memory
   - memory management technique used in order to more effectively manage and secure key system resource
   - During process creation, program and any system libraries it relies on are loaded into virtual memory.
@@ -128,7 +128,7 @@
       - _swap partition_: special location for swapping operations that is reserved directly by the filesystem
       - Generic Swap files within accessible portions of the filesystem created by system admin to allow for more swap space.
 
-## File Management
+### File Management
 - Filesystem internals
   <img width="621" height="286" alt="image" src="https://github.com/user-attachments/assets/7c1074de-b119-4015-9a38-377c70ae8c92" />
   - When the kernel receives a request to access a file, it searches through the filesystem’s directory for the appropriately named file, using the directory to determine the location of that file’s associated record in a record list
@@ -139,14 +139,14 @@
   - VFS is abstract layer that lies between client appllications and concrete filesystem.
   - Implemented as a kernel module within OS kernel, and defines common language that client applications and filesystems can use to comm, regardless of specifics of underlying filesystems.
 
-## Types of Filesystems
+### Types of Filesystems
 - File Allocation Table (FAT)
 
 - New Technology File System (NTFS)
 
 - Resilient File System (ReFS)
 
-## Linux Filesystems
+### Linux Filesystems
 - Extended Filesystem (ext)
 
 - XFS
@@ -159,7 +159,7 @@
 
 - Symbolic Links
 
-## Network Management
+### Network Management
 - _Network devices/interfaces_ are specialized hardware peripherals that enable transmission of data btwn 2+ systems.
 - In modern systems, basic net interfaces are build directly into system's hardware.
 - Sockets
@@ -183,7 +183,7 @@
   - _send or sendto_: App sends data over the socket, which is transmitted to corresponding socket on other end of connection.
   - _close_: closes socket
 
-## Additional Kernel Capabilities
+### Additional Kernel Capabilities
 - Peripheral and I/O Device Management
   - modern computers support keyboards, mice, speakers, etc.
   - Generally known as I/O Devices, since they ultimately provide input or output streams.
@@ -196,7 +196,7 @@
 - Kernel Drivers
   - minimum capability required for a kernel to operate is the ability to facilitate the execution of software instructions on the system’s hardware
 
-## Windows and Linux Architecture
+### Windows and Linux Architecture
 <img width="900" height="425" alt="image" src="https://github.com/user-attachments/assets/07c655dc-0252-477a-b18f-909dc3b2ec76" />
 
 - Windows Architecture
@@ -218,13 +218,13 @@
     - many system resources are exposed to the system’s applications via file descriptors.
     - These file descriptors allow other applications to interact with a large variety of different resources
    
-## Windows Registry
+### Windows Registry
 - Windows OSs make use of a construct called the registry to store system and user configuration information.
 - _registry_ hierarchical database that stores information in key:value pairs, persists through system reboots by being saved to the system’s hard disk, quickly referenced by both user mode and kernel mode processes running on the system.
 - Information contained in the registry can be secured with a standard set of permissions; create, read, update, and delete permissions can be assigned by the owner of a particular registry key in order to limit others' access to the key.
 
 
-## Forensic Principals
+### Forensic Principals
 
 - Stages of Digital Forensics
   - **Identification** of evidence sources
@@ -243,7 +243,7 @@
   -  process of reconstructing files by scanning the raw bytes of a disk, and attempting to piece together the files without the metadata information normally tracked by the filesystem.
   -  requires determining the type of filesystem represented by the data on the disk, then using this knowledge to locate and reconstruct the directory and record list held within the filesystem
 
-## Metadata
+### Metadata
 - Most common types are:
   - Creation date and time
   - Program or processes used to create the data
@@ -273,7 +273,7 @@
     - **Change**: The most recent time the file’s record was changed within the filesystem
     - **Birth**: The original time the file was created
 
-## File Headers
+### File Headers
 - Chosen Location, found at beginning of a file, used to store metadata specific to a given file format..
 - Portable Executable Format
   - common file format across many types of executable files on Windows systems.
