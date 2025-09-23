@@ -311,7 +311,50 @@
     - **Sublime Text**: supports syntax highlighting for some scripting languages, and limited autocompletion.
     - **Notepad++**: open-source text editor with many features similar to Sublime Text. Supports highlighting for some languages, and supports additional languages via plugins or editing the configuration.
     - **Visual Studio Code**: This editor behaves as a full-blown Integrated Development Environment (IDE) for many languages. It supports many features to assist development, such as syntax highlighting, autocompletion, debugger support, and many hotkeys and configurations to assist development.
-    - **Vi/Vim**: While this command line text editor has rich configuration support, if used during this course, it is generally used as a basic text editor. 
+    - **Vi/Vim**: While this command line text editor has rich configuration support, if used during this course, it is generally used as a basic text editor.
+ 
+- Execution History
+  - Bash's history file is located in `<userhome>/.bash_history`
+  - PowerShell — since 5.0 — has a default location at `%APPDATA%\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt`
+  - PowerShell default location can be changed using `Set-PSReadLineOption` with `-HistorySavepath` option, and location can be displayed using `Get-PSReadLineOption`
+
+### SCript Creation
+- When creating or prototyping a script, there are methods to determin best path forward:
+  - State the problem clearly. This step is vital to ensure that the correct solution is sought out.
+  - Determine a big picture solution to the problem.
+  - Break the solution down into individual steps. If unable to do so, reconsider the solution or research as necessary.
+  - Determine how to perform each step in the target language, adjusting flow or structure as required based upon feedback here. For steps with many or complex parts, this may require following this process starting back at the beginning for that particular step.
+  - Test and deploy the script.
+  - Clean up and/or revise as necessary.
+- When creating scripts, _pseudocode_ is importatnt to understand what you are doing. This code is a plain text description of each step.
+
+- Common Language Features
+  - Data Types:
+    - String: This data type consists of individual characters, often laid out sequentially in memory
+    - Integer: Whole numbers only
+    - Array: Also known as lists in a scripting context,
+    - Float: Numbers with decimal points
+    - Boolean: True or False
+  - Variables:
+    - Allows storage of a value, and then overwrites value if needed.
+  - Input/Output
+    - Console: The console can often be read from or written to.
+    - File: Scripting languages can often read from or write to files.
+    - Registry: Scripting languages on Windows may be able to read or write to the registry.
+    - Databases: Some scripting languages support reading or writing to or from databases, or external binaries may be usable to perform the same operations.
+    - Command Line Arguments: Many scripting languages allow command line arguments to be read, and command line arguments can be supplied to other scripts or applications.
+    - Network: Scripting languages can allow a script to connect to other machines via networking to send or receive data. This can take the form of Hypertext Transfer Protocol (HTTP) requests, Transmission Control Protocol (TCP) connections, or other lower-level connections. This is useful for downloading software to deploy. Threat actors may also use this functionality to establish remote shells by connecting to a remote machine that issues commands.
+  - Loops/Iterations
+    - For loop: iterates a specific number of times
+    - While/Do Loop: iterates while a specified condition is met. Can be written as do..until
+  - Branching Logic
+    - If/Else: performs the else statement if the "if" statement is not met.
+
+
+
+
+
+
 
 
 
