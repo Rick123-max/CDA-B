@@ -415,7 +415,24 @@
     - Due to the shortage of public IPv4 addresses, IANA reserved several network ranges and designated them for private use, and use NAT to communicate with public addresses.
     - This allows a network to have virtually unlimited private hosts and translate them to a much smaller range of public IP addresses for use on the internet.
 
-<img width="963" height="1034" alt="image" src="https://github.com/user-attachments/assets/d6595ddc-ee04-46d8-85b0-013fd37a3319" />
+<img width="963" height="1034" alt="image" src="https://github.com/user-attachments/assets/d6595ddc-ee04-46d8-85b0-013fd37a3319" /> 
+
+### DHCP
+- IP addresses can be assigned statically or requested dynamically.
+- DHCP (UDP 67 for servers and 68 for clients)
+- DHCP ops fall into four stages: (DORA)
+  - DHCP server Discovery
+    - When client needs IP address and is configured to use DHCP, it broadcasts discovery request using destination IP `255.255.255.255` and DMAC `FFFF.FFFF.FFFF.FFFF`
+  - IP address lease Offer
+    - When the server receives a discovery request, it reserves an IP address out of its pool of addresses and makes a lease offer to the client.
+    - The offer is sent unicast, directly to the client’s MAC address and includes the offered IP address as the destination IP address.
+    - The DHCP message includes the client's MAC address, the IP address the server is offering, the subnet mask, the lease duration, and the IP address of the DHCP server.
+  - IP address lease Request
+    - Once the client has received the offer from the DHCP server, the client again sends a broadcast packet to actually request the IP address offered.
+    - The client request also includes any options — or additional configuration settings — the server may be able to provide, including default gateway, DNS servers, and Network Time Protocol (NTP) servers.
+  - IP address lease Acknowledgement
+    - DHCP server sends an acknowledgment directly to the client with the full details of the lease
+
 
 
 
