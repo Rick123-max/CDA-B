@@ -434,6 +434,59 @@
     - DHCP server sends an acknowledgment directly to the client with the full details of the lease
 
 
+### Subnet Review
+
+- IPV4
+  - Classless inter-Domain Routing (CIDR)
+    <img width="962" height="522" alt="image" src="https://github.com/user-attachments/assets/d21e3830-196d-4639-9aba-a6268689ab39" />
+    
+    <img width="963" height="1895" alt="image" src="https://github.com/user-attachments/assets/f8eafdee-905a-4d4c-8910-8bfe45fb01ea" />
+
+  - Run the following commands to see CIDR and IP range:
+    - Network ID and CIDR for specified IP: `netmask 199.63.64.51/255.255.255.0`
+    - range of IP addresses for a network: `netmask -r 199.63.64.51/24`
+   
+- IPv6
+  - IPv6 uses 128-bit addresses, represented in hexadecimal notation.
+    
+    <img width="305" height="162" alt="image" src="https://github.com/user-attachments/assets/559c8eec-b7e8-4504-bafc-3e4418a39cb7" />
+
+  - Can be shortened in certain circumstances for clarity and readability:
+    - One or more leading zeros from a group of hexadecimal digits can be removed (e.g., :0042: is shortened to :42:)
+    - Consecutive sections of zeros are replaced by two colons (e.g., 2001:0db8:0000:0000:0000:ff00:0042:8329 is shortened to 2001:0db8::ff00:0042:8329)
+    - With both rules in place, 2001:0db8:0000:0000:0000:ff00:0042:8329 is shortened to 2001:db8::ff00:42:8329.
+   
+### NAT/PAT REVIEW
+- Allows networks to use limited number of public IP addresses to isolate and translate between private IP addressing space and public IP addresses to comm with hosts on internet.
+- NAT is intended as 1-for-1 priv-to-public address translation.
+- PAT uses combo of inside IP address and inside source port to build translation table.
+  
+  <img width="719" height="223" alt="image" src="https://github.com/user-attachments/assets/8c1286f1-e0c2-4c6d-a094-0b421eddb5a4" />
+
+  <img width="671" height="338" alt="image" src="https://github.com/user-attachments/assets/d2c92317-72bd-4d2f-9c5f-c5ac19f5a516" />
+
+
+### VLAN
+
+<img width="1500" height="591" alt="image" src="https://github.com/user-attachments/assets/36ef1ba9-17cd-423f-ae9e-776d2d89f116" />
+
+- VLANs have several advantages over traditional network configurations, including: performance, reduced administrative burden, reduced cost, security, and logical workgroups.
+- Multiple traditional networks can exist on a single switch, which reduces the number of devices an admin group has to manage and purchase.
+- Switches can perform VLAN switching at a higher speed than a router since they do not have to read as much of the frame/packet in order to make a decision about where to send the data.
+- A common use for VLANs is to segregate the management protocols that network devices use for dynamic switching and routing updates from the rest of the user data that traverses a network.
+- VLANs are a way to separate hosts on the same physical network — layer 2 — into two or more logical networks.
+- Each VLAN has its own broadcast domain and communication between two VLANs require a router that is connected to both networks.
+- Specific ports on a switch can be designated to a specific VLAN, known as **VLAN tagging**.
+- VLANs are described by multiple standards, primarily based on IEEE standard 802.1Q.
+
+
+
+    
+
+    
+
+
+
 
 
      
