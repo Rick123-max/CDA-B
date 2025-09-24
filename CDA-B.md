@@ -612,45 +612,90 @@
 
 ## CAPABILITY ANALYSIS
 
+### Capability Analysis Overview
+- CPT Capability Analysis and Force Allocation step involves determining the mission capabilities of each element.
+- The elements included in this process are the **CPT**, **mission partners**, and the **operational planning section**.
+- This consists of the following stages:
+  - Capability planning
+  - Force availability, selection, preparation
+  - Force presentation and available effects
+  - Objectives, effects, and guidance refinement
+  - Course of action development
+  - CPT Rules of Engagement (ROE) development
+  - Assessment plan
+  - Service interruption coordination
+  - Operational Impact Validation (OIV)
 
+- Capability Planning
+  - CWP 3-33.4, Appendix A:
+    - CPTs must analyze the following:
+      -  Planning Order (PLANORD)
+      -  Tasking Order (TASKORD)
+      -  Mission Analysis (MA) Results
+      -  Mission Relevant Terrain in Cyberspace (MRT-C)
+      -  Supported commander’s risk management, mission defense, and incident response plans (if applicable)
 
+- Force Availability, Selection, and Preparation
+  - Once MA is completed, available CPt forces are examined to determine mission accomplishment capability.
+  - The scope of the proposed mission and other on-going CPT requirements factor into mission element and crew selection
+  - CPT leadership examines the team members’ experience, proficiency, and training levels, as well as administrative readiness status against the number of personnel required to complete the mission as determined during CPT MA
+  - The **scope of the terrain** and **operational-level mission completion date** drive the **number of personnel required**
+  - The CPT also analyzes available equipment based on locally-protected network or system configurations to determine necessary hardware and applications.
+  - This step also includes assessing the potential for on-site or remote operations, and selecting equipment and hardware to enable mission conduct across multiple domains or classification levels.
 
+- Force Presentation and Available Effects
+  - Once ME crews and required equipment are determined, CPT leadership presents options to **operational planning section** including:
+    - Tradecraft needs, constraints, or limitations
+    - Desired noise levels
+    - Accessing or forwarding logs
+    - Use of native tool sets during the mission
+    - Inclusion of local network protection personnel during the mission
 
+- Objectives, Effects, and Guidance Refinement
+  - If MA by the operational planning section or CPT determines the CPT is unable to achieve all objectives or create all desired effects as articulated in the PLANORD, the operational planning section is responsible for refining objectives and desired effects in coordination with the supported commander and CPT.
+  - Changes to or evolution of mission terrain during planning also necessitates adjustment of objectives and desired effects based on available personnel and equipment.
+  - Finally, commander’s guidance may require adjusting or refining if changes to objectives, tasks, or desired effects change.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
-    
-
-
-
-
-
-     
-
-
-
-
+- COA Development
+  - COAs describe operational approaches and provide options to achieve the mission end state
+  - COA describes who takes action, what type of action occurs, how the action occurs, when and where the action takes place, and why the action is required
+  - Products from COA development present alternatives including sketches allowing COA visualization by higher ranking and supported headquarters’ commanders and planners.
+  - COAs should envision the employment of all participants and take into account operational limitations, logistical considerations, and conclusions drawn by local or regional network protectors or CSSPs
+  - Critical to this step is considering potential or expected adversary COAs likely to affect achieving objectives and desired end states.
+  - transition from MA to COA development should identify decision points, the person responsible for making the decision, and measures available to provide leaders with additional time before making a decision.
+  - Decision points may be based on the analytics implementation, sensor placement, the establishment of Named Areas of Interest (NAI) or engagement areas, or additional Priority Intelligence Requirements (PIR).
+  - A well-developed COA provides identity points in time when options, or the COA itself, is no longer viable based on predetermined criteria or conditions.
+ 
+- ROE Development
+  - operational planning section and supported commander, advised by the CPT, develop the CPT mission ROE, constraints, and restraints
+  - Effects from CPT hunt and clear operations may potentially disrupt or degrade MRT-C performance
+  - critical the CPT continually advises all parties involved regarding capabilities to be employed, and possible unintended or cascading effects
+  - Actions CPTs can or cannot take should also be defined in the ROE
+  - During hunt, clear, and enable hardening missions it is often difficult, or sometimes impossible, to clear MCA or harden terrain without some degree of service interruption.
+ 
+- Assessment Plan
+  - responsibility of the **operational planning section** to effectively assess the CPT mission
+  - validates the CPT plan by outlining Measures of Performance (MOP) for operational tasks and Measures of Effectiveness (MOE) for operational objectives and desired effects, and can also prove the engagement area in a deliberate defense
+  - outlines information collection requirements to enable reporting, and must include external assessment information collection requirements
+  - disseminated to the CPT and supported by the commander during the final order published during the next step of the CPT operations tasking process.
+  - Operational-level assessment is not performed by the CPT
+ 
+- Service Interruption Coordination
+  - necessary for the deployment of passive network taps as well as any in-line, network-based capabilities, such as intrusion prevention or encrypted traffic decryption capabilities
+  - Additional service interruptions may be coordinated for configuration changes within the MRT-C to enable CPT operations, such as:
+    - deployment of agent-based capabilities
+    - whitelisting CPT applications and scripts
+    - modifying Group Policy Objects (GPO) to enable remote access for CPTs
+    - enabling event log forwarding
+    - modifying network configurations
+    - turning on NetFlow
+  - Service interruptions required to deploy CPT capabilities are planned and scheduled by the operational planning section in coordination with the supported commander and the CPT.
+ 
+- Operational Impact Validation
+  - OIV verifies:
+    - impact of bservice interruptions to the supported commander’s protected networks or systems
+    - validates CPT capabilities creating desired effects on mission partner systems from unintended or cascading effects
+    - captures representative data sets enabling follow-on tactical planning
 
 
 
