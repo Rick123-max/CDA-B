@@ -609,7 +609,6 @@
     - CPT redeployment based on other priorities, contingencies, or crises.
   - When permissible, and where feasible, products developed during all steps should be added to the Joint Lessons Learned System (JLLS) to enable future assessments and planning.
 
-
 ## CAPABILITY ANALYSIS
 
 ### Capability Analysis Overview
@@ -756,6 +755,7 @@
     - A good open-source resource for adversary TTPs is MITRE Adversarial Tactics, Techniques, and Common Knowledge (ATT&CK), which is a globally-accessible knowledge base of adversary tactics and techniques based on real-world observations.
     - DeTT&CT maps detection capabilities to MITRE ATT&CK techniques.
 
+# MODULE 1
 ## HUNT
 
 ### CWP and CPT Threat Hunting
