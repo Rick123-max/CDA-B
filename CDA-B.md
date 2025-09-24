@@ -634,6 +634,12 @@
       -  Mission Analysis (MA) Results
       -  Mission Relevant Terrain in Cyberspace (MRT-C)
       -  Supported commander’s risk management, mission defense, and incident response plans (if applicable)
+  - Using the PLANORD or TASKORD, the CPT develops a tactical mission statement and a projected end state, defines initial tactical objectives, and determines initial capabilities for the mission
+  - The CPT will coordinate with the operational planning section and support the commander's staff to coordinate mission rules of engagement (ROE) informed by the initial capabilities analysis.
+  - ROE in the context of CPT operations refers to the constraints and limitations under which the CPT will hunt and/or clear when MCA is encountered as agreed on by the supported network owner and the supporting commander.
+  - By adding enriching data and graphical control measures to **network maps** produced during the previous step, the CPT further improves terrain visualization during planning and operations to enable a **common operating picture** to emerge, and create shared situational awareness between the CPT, the supported commander, and local network protection assets.
+  - The **network map** forms the basis of the CPT’s visualization tools and must scale appropriately to the situation.
+  - As a critical input, the **network map** forms the foundation on which courses of action are developed based on the operational approach and analytic scheme of maneuver employed by the CPT.
 
 - Force Availability, Selection, and Preparation
   - Once MA is completed, available CPt forces are examined to determine mission accomplishment capability.
@@ -688,6 +694,10 @@
     - modifying Group Policy Objects (GPO) to enable remote access for CPTs
     - enabling event log forwarding
     - modifying network configurations
+      - assigning IP space to the CPT
+      - modifying routes
+      - creating span ports
+      - adding Media Access Control [MAC] addresses to port security configurations
     - turning on NetFlow
   - Service interruptions required to deploy CPT capabilities are planned and scheduled by the operational planning section in coordination with the supported commander and the CPT.
  
