@@ -1096,7 +1096,13 @@
   - **ACAS**: This is the mandated enterprise vulnerability scanning capability utilized for assessing DoDINs such as Non-classified Internet Protocol Router Network (NIPRNet) and Secret Internet Protocol Router Network (SIPRNet).
   - **RedSeal**: A security solution capable of assessing cloud environments as well as application-based policies and endpoints.
   - **Open Vulnerability Assessment System (OpenVAS)**: A successor to Nessus, OpenVAS is a robust open source vulnerability scanner that is part of the commercial Greenbone Security Manager.
-    - Its capabilities include authenticated and unauthenticated testing, industrial and internet protocols testing, and an internal programming language for implementing any type of vulnerability scan. 
+    - Its capabilities include authenticated and unauthenticated testing, industrial and internet protocols testing, and an internal programming language for implementing any type of vulnerability scan.
+- Firewall rules:
+  - Rule 10 — Allows workstations to communicate with the CDA-SERVERs
+  - Rule 20 — Prevents the Accounting (ACC) and Human Resources (HR) networks from communicating with each other
+  - Rule 30 — Allows both devices to communicate with the logging host in the security network
+  - Rule 40 — Allows all other types of traffic
+
 
 
 
