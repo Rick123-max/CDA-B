@@ -756,6 +756,195 @@
     - A good open-source resource for adversary TTPs is MITRE Adversarial Tactics, Techniques, and Common Knowledge (ATT&CK), which is a globally-accessible knowledge base of adversary tactics and techniques based on real-world observations.
     - DeTT&CT maps detection capabilities to MITRE ATT&CK techniques.
 
+## HUNT
+
+### CWP and CPT Threat Hunting
+- Threat hunting is one of the four core functions of a CPT.
+- Chapter 3 section 2 of the CWP defines hunting as `the process of proactively and iteratively searching through networks to detect evidence of Malicious Cyberspace Activity (MCA) to gain and maintain contact with an adversary and develop the situation.`
+- Important quotes from CWP:
+  - Where traditional cybersecurity is passive or reactive, CPT hunt operations take the fight to the enemy by proactively searching out, identifying, disrupting, and defeating threats resident in networks and systems. (2.a.1)
+  - Knowledge of adversary presence is not a prerequisite for the conduct of CPT hunt operations. (2.a.4)
+  - Hunting is an operation to find, fix, and track MCA, and is often driven by data analysis, threat identification, or other anomalous activity.
+    - CPTs, in contrast to local defenders, focus on those threat subsets with Tactic, Technique and Procedure (TTP)-specific capability, perceived intent, and opportunity to bypass security layers emplaced by Cybersecurity Service Providers (CSSP) and local network defenders.
+    - CPT hunt operations are predicated on the assumption [that] threats already reside within networks. (2.a.5)
+  - The absence of security alerts does not indicate an absence of threats, and may instead indicate security mechanisms did not detect a threat or intrusion. ... Passive incident detection and threat hunting operations can, and should, be conducted simultaneously. (2.a.7)
+  - CPT hunt operations focus on narrowing MCA tactics to characterize the threat, and determine the threat's technical capability. (2.a.6)Successful hunt operations may require the CPT to establish a deliberate defense posture to further develop and coordinate detailed plans based on the adversary or MCA. (2.a.8)
+- A CPT analyst performing a threat hunting operation should proactively and iteratively seek evidence of MCA within an environment
+- CPT analysts should focus on hunting a subset of threats, specifically those with advanced TTP-specific capabilities, and should expect that these threats likely have the capability to avoid security controls that may already be in-place on a network
+-  If, and when, a CPT analyst discovers evidence of MCA during hunting operations, they should gather additional data in order to determine the threat's technical capability
+  - this data is used to help the CPT and local network defenders determine the actions that should be performed in response to the threat, which may include:
+    - immediate clear operations
+    - the creation of a deliberate defense posture
+    - or other actions established via planning with local defenders and network owners
+- Threat hunting activities can, and should be, done alongside passive incident detection activities to increase the security posture of a network.
+
+### CPT Hunting Operations
+- Triggers
+  - Three Triggers that initiate CPT OP:
+    - **Threat Intelligence**: Threat intelligence can trigger a hunt operation by warning of an imminent or already-realized cyber attack, or by reporting on new indicators or adversaries that were recently seen in the wild.
+      - For example, intelligence about an adversary beginning to actively target the energy sector may trigger a CPT to perform hunts that look for evidence of that adversary on energy sector networks.
+      - Threat intelligence can also inform the Tactical Planning and Mission Execution phase of a hunting operation, by allowing a threat hunter to develop more informed or more targeted hunting hypotheses. The creation of hunt hypotheses is discussed later in this lesson.
+    - **Campaign Plan**: CPT employment in support of Combatant Command (CCMD) campaign plans is intended to increase critical asset protection prior to operational need.
+      - Hunting for evidence of MCA on an asset prior to that asset's use can prevent an adversary's ability to monitor, control, or render that asset unusable during critical phases of CCMD's campaign plans.
+    - **MCA Detection**: Detection of MCA within a network may prompt further hunting operations.
+      - These operations may be employed in an attempt to discover additional MCA which has evaded detection, or to maintain further contact with an adversary that has already been discovered.
+
+- Planning
+  - the planning phases of teh CPT OP take place after CPT threat hunting Op has been triggered.
+  - These steps include:
+    - determining the objectives and scope of the operation
+    - terrain mapping
+    - determining the Mission Relevant Terrain in Cyberspace (MRT-C) and Key Terrain in Cyberspace (KT-C)
+    - documenting Rules of Engagement (ROE) for the CPT
+    - beginning to coordinate system access for the CPT
+    - publishing and disseminating orders, and other actions.
+  - Additionally, information gathered during Terrain Mapping and Analysis can inform a CPT about the evidence sources that are currently available in an environment, and which of those evidence sources is most fruitful to hunt within.
+  - Lastly, knowledge about the MRT-C and KT-C within an environment can help a CPT focus its hunting efforts on the most relevant terrain in an environment.
+  - After the completion of the planning phases of the CPT OP, a CPT should be able to answer the following questions as they relate to the hunting operation:
+    - What is the scope and purpose of the hunting operation? — What triggered the operation? How long does the operation last? What is the intent and desired end state of the operation?
+    - What does the environment look like? — Has a network diagram been created that accurately documents the network? What applications, Operating Systems (OS), and hardware are in use in the environment? What security controls are already in place and potentially related to the operation?
+    - What evidence sources are available for a CPT to utilize during the hunt? — Is it necessary for a CPT to acquire evidence for itself, or can this be furnished by local defenders? Are there any visibility gaps that must be accounted for during evidence collection or investigation tasks? If the CPT requires access to additional data, what is the procedure to acquire this access?
+    - What are the ROEs that a CPT must adhere to within the environment? — Are there any actions that a CPT has been forbidden from taking? Are there any network segments, machines, or applications that are off-limits to the CPT? What actions are taken by the CPT if, and when, MCA is discovered?
+    - Who are the people that the CPT must keep involved during this operation? — Who are the Points of Contact (POC) that a CPT might need to reach out to? When should a CPT reach out to one or more of these POCs? What CPT actions need approval, and which POC can give this approval? How and when does the CPT share their results with appropriate POCs?
+  - This wealth of information is utilized by a CPT during the Tactical Planning and Mission Execution phase of a hunting operation.
+ 
+### Tactical Planning for Hunt Operations
+- A CPT that has completed the planning phases of the CPT OP is ready to begin the Tactical Planning and Mission Execution of the hunt operation. At this point, a CPT should understand the goals of their mission, the environment/network they are operating within, the individuals and groups that they need to communicate with during the operation, and any limitations, ROEs, or contingencies that exist or need to be planned for.
+- Creating a Tactical Plan
+  - **Appendix C** of the CWP contains a Tactical Hunt Planning Guide that CPTs can reference when creating a tactical plan for a hunt operation.
+  -  **section b.1.a** of the guide outlines **Network Topology**, and lists the following items that should be documented in the tactical plan:
+    - Physical layout
+    - Logical layout
+    - External connections (if applicable)
+    - Critical systems (i.e., MRT-C, or KT-C, if identified)
+    - Services and applications
+  - Each of these important sections is detailed as follows:
+    #### Section b.1.d: Network Environment — Threat/Adversary Model
+      - This section of the tactical plan should contain information surrounding specific adversaries being targeted during the hunt, including those adversaries' TTPs, objectives, and other detailed intelligence about the adversary.
+      - For hunting operations, this section should be as thorough as possible, and might even include information on adversaries that are theorized to be targeting the mission partner's network, even if no tangible intelligence has been gathered to support this.
+      - Having this information allows a CPT to better focus their hunting efforts, and more accurately assess any suspicious indicators that arise over the course of the operation.
+      - Threat modeling is especially important for CPT hunting operations.
+      - Threat modeling performed by intelligence operators can serve as a Campaign Plan trigger — a threat model suggesting an adversary targeting a particular environment can trigger a proactive hunting operation within that environment.
+      - Additionally, threat modeling is an important step for a CPT to perform during operations that were triggered via active MCA in an environment, as the adversary responsible for that MCA very likely still poses an active risk to that environment.
+      - Hunting for TTPs and other indicators belonging to that adversary are key steps in determining the full scope of a compromise.
+    #### Section c.1: Execution — Network/System Owner's Intent
+      - This section should clearly state the desired goals of the hunt operation, as determined by the network/system owner.
+      - A CPT should develop key tasks performed in order to achieve these desired goals.
+      - Many of the key tasks for a hunting operation should include high-level hunting topics; a CPT hunting operation likely consists of multiple individual hunts, each of which is aligned to a topic described in a key task.
+    #### Section c.12: Execution — Collection Plan
+      - This section documents the plan to collect data from the environment.
+      - This data can either be used to answer questions that arose during earlier planning steps, or can be used directly during the execution of an individual hunt.
+      - This section should also document any analytics present in the environment, such as any pre-existing automated detection/alerting platforms, and outline a plan for developing suspicious hunt findings into actionable analytics.
+      - Lastly, this section should establish a plan for the consolidation and analysis of the data a CPT needs access to in order to conduct the hunting operation.
+    #### Section c.13: Execution — Analysis Plan
+      - This section combines and further develops the items documented in Section C of the Tactical Hunt Planning Guide.
+      - At this point, a CPT should be developing the key tasks they have identified into individual hunts via the creation of hunt hypotheses, which are discussed later in this lesson.
+      - The plan for each hunt should include details on what a CPT is hunting for and which data sources are required to do so.
+      - This section should also document an overarching information sharing plan for any new adversary indicators or TTPs that are uncovered during the course of a hunt.
+    #### Section c.14: Execution — Response/Incident Response
+      - This section details what actions are taken if, and when, MCA has been identified in an environment.
+      - This information is extremely important, as it fully details the scope of the operation and further defines the ROEs that a CPT must abide by.
+      - For example, a CPT may be tasked with passing potential MCA findings to the local defender's Incident Response (IR) team for further investigation and confirmation that the finding represents an actual threat.
+      - In this case, the IR section of the tactical plan should detail the necessary requirements needed to engage the IR team, and how the details of the identified MCA are communicated between the CPT and the IR team.
+
+### Identifying and Collecting Data for Hunting
+- During the creation of the tactical plan, a CPT identifies the key tasks that need to be performed in order to meet the goals of the operation as determined by the network/system owner.
+- For hunting operations, these key tasks include high-level hunt topics that can be further broken down into individual hunts.
+- For each hunt, a CPT must identify relevant data that exists within the environment, and develop a plan for acquiring access to this data or otherwise collecting it for themselves, if allowed.
+- In terms of collecting data from these data sources, a CPT must be prepared to adapt to a wide array of situations — due to the variety of data sources available, as well as differences between networks, no set plan can be established for collecting data from an environment
+- In general, a CPT should have knowledge of the different types of security-related data that can exist within an environment.
+- This knowledge lets a CPT make informed decisions about which data sources are the most valuable during a hunt.
+- Additionally, a CPT may be able to make additional requests of local network owners and operators in order to acquire access to other data sources.
+
+- Host Logs
+  - Host logs are generated by the OS installed on an individual host or endpoint.
+  - A wide array of host logs are available, but not all are usable for security-focused investigation activities.
+  - Additionally, different OSs contain vastly different types of host logs — cybersecurity analysts performing a host log investigation must learn to cope with many different sources, types, and qualities of logs generated across each investigated OS.
+  - host logs contain granular information about events that occur on a host.
+  - The following events are a very small sample of the host logs that might be generated on an endpoint:
+    - A process was started or stopped
+    - A network connection was attempted
+    - A user logged in to or logged out of the machine
+    - A new device was plugged into the machine
+  - Examples of data sources that hold these types of logs include:
+  - the Windows event log (on Windows systems)
+  - or the System Log (syslog) and System Daemon (systemd) logs on Unix systems.
+
+- Network Logs
+  - Network logs are generated by applications or devices that handle network connections in some fashion, and contain information about a connection such as its source, destination, associated ports, and amount of data being transferred.
+  - More advanced network logs may include additional details about each connection — for example, network logs from HTTP traffic usually include the type of HTTP request that is being made and the HTTP response code returned by the server handling the request.
+  - Some network logs are generated as part of normal OS activity, and may be accessed in the same ways that an analyst might access host logs.
+  - Other network logs are generated by specific devices or networking appliances such as routers, firewalls, or proxy devices
+
+- Security Appliance Logs
+  - Security appliance logs are logs generated by a security appliance, an antivirus log indicating that potential malware was identified and removed, or an IDS identifying network traffic containing potential attack patterns.
+  - As the goal of many security appliances is to prevent or detect MCA, these logs are usually directly related to potential MCA.
+
+- Application Logs
+  - This broad category of logs simply means any logs generated by an individual application
+  - Not all applications generate logs, and just because a log exists does not mean it is useful to a security investigation
+  - if an analyst needs additional information surrounding an attacker's direct interactions with an application, or when an attack vector is performed through exploiting a specific application, application logs may provide crucial insight into the attacker’s activity.
+  - Application logs can also be utilized for security investigations as a backup source of evidence to fill potential visibility gaps or provide more context to an investigation
+  - In actuality, the categories suggested above are rough approximations of various data sources that are likely to be present in an IT environment.
+  - Specific knowledge of the system or application that is generating a log is usually required in order to utilize the log to its full potential.
+
+### Executing a Hunt
+- During the creating of teh tactical plan, CPT breaks operation's _key tasks_ into high-level hunt topics, which can be broken down int oindibidual hunts.
+- After this, and collecting dat arelevant to each hunt, CPT is ready to perform data analysis and investigative tasks required to execute a hunt.
+- Threat Hunting Loop
+  <img width="1126" height="706" alt="image" src="https://github.com/user-attachments/assets/2b7cfa1f-ddc9-4c14-b3af-0100a3e6ff93" />
+  - Presented as a way to tactically implement a hunt, consisiting of four stages that guide an anlyst or team of analysts through execution of a hunt.
+
+- Create Hypotheses
+  - Each hunt poses a single hypothesis, then uses evidence gathered from the network to prove or disprove that hypothesis.
+  - Creating a hypothesis is the first stage of the Threat Hunting Loop because a hypothesis is the foundation on which a hunt is built
+  - A hunt starts with creating a hypothesis, or an educated guess, about some type of activity that might be going on in your IT environment.
+  - Hypotheses are typically formulated by analysts based on any number of factors, including friendly intelligence and threat intelligence, as well as past experiences.
+    
+- Investigate Via Tools and Techniques
+  - During this stage, an analyst actually begins performing an investigation
+  - A CPT should also have knowledge of the tools available within their mission kit that can be used to investigate these evidence sources.
+  - This phase also makes reference to techniques — more specifically, this refers to **hunting techniques**. **Hunting techniques** are data analysis techniques that are used to investigate a set of data during a hunt.
+  - These can range from very basic techniques like running simple searches against a dataset, to incredibly complex techniques such as machine learning or advanced statistical analysis.
+ 
+- Unconver New Patterns and TTPs
+  - Once suspicious activity has been identified, an analyst must determine if the activity can truly be traced back to an attacker.
+  - This may be immediately evident upon initial discovery of a suspicious pattern, or may require a deeper investigation.
+  - This phase can also include further refinement of the hunting techniques used to initially identify the activity.
+  - This step often allows an analyst to refocus or reword the initial hypothesis, and may even generate new hunting hypotheses.
+  - An analyst should document these hypothesis ideas as they come up — investigating a second or third hypothesis may reveal instances of suspicious activity that the first hypothesis did not.
+
+- Inform and Enrich Analytics
+  - Don’t waste your team’s time doing the same hunts over and over. If you find an indicator or pattern that could recur in your environment, automate its detection so that your team can continue to focus on the next new hunt.
+  - During this step, a CPT should document the suspicious pattern that was identified, the associated analysis techniques used to detect the pattern, and any analytics that were developed around this pattern, such as detection rules, searches, and code used for data analysis
+  - It is not possible, or advised, to try to fully automate every hunt result.
+  - In certain environments, automated detection may not be feasible, or even possible.
+  - However, the investigative and analysis steps taken during each hunt should be well-documented, so that the hunt can be more easily repeated later.
+  - Any automated analytics or hunt documentation created during this step should be placed within an appropriate knowledge management solution to help improve the operations of other CPTs.
+  - A version of this documentation can also be provided to local defenders and local network operators in order to help improve the network’s security posture.
+  - **Friendly intelligence** — information about the normal operations of the environment that the hunt is being conducted within — can also be created during this step.
+  - **Friendly intelligence** can include:
+    - a software inventory
+    - a catalogue of important server locations
+    - and other details about the environment.
+  - Documenting friendly intelligence can be especially important during a long-term hunting operation, as it allows a CDA to more quickly recognize what normal looks like in a given environment.
+
+- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
