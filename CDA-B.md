@@ -929,7 +929,23 @@
     - and other details about the environment.
   - Documenting friendly intelligence can be especially important during a long-term hunting operation, as it allows a CDA to more quickly recognize what normal looks like in a given environment.
 
-- 
+### Creating a Password Guessing Hunt Hypothesis
+- A good hypothesis might accomplish any or all of the following:
+  - Direct analysts towards potential analysis methods
+  - Propose what attacker activity might look when found
+  - Identify likely sources of evidence to hunt within
+  - Provide a path for analysts to follow in order to prove or disprove the hypothesis
+- Password Guessing Attack Overview (MITRE T1110.001)
+  - A password guessing attack is exactly as it sounds — if an attacker knows the username of an account, they can try to guess the password for that account.
+  - Successfully guessing the password should allow the attacker to log in as that user account.
+  - This attack can be performed against as many accounts as the attacker wishes to run it against, but is usually performed against a specific target account.
+  - Usually, password guessing attacks are performed via an automated tool, which can guess many different passwords in a short amount of time
+  - In practice, attackers often try to limit the number of passwords they need to guess by choosing passwords from a password list, which contains hundreds or thousands of commonly-compromised passwords that have been extracted from breach reports
+  - 
+
+
+
+
 
 
 
