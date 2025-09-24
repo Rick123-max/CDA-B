@@ -987,3 +987,120 @@
 
 ## ENABLE HARDENING
 
+### Enable Hardening - FOUO
+- As described in Cyber Warfare Publication (CWP) 3-33.4:
+  - “For Official Use Only (FOUO) Adversary exploitation will require technology or process updates to mission partner networks and systems to mitigate them. CPTs will maintain and update network or system hardening recommendations for the duration of hunting and clearing operations. Commanders will be notified when critical vulnerabilities arise, and whether those vulnerabilities will be mitigated in stride to increase network or system security and resilience. Pre-approved actions, and those actions requiring further approval(s), will be identified and presented during pre-mission planning. CPTs will recommend hardening actions and report on network or system hardening recommendations to mitigate threat-specific risks to supported commanders, CyberSecurity Service Providers (CSSP), and local network and system protectors upon conclusion of operations. Department of Defense Information Network Area of Operation (DoDIN AO) commanders and directors, local network owners, local network defenders, and CSSPs maintain the responsibility to determine available data, develop plans to mitigate gaps, and implement required updates or hardening measures recommended by CPTs. CPTs will advise and assist, but should not be the primary entity performing protection duties expected of DoDIN AO commanders and directors, local network owners, local network defenders, or CSSPs.”
+- Mission Relevant Terrain in Cyberspace (MRT-C) and Key Terrain in Cyberspace (KT-C) are an especially important focus during the hardening phase. MRT-C and KT-C will be determined during mission planning.
+- "(FOUO) The end state of the hardening function is to mitigate risk of adversary exploitation, or reduce it to levels acceptable to network or system owners." CWP 3.33-4
+
+### Relevant Cybersecurity Principles
+- A Cyber Defense Analyst (CDA) needs to be aware of specific general cybersecurity principles and policies to be successful during the hardening function.
+- Federal Information Systems Management Act (**FISMA**) requires every federal agency to develop, document, and implement a security policy for information and information system assets throughout the agency.
+- **FISMA** outlines a risk management based process for cost effective security.
+- **Standards** are formal, mandatory requirements an organization must meet for actions, processes, or configurations.
+- A common collection of standards a CDA may encounter is the Federal Information Processing Standard (**FIPS**), which was developed by the National Institute of Standards and Technology (**NIST**) in response to FISMA
+- It defines the standards for non-national security systems.
+  - An example of a standard is the Secure Hash Standard (part of FIPS), that specifies which hashing algorithms organizations are allowed to use to generate message digests.
+- **Baselines** define minimum levels of security that every system within an organization must meet
+- The Defense Information Systems Agency (**DISA**) has several Security Technical Implementation Guides (**STIGs**) that Department of Defense (**DoD**) systems must comply with, which provide security baselines for Operating Systems (OS) and software
+- The **STIG Viewer tool** allows analysts to view STIGs that are applicable to specific systems running specific software. It is available on Windows, Linux, and MacOS.
+- **Guidelines** are recommendations on a course of action to best meet specified requirements.
+- NIST has developed several guidelines in their Special Publications (SP), which lay out best practices for several processes
+- There are several SPs that a CDA may find useful while hardening within the SP 800 series including, but not limited to:
+  - **SP 800-53**: Catalog of security and privacy controls for federal information systems
+  - **SP 800-40**: Relates to patch management
+  - **SP 800-41**: Relates to firewall configuration
+  - **SP 800-123**: Relates to central server security
+
+<img width="1944" height="1246" alt="image" src="https://github.com/user-attachments/assets/60a74721-7488-4425-a742-730838bd170e" />
+
+- Defense-in-depth is a practical strategy developed by the National Security Agency (NSA) that employs a layered approach including:
+  - people
+  - technology
+  - aoperational capabilities that establishes barriers to attacks to achieve information assurance.
+
+<img width="1280" height="913" alt="image" src="https://github.com/user-attachments/assets/82f9c01a-0e88-49b4-ac77-523a9b73d7bb" />
+
+### Assessing Security Posture and Making Recommendations
+- Observe the documentation below, which provides context and situational awareness for the mission partner and enables the CPT to make hardening recommendations:
+  - Supported Organization Mission and Resources help the CPT gain a Common Operating Picture (COP) of the mission partner’s current security posture.
+  - This includes, but is not limited to, network and system logging, configuration, current security procedures, etc.
+  - AO Logical Maps or Network Maps are the principal documents for terrain visualization of mission partner networks and systems (from CWP 3.33-4). Generally, this is a Microsoft Visio document or a Draw.io document.
+  - Detailed Threat Assessment Reports cover the historical attacks against the mission partner, probable threat actors they would see in their AO, likelihood of threat activity/capability used against them, and the threat matrix (criteria/heat map) showing their ability to detect and counter them (from CWP 3.33-4).
+- CPTs issue or provide input to the following reports after hardening a mission partner network (from CWP 3.33-4):
+  - **Detailed Host Vulnerability Finding and Corrective Actions Report**: Covers patch management and outdated software vulnerabilities, services, and detailed vulnerability scanner results (e.g., results from Assured Compliance Assessment Solution [ACAS] and misconfigurations).
+  - **Detailed Network Vulnerability Findings and Corrective Actions Report**: Covers at least the following elements, if applicable — proper sensor placement, signature management, firewall implementation, firmware vulnerabilities, ports/protocols, access control lists, or infrastructure configurations.
+  - **Detailed Non-Technical Vulnerability Findings and Corrective Actions Report**: Covers policy assessment from NIST SP 800-53 and mission partners utilizing intelligence to inform DCO.
+  - **Risk Mitigation Plan (RMP)**: Documents all vulnerabilities identified during threat mitigation. This document includes recommendations for internal and external mitigation actions to reduce the overall risk to the secured network. This is further discussed in upcoming lessons.
+
+### Identifying Host and Network Areas for Hardening
+- NIST SP800-53 provides an overarching checklist for high-level categories as mentioned previously.
+- However, CDAs primarily evaluate these areas:
+  - **Web-facing Assets/Infrastructure**: These devices contain resources that are accessible to an external and internal user.
+    - This duality means that devices in this network are untrusted.
+    - Internal users are allowed to connect in, but devices within the Demilitarized Zone (DMZ) are restricted from initiating connections into the private network.
+  - **Network Boundary**: A network boundary is where one logical network meets another.
+    - In the case of a private network and the open internet, this may be different organizational networks connecting, etc.
+    - It is generally wise to deploy boundary defense mechanisms in this area such as firewalls, Network Intrusion Detection System (NIDS), or Network Intrusion Prevention System (NIPS).
+  - **Network Segmentation**: In simple terms, network segmentation is grouping devices into zones, often by function or access requirements, and putting them in their own network.
+    - Access controls are often applied between segments to restrict access into more sensitive segments.
+  - **Inventory of Systems**: Organizations should have an inventory system to track their assets.
+    - This includes devices such as phones and printers.
+    - An accurate inventory is essential for implementing the correct security controls.
+  - **Domain Architecture and Services**: In reference to Microsoft Active Directory (AD) service, AD hosts a number of Windows services facilitating centralized identity management, object access, and policy management across Microsoft AD trees and forests.
+    - Because of their orchestrating role, protecting critical components of domains (e.g., enterprise and domain administrators and Domain Controllers [DC]) is crucial.
+  - **User Rights Management**: Users should always be given the least amount of privilege necessary to complete their assigned work roles.
+    - This is often achieved by assigning users into groups depending on their job duties.
+  - **Endpoint Configuration**: Secure configurations on the endpoints rely on processes such as update and patch management, software management, etc.
+    - A good practice for endpoint configuration is developing a common secure baseline image.
+  - **Logging and Detections**: Audit policy is dependent on regulation and organizational requirements.
+    - However, auditing is key in detecting incidents and determining the extent of damage. Without auditing, breaches would be excessively difficult, if not impossible, to assess.
+- In Windows environments with DCs, host hardening is done centrally in AD by using GPOs
+- GPOs govern access to services on the network, user rights management, endpoint configuration, firewall configurations, logging, and a plethora of other functionality
+- Consult the NIST SP 800 series for guidelines and best practices for these devices as well as STIGs to ensure that systems and network devices meet security baselines.
+- Once you understand the mission partner's operational cyberspace, recommend changes.
+- The goal is to:
+  - Propose network architecture changes to improve security and reduce risk
+  - Ensure unnecessary services are disabled
+  - Ensure latest patches are installed
+  - Remediate insecure configurations
+  - Audit installed software
+  - Enforce an audit policy
+  - Enhance security systems and logging
+
+### Tools
+- The categories covered are platforms, host utilities, vulnerability scanners, and Security Information Event Management (SIEM) solutions.
+- Some specific cyber defense platforms that CDAs may encounter:
+  - **Security Onion**: A free and open source platform for network security monitoring, threat hunting, enterprise security monitoring, and log management.
+    - It comes with several tools mentioned in this lesson including Kibana, Zeek, Suricata, and other utilities.
+  - **Response Operation Collection Kit Network Security Monitor (ROCK NSM)**: ROCK NSM provides a robust platform for passive data acquisition, transit, and data storage and indexing.
+    - Like Security Onion, it comes with Kibana, Zeek, Suricata, and other utilities.
+- Windows hosts make up a large portion of many DoDIN networks.
+- These tools help with the hardening process:
+  - **Sysinternals**: A suite of over 65 tools for troubleshooting Windows OS.
+  - **Windows PowerShell**: Object-oriented scripting utility that is tightly integrated with the Windows OS and AD.
+    - Windows PowerShell is an incredibly useful tool when enumerating Windows ADs and Windows hosts.
+  - **Microsoft Baseline Security Analyzer**: A deprecated vulnerability scanner for Windows systems pre-Windows Server 2008 R2.
+    - Its capabilities include ensuring security updates are up to date, checking for Structured Query Language (SQL) Server and Internet Information Services (IIS) administrative vulnerabilities, and verifying password complexity.
+    - Its successor is the Windows Update service.
+- Network Security Monitors (NSM) detect and often respond to network attacks. CDAs need familiarity with:
+  - **Zeek**: Formerly known as Bro, Zeek is an open source network security monitor.
+    - It sits on a sensor in the network that observes network traffic and generates robust logging that is forwarded to a SIEM like Splunk or Elasticsearch.
+  - **Suricata**: A free and open source robust network threat detection engine.
+    - It is capable of real time intrusion detection, in-line intrusion prevention, network security monitoring, and offline network capture processing.
+- SIEMs play an essential role in the hardening function as they enable rapid detection of future incidents
+  - **Splunk**: A proprietary software platform widely used for monitoring, searching, and data visualization especially in relation to logging data in real time.
+  - **Kibana**: A data visualization tool generally deployed in a stack along with Elasticsearch and Logstash.
+    - Elasticsearch is a free and open source databasing and visualization tool used in conjunction with Security Onion or ROCK NSM.
+- CDAs need familiarity with the following vulnerability scanners:
+  - **ACAS**: This is the mandated enterprise vulnerability scanning capability utilized for assessing DoDINs such as Non-classified Internet Protocol Router Network (NIPRNet) and Secret Internet Protocol Router Network (SIPRNet).
+  - **RedSeal**: A security solution capable of assessing cloud environments as well as application-based policies and endpoints.
+  - **Open Vulnerability Assessment System (OpenVAS)**: A successor to Nessus, OpenVAS is a robust open source vulnerability scanner that is part of the commercial Greenbone Security Manager.
+    - Its capabilities include authenticated and unauthenticated testing, industrial and internet protocols testing, and an internal programming language for implementing any type of vulnerability scan. 
+
+
+
+
+
+
+
