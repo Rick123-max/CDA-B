@@ -985,4 +985,5 @@
 - This is also an exhaustive process and should never be done from memory or through pure intuition
 - Use established organizational Standard Operating Procedures (SOP) and industry-proven checklists in investigating the system
 
+## ENABLE HARDENING
 
