@@ -696,6 +696,59 @@
     - impact of bservice interruptions to the supported commander’s protected networks or systems
     - validates CPT capabilities creating desired effects on mission partner systems from unintended or cascading effects
     - captures representative data sets enabling follow-on tactical planning
+  - Critical to OIV conduct is the CPT’s knowledge and understanding of the supported commander’s protected networks as a result of MA and Terrain Mapping and Analysis outputs.
+ 
+### Mission Capabilities and Requirements
+  - CPTs provide commanders with three Capabilities:
+    - Discovery and Counter Infiltration (D&CI)
+      - detection, illumination, and defeat of known or unknown threats within a secured network or system
+      - To be successful with missions involving D&CI capabilities, CPTs should have clear PIR and supporting Essential Elements of Information (EEI) to drive collection requirements and efforts.
+    - Cyber Threat Emulation (CTE)
+      -  process of using known adversary TTP to replicate real-world threats to train and measure the effectiveness of cybersecurity defenses
+      -  This capability is primarily associated with DoD red teams to highlight vulnerabilities and demonstrate operational impact for the purpose of improving cybersecurity postures.
+      -  In contrast, CPTs typically employ CTE to validate defensive postures rather than to find vulnerabilities.
+    - Threat Mitigation
+      - CPT provides a comprehensive review of the mission partner’s MRT-C with a focus on threat TTPs
+      - CPTs assess secured network cybersecurity posture and processes to identify specific threats in vulnerable areas and to provide mitigative measures.
+      - CPTs then provide a Risk Management Plan (RMP), which documents recommendations for internal and external mitigative actions to supported mission partners.
+     
+### Data Collection Plans
+- Gathering Collection Requirements
+  - Before data can be collected, CPt must know what data collection requirements are.
+  - This is mission-dependent and can vary across different mission sets
+  - Defining data collection requirements requires:
+    - the ability to identify gaps in currently collected data
+    - determine what data needs to be collected
+    - and know where that data can be found.
+  - Data can be collected from several locations including:
+    - endpoints
+    - networks
+    - databases
+    - open-source data
+  - This knowledge is valuable for defining and scoping collection efforts.
+ 
+- Data Collection
+  - Data can be collected actively, passively, or from open-source information
+  - Active data collection involves generating new data that does not already exist (I.E running a port scan)
+    - Examples of tools used for Active data collection:
+      - **Kali Linux**: An open-source, Debian-based Linux distribution aimed at advanced penetration testing and security auditing.
+        - It comes with several active scanning utilities pre-installed.
+      - **Nmap**: A free and open-source utility for network discovery and security auditing. Nmap also comes installed by default on Kali Linux.
+      - **RedSeal**: A security solution that provides risk assessment, compliance auditing, and network visualization of both private network resources and resources located in the cloud.
+  - Passive data collection data that is automatically generated or collected without user intervention, though it may require some initial configuration to set up passive data streams
+    - Examples of data that is passively collected include:
+    - log entries
+    - net flow data
+    - packet captures
+  - **Network sensors** are especially essential for passive data collection
+  - CDAs can determine whether there is sufficient data collection coverage within a network by using **DeTT&CT**, a knowledge base created for network defenders to score and compare data log source quality, visibility coverage, and detection coverage against known threat actor behaviors.
+  - Open-source data is data that is publicly available
+    - A good open-source resource for adversary TTPs is MITRE Adversarial Tactics, Techniques, and Common Knowledge (ATT&CK), which is a globally-accessible knowledge base of adversary tactics and techniques based on real-world observations.
+    - DeTT&CT maps detection capabilities to MITRE ATT&CK techniques.
+
+
+
+
 
 
 
