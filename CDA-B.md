@@ -979,6 +979,10 @@
   - security systems (e.g., Network Security Monitors [NSM], firewalls, and Intrusion Detection Systems [IDS]).
 - If an event appears to be an incident after identification and analysis, it is important to report it quickly and respond according to organizational procedures and standards. 
 
-
+### Neutralization and Eradication of MCA from Affected Systems
+- The objective of a clear operation is the **quarantine**, **withdrawal**, or **destruction of identified threats** from the network or system. This is the key phase in accomplishing that objective.
+- After a system is contained, responders conduct the actual removal of compromised artifacts and any persistence that an attacker may have left behind
+- This is also an exhaustive process and should never be done from memory or through pure intuition
+- Use established organizational Standard Operating Procedures (SOP) and industry-proven checklists in investigating the system
 
 
