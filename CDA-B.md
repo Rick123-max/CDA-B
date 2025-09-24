@@ -941,34 +941,43 @@
   - This attack can be performed against as many accounts as the attacker wishes to run it against, but is usually performed against a specific target account.
   - Usually, password guessing attacks are performed via an automated tool, which can guess many different passwords in a short amount of time
   - In practice, attackers often try to limit the number of passwords they need to guess by choosing passwords from a password list, which contains hundreds or thousands of commonly-compromised passwords that have been extracted from breach reports
-  - 
 
 
+## CLEAR
 
+### Introduction to Clearing
+- Clearing is an operation to target and engage MCA to eliminate or neutralize it from a network or system.
+- Cyber Warfare Publication (CWP) 3-33.4:
+  - Clear is normally used relative to the removal of barriers or obstacles in mobility operations or the deconfliction of targets for engagement. In the context of CPT operations, clear is defined as an operation to target and engage MCA in order to eliminate or neutralize it from a network or system, and may include actions to interdict, contain, disrupt, or degrade MCA. The CPT clear function occurs when the supported or supporting commander directs the CPT to eliminate or neutralize the identified threat on the network or system. CPTs may also be directed to take other actions against identified threats rather than clearing them.
+- The process of conducting a clearing operation through mission partner networks and systems occurs after a hunt operation or threat intelligence identifies MCA
+- Prerequisite to conducting the clearing operation, a CPT should determine the full scope of the intrusion, both functionally and physically, so that the threat and damage is fully characterized prior to recommending that the clear operation proceed.
+- According to National Institute of Standards and Technology (NIST) Special Publication (SP) 800.61r2, the IR lifecycle consists of four phases.
+  - Preparation
+  - Detection and Analysis
+  - Containment, Eradication, and Recovery
+  - Post-incident Activity
+    
+  <img width="608" height="304" alt="image" src="https://github.com/user-attachments/assets/b9eeced1-5880-477b-8ea1-11374d6658d5" />
 
+- These steps correspond to the Preparation and Detection phases of an IR cycle:
+  - Gain and maintain contact with the MCA
+  - Consult with Subject Matter Experts (SME) to determine methods and intent behind MCA
+  - Engage with mission partner Cybersecurity Service Providers (CSSP) to assist with an IR plan
+  - Make a risk mitigation decision based on the benefits or consequences of continuing hunt operations versus initiating clear operations
+- Once a clear operation is approved, a CPT performs the following, as directed or tasked:
+  - Contain affected systems and networks simultaneously to prevent adversary repositioning.
+  - Neutralize and eradicate adversary activities in each network or system
+  - Observe and characterize adversary behavior and Tactics, Techniques, and Procedures (TTP) to enable follow-on operations (i.e., enable hardening)
+  - Enable recovery or restoration of affected systems and networks
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+### Gain and Maintain Contact
+- During the prerequisite phase of clearing operations, which corresponds to the Preparation and Detection steps of the IR lifecycle, Cyber Defense Analysts (CDA), in a **deliberate hunt operation** or after given **actionable threat intelligence**, use a working knowledge of normal operations and patterns in an organization to determine deviations from that baseline, and characterize those anomalies as incidents or not.
+- A variety of tools and techniques are employed, such as:
+  - monitoring software
+  - log and error message aggregation
+  - querying platforms
+  - security systems (e.g., Network Security Monitors [NSM], firewalls, and Intrusion Detection Systems [IDS]).
+- If an event appears to be an incident after identification and analysis, it is important to report it quickly and respond according to organizational procedures and standards. 
 
 
 
