@@ -1372,5 +1372,28 @@
       - Usernames, permission levels, email addresses, chat names, etc
 - When evaluating the OE for a DCO mission, collaboration with the local network owner is essential.
 
+### DMZ
+- A DMZ is a perimeter network that protects an organization's internal Local Area Network (LAN). The DMZ protects the enterprise network by offering a layer of separation between internet-facing services and more sensitive internal-only subnets
+- Additionally, the DMZ utilizes Dynamic Host Configuration Protocol (DHCP) via Internet Service Provider (ISP).
+- DHCP via ISP is when a DHCP server assigns IPs by modem Media Access Control (MAC) address
 
+### Domain Controllers
+- AD is a database and set of services that connect users with the network
+- The DC is the terminal that controls AD.
+- The DC manages many of the services running on the network, tracks which users are active/inactive on the network, and controls access to critical information.
 
+### ACAS Server
+- ACAS is a suite of security software responsible for assessing the network and determining if it meets the defined security objectives
+- ACAS utilizes Nessus to scan software to identify vulnerabilities and weak spots on the network.
+- Nessus actively scans the network in an effort to detect defined vulnerabilities.
+- ACAS also uses the Passive Vulnerability Scanner (PVS) to monitor network traffic at the packet level.
+- PVS discovers new hosts added to a network, identifies ports that are passing traffic, and identifies when applications might be compromised.
+- Administrators on the network are able to view the output from the ACAS server in a centralized software called Security Center (SC).
+- Within SC, administrators make necessary adjustments and modifications to the ACAS and the network.
+- The goal of the ACAS server is ultimately to make the environment as secure as possible
+
+### VPN Server
+- The VPN server acts as a secure tunnel connecting two networks.
+
+### Analyzing a Terrain Map
+- 
