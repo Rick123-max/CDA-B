@@ -1153,6 +1153,134 @@
 
 ## Planning Lifecycle
 
+### Planning Lifecycle Overview
+- Three possible triggers initiate the CPT operations process:
+  - Threat Intelligence
+    - Threat intelligence reporting or warning intelligence may trigger hunt, clear, enable hardening, and assessment functions by the CPT.
+  - Campaign Plan
+    - CPT employment in support of Combatant Command (CCMD) campaign plans is intended to increase critical asset protection prior to operational need.
+  - Malicious Cyberspace Activity (MCA) Detection
+    - Whether discovered by local network protection assets, network owners, or indicated by threat intelligence reporting, CPT hunting and clearing entails conducting reconnaissance and counter-reconnaissance on supported commanders’ networks or systems to gain and maintain contact with an adversary or further develop a situation.
+- The first step of the CPT OP is Objectives, Effects, and Guidance
+- the operational planning section determines the appropriate CPT functions and capabilities before developing preliminary objectives, intended effects, and commander’s guidance
+- The operational planning section is also responsible for assessing existing command relationships and making recommendations for potential additions or changes to facilitate and enable the CPT mission
+- Once a trigger has been identified If a mission is required, a PLANORD and TASKORD is developed.
+- Objectives, intended effects, and commander’s guidance are disseminated via a Planning Order (PLANORD) to the CPT, the supported commander, and the local network protectors
+- PLANORDs are followed by a TASKORD
+  -  According to DoD Joint Publication (JP) 1-02 a TASKORD is,
+    - “A method used to task and to disseminate to components, subordinate units, and command and control agencies projected targets and specific missions. In addition, the tasking order provides specific instructions concerning the mission planning agent, targets, and other control agencies, as well as general instructions for accomplishment of the mission.”
+- TASKORD documents the supported commander’s or organization’s requirement to collect initial network diagrams, terrain information, design documentation, previous operational and penetration test results, and configuration information for CPT use in the next step of the OP.
+
+### TASKORD Overview
+- The PLANORD and TASKORDs provide specific instructions concerning the
+  - mission planning agent
+  - targets
+  - and control agencies, as well as general instructions for accomplishment of the operation.
+- Using the provided information and their analysis of it, the CPT develops a tactical mission statement, end state, defines initial tactical objectives, and determines initial capabilities for the mission.
+- CPT then coordinates with the operational planning section and supports the commander’s staff to coordinate mission Rules of Engagement (ROE) informed by the initial capabilities analysis
+- **ROE** in the context of CPT operations refers to the `constraints and limitations under which the CPT hunts and/or clears when MCA is encountered as agreed on by the supported network owner and the supporting commander`
+- CPT leadership also conducts a troops-to-task assessment to determine personnel requirements based on mission scope and scale.
+- TASKORD Header
+  - General Details pertaining to the Mission
+    <img width="1174" height="1270" alt="image" src="https://github.com/user-attachments/assets/a1a5a624-264d-419f-9291-a0440b9b11ef" />
+
+  - Portion outlined in green describes relevant genreal information that pertains to task.
+  - Important items include:
+    - **Subject (SUBJ)**: The name and goal of the TASKORD and mission
+    - **Operation (OPER)**: The name of the mission
+
+- TASKORD: SECTION 1
+  <img width="1178" height="1430" alt="image" src="https://github.com/user-attachments/assets/ddefa049-7b03-4592-bceb-93fd98d07610" />
+
+  - covers the situation of the task
+  - provides the CPT with background and context for what and why the task is being issued.
+  - CPTs can find a mission summary and the area of concern here
+ 
+- TASKORD Section 2A
+  <img width="1196" height="1128" alt="image" src="https://github.com/user-attachments/assets/d988fb17-1851-4e05-82f9-f083cb393f88" />
+
+  - defines the intent, purpose, method, and end accomplishment(s) of the task
+  - The Commander’s Intent is the overview of the mission and the applicable actions the CPT takes in the task.
+  - The Purpose defines the goals and objectives of the task.
+  - The Method defines how the task is executed.
+  - The End State defines what constitutes completion of the task.
+ 
+- TASKORD: Section 2B
+  <img width="1098" height="1522" alt="image" src="https://github.com/user-attachments/assets/2b3c093c-edd5-4993-b586-2fadf760958b" />
+
+  - provides a list of sub-tasks that are required in support of the overall goal of the TASKORD.
+ 
+- TASKORD: Section 3
+  <img width="1316" height="452" alt="image" src="https://github.com/user-attachments/assets/9229675c-9cf9-48f7-a117-435a77bb5294" />
+
+  - Section 3 of the TASKORD defines administrative and logistical information.
+  - Section 3 can include anything noteworthy pertaining to the specific site or mission funding.
+ 
+- TASKORD: Section 4:
+  <img width="1288" height="310" alt="image" src="https://github.com/user-attachments/assets/968e425d-5816-4a60-86a6-fc10fb412af0" />
+
+  - Section 4 of the TASKORD defines the primary command and control for the mission.
+ 
+- TASKORD: Section 5:
+  <img width="1304" height="896" alt="image" src="https://github.com/user-attachments/assets/1b9e8c56-2c42-463f-b24c-781ecc09d598" />
+
+  - Section 5 of the TASKORD defines the ROE.
+  - The ROE are parameters that the CPT must follow, and includes parameters such as areas of the network that should not be accessed and tools that can/cannot be used on the network.
+  - The CPT coordinates with the operational planning section and support commander’s staff to coordinate mission ROE informed by the initial capabilities analysis.
+  - ROE in the context of CPT operations refers to the constraints and limitations under which the CPT hunts and/or clears when MCA is encountered as agreed upon by the supported network owner and the supporting commander.
+  - For example, the CPT needs to know if they are allowed to employ agent-based solutions, deploy compiled code to hosts, or interrupt service(s) during mission conduct.
+  - CPT leadership also conducts a troops-to-task assessment to determine personnel requirements based on mission scope and scale.
+  - By adding enriching data and graphical control measures to network maps produced during the previous step, the CPT further improves terrain visualization during planning and operations to enable a common operating picture to emerge, and create shared situational awareness between the CPT, the supported commander, and local network protection assets.
+  - The network map forms the basis of the CPT’s visualization tools and must scale appropriately to the situation. As a critical input, the network map forms the foundation on which courses of action are developed based on the operational approach and analytic scheme of maneuver employed by the CPT.	
+
+### Data Collection
+- The planning phase includes data collection of artifacts, such as:
+  - Network Diagrams
+    - visual representation of the systems and connections the CPT operates on during the mission
+    -  streamline the mission by cutting out the time or effort to make assumptions about the network
+  - Terrain Information
+    - includes the logical and physical components
+    - Defensive Cyberspace Operations (DCO) team members should use Key Terrain in Cyberspace (KT-C), MRT-C, Task Critical Asset (TCA), and Defense Critical Asset (DCA) to define terrain
+    - Terrain analysis is the collection, analysis, evaluation, and interpretation of geographic (physical) and digital (virtual) information on the natural and man-made features of the terrain to predict the effect of the terrain on military operations.
+    - Within DCO, it involves the study and interpretation of features of the terrain and their effects on military operations.
+  - Configuration Information
+    - Configuration information refers to the details and settings of the machines and devices used on the network
+    - can refer to both physical and logical details and settings
+    - Physical configuration information can include data points such as the location of servers, machines, or network devices and the type of hardware making the connection between machines
+    -  Logical configuration information can include data points such as Operating Systems (OS), firmware and firewall versions, and Active Directory (AD) users and groups.
+    -  Configuration information can also include data points containing the Points of Contact (POC) that are responsible for the configurations.
+
+### RFI Overview
+- An RFI is a document that an organization sends to customers to request specific information or clarification on information regarding the mission
+- While not always necessary for every mission, an RFI provides clarity for the information in question that is both technical and/or non-technical
+- During the planning lifecycle of the CPT OP, CPTs collect a vast amount of data points and information
+
+- RFI Format
+  - RFIs do not need to follow a specific format or template.
+  - RFIs need to include requests for information that impacts how an operation is executed.
+  - The information in the request can pertain to any of the topics covered in the TASKORD or in the operation as a whole, topics can include:
+    - intent
+    - purpose
+    - end state
+    - tasks
+    - logistics
+    - command, or control.
+  - The RFI will include the contact information for the site personnel responsible with receiving and processing the RFI.
+  - The personnel is typically the network or system owner, or directly connected to the owners, at the site of the operation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
