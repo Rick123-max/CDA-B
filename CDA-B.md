@@ -1268,32 +1268,109 @@
   - The RFI will include the contact information for the site personnel responsible with receiving and processing the RFI.
   - The personnel is typically the network or system owner, or directly connected to the owners, at the site of the operation.
 
+## Terrain Identification
 
+### Terrain Overview
+- Terrain, which covers all of cyberspace, includes the logical and physical components
+- When defining terrain DCO team members should use:
+- **KT-C**
+  - Any locality or area — physical or logical — where seizure, retention, or other specified degrees of control provide a marked advantage in cyberspace to any combatant. 
+- Mission Relevant Terrain in Cyberspace (MRT-C)
+  - Described as — but not limited to — all devices, internal/external links, Operating Systems (OS), services, applications, ports, protocols, hardware, and software on servers required to enable the function of a critical asset. 
+- **Task Critical Asset (TCA)**
+  - An asset that is of such extraordinary importance that its incapacitation or destruction would have a serious, debilitating effect on the ability of one or more Department of Defense (DoD) or Office of the Secretary of Defense (OSD) components to execute the capability or mission-essential task it supports. TCAs are used to identify DCAs.
+- and **Defense Critical Asset (DCA)**
+  - An asset of such extraordinary importance to operations in peace, crisis, and war that its incapacitation or destruction would have a very serious, debilitating effect on the ability of the DoD to fulfill its missions.
+- as outlined in United States Cyber Command (USCC) Operational Guidance on Identification of Mission Relevant Terrain in Cyberspace.
+- Once the CPT has an assigned terrain in which to hunt and operate, the threat hunter can filter through the terrain, based on the types of systems and data available
+- Data requirements are tied to analytics that are then tied to Tactics, Techniques, and Procedures (TTP) used.
+- Identifying terrain, in turn, reduces the number of analytics necessary for the team to execute.
+- The threat hunter can also filter through the terrain on the identified MRT-C and KT-C to prioritize the required data collection.
+  
+### Terrain Analysis and Identification
+- **Terrain analysis** is the collection, analysis, evaluation, and interpretation of geographic (physical) and digital (virtual) information on the natural and man-made features of the terrain to predict the effect of the terrain on military operations.
+- Within DCO, it involves the study and interpretation of features of the terrain and their effects on military operations.
+- Terrain Analysis and Site Survey
+  - A site survey is the examination of a location in order to obtain data or information
+  - The information obtained during a site survey helps determine the mission terrain, gathers critical data, and defines the network owner’s needs
+  - Information that can be collected during a site survey includes
+    - access to the site and necessary equipment
+    - network topology
+    - OSs
+    - and critical on-site personnel to assist with the operation (such as security and information technology personnel).
+  - During the site survey, a DCO team supporting threat hunting develops relationships with the network owner, finalizes the Operation Order (OPORD), develops the tactical plan, and collects the crucial mission data necessary to build a hunt plan
+  -  It is during this time that a team arrives, requests a work location, gains access to personnel/systems, and integrates its equipment and tools into the network.
+  - To develop the fundamental understanding of the terrain, a DCO team must collect data before the site survey occurs.
+  - Data to collect prior to the site survey includes policy documents, briefings, log samples, network maps, or vulnerability scans
 
+### Terrain-based Cyberspace Threat Hunting Methodologies
+<img width="668" height="368" alt="image" src="https://github.com/user-attachments/assets/afe841b3-b82f-4791-a2f0-9f74dccaa2f3" />
 
+- **Cyberspace Threat Hunting (CTH)** is the process of proactively and iteratively searching through networks to detect and isolate advanced threats that evade existing security solutions
+- There are three unique core CTH methodologies driven by
+  - analytics
+    - Analytics — Driven methodology leverages data and analytics
+    - utilizes complex queries and algorithms to apply to data sets
+    - A key distinction with the Analytics methodology is no physical access to local machines, networks, or systems is required.
+    - Data artifacts consisting of sensor alerts, system logs, and network traffic are vital to the Analytics — Driven Methodology.
+    - CTH analysts combine knowledge of data artifacts with knowledge of automated analysis capabilities to develop a picture of the network terrain.
+  - situational awareness
+    - Situational Awareness — Driven methodology leverages an advanced understanding of a particular cyberspace terrain in order to detect anomalous activity.
+    - Situational Awareness does not require physical access to local systems
+    - Data artifacts pertaining to the operating environment are critical to this methodology.
+    - CTH analysts examine data artifacts over time in order to understand system normality and detect outliers in behavior, which often lead to discovering potentially Malicious Cyberspace Activity (MCA).
+  - and intelligence.
+    - Intelligence — Driven methodology leverages timely, accurate, mature Cyberspace Threat Intelligence (CTI) to detect advanced cyberspace threats.
+    - Intelligence — Driven methodology requires physical access to local systems.
+   
+### Defining an Operational Environment
+- An **OE** is a composite of the **conditions**, **circumstances**, and **influences** that affect the employment of capabilities and bear on the decisions of the commander
+- Components including the type of equipment, the size of the network, OSs, key personnel, and schedule of the location all play critical roles in decision making. These components help to define the OE.
+- Defining the OE results in the identification of:
+  - Significant characteristics that can affect friendly and threat operations
+  - Gaps in current intelligence
+- CTH analysts identify significant relevant characteristics related to the mission variables of the enemy and terrain
+- The threat operator evaluates significant characteristics to identify gaps and initiate information collection.
+- Failure to identify or misidentify the effect these variables may have on the mission at a given time and place can hinder decision-making and result in mission failure.  
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+### Layers of Cyberspace
+- When defining the OE, start with the three layers of cyberspace:
+  - Physical network
+    - consists of the tactile Information Technology (IT) devices and infrastructure in the domains that provide storage, transport, and processing of information within cyberspace
+    - The layer includes data repositories and the connections that transfer data between network components.
+    - Physical network components include the hardware and infrastructure (e.g., computing devices, storage devices, network devices, and wired and wireless links).
+    - These components require physical security measures to protect them from damage or unauthorized access, which may be leveraged to gain logical access.
+    - Depicting the physical network layer within the OE allows analysts to inspect the layer as it relates to friendly and threat operations.
+    - CTH analysts derive the physical network layer depiction from products developed by the network owner and through their own validation of the network.
+    - When analyzing the physical network layer, identify:
+      - Threat Command and Control (C2) systems  — physical devices adversaries use to leverage to execute their operations — that traverse the cyberspace domain
+      - Critical nodes the threat can use as hop points in the OE
+      - Physical network devices in the terrain (e.g., fiber optic cables, internet exchanges, and public access points)
+      - Elements or entities — threat and non-threat — interested in and possessing the ability to access data and information residing on and moving through the network
+      - Physical storage locations with the most critical information and accessibility to that information
+      - Implemented measures that prevent threat actors from accessing the networks
+  - Logical network
+    - consists of all the data — whether resting, moving, or being used in the physical network layer
+    - based on the programming or software that drives network communications, interactions, and connectivity
+    - Individual links and nodes are represented in the logical network layer along with various distributed elements of cyberspace including data, applications, and network processes not tied to a single node.
+    - Network maps often depict the logical network layer in relation to the physical network layer.
+    - Reporting from many sources can provide information about the logical network layer of threat cyberspace, including — but not limited to — protocols, Internet Protocol (IP) address blocks, and OSs.
+    - Network key systems can be assessed using the depiction on the logical network layer.
+    - When analyzing the logical network layer, identify:  
+      - Websites or web pages that influence or have a social impact on the network
+      - Friendly logical network configurations and vulnerabilities and the friendly physical network configurations
+      - Software that handles and shares friendly data
+      - Virtual Private Networks (VPN) or subnets that cross physical boundaries
+  - Cyber-Persona
+    - view of cyberspace created by pulling artifacts and data from the logical network layer to describe actors and entities that utilize the network
+    - consists of network or IT user accounts, whether human or automated, and their relationships to one another.
+    - Cyber-personas may relate directly to an actual person or entity, incorporating some personal or organizational data (e.g., email and IP addresses, web pages, phone numbers, web forum logins, or financial account passwords).
+    - includes employee permissions to access physical and logical aspects of the OE
+    - When analyzing the cyber-persona layer, identify: 
+      - Data and information consumers in the terrain
+      - How local users interrelate with the physical network and logical network layers
+      - Usernames, permission levels, email addresses, chat names, etc
+- When evaluating the OE for a DCO mission, collaboration with the local network owner is essential.
 
 
 
