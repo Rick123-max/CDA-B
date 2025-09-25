@@ -1105,6 +1105,59 @@
 
 ## ASSESS
 
+### Overview of the Assess Function - FOUO
+- The Assess Phase
+ - One of the core functions of a CPT is assessing the effectiveness of response actions against current and future risks to specified terrain in cyberspace
+ - As per Cyber Warfare Publication (CWP) 3.33-4:
+   - During operations, the CPT will simultaneously assess the effectiveness of clearing operations, hardening actions taken by local network defenders, and the overall network system security, and resilience.
+ - As per CWP 3.33-4, the goal of assessing is to conduct Cyber Threat Emulation (CTE)
+ - CTE assesses the current security posture by emulating known adversary Tactics, Techniques, and Procedures (TTP) to validate the current defensive measures
+ - Assessment takes the products from a mission execution and uses them to determine if operational objectives were met. Assessment is centered around indicators to track progress towards mission accomplishment.
+ - The indicators that the trainee is concerned with as per CWP 3-33.4 are
+   - MOPs determine whether operational tasks were satisfied to create the desired effect.
+   - MOEs determine whether the desired effect achieved operational objectives.
+   - More concisely, MOPs track progress towards creating the desired effect, and MOEs evaluate if that desired effect achieved operational objectives.
+   - MOEs can be considered as bullets and MOPs can be considered sub-bullets.
+ - While the CPT OP focuses on mission at an operational level, CPTs do not function at an operational level during day-to-day tasks
+ - When the Operational Control (OPCON) Headquarters (HQS) Operational Planning element provides operational level MOEs and MOPs, the CPT will use them by converting them into tactical level MOEs and MOPs
+ - This involves turning operational level MOPs into tactical level MOEs, and developing new tactical MOPs that would correspond to the MOEs
+ - The new tactical level MOEs and MOPs will be used by the CPT to conduct tactical assessments during and after the mission execution phase.
+ - Tactical assessments can fulfill the objective of assessing the effectiveness of response actions, and therefore play a part during the assess function.
+
+### MOEs and MOPs
+<img width="1950" height="838" alt="image" src="https://github.com/user-attachments/assets/12a11e15-4c29-4440-b0ce-f00b2df7c0d5" />
+
+- Since CPTs only function at tactical level, the MOPs become the new MOEs.
+- CPTs decide how to accomplish MOEs by developing now MOPs
+<img width="799" height="932" alt="image" src="https://github.com/user-attachments/assets/9dc1b847-e7f9-4a92-be92-bf6c9fb23bdd" />
+
+- CPT continuously references MOEs and MOPs during mission execution, and post-mission execution to ensure effectively conducted operations and completed key tasks.
+
+### Building a Timeline
+- Examining external reporting and observing the Operation Notes (OPNOTE) of other analysts are critical tasks at this stage
+- Focus on aggregating the output of various intelligence and tactical products to ensure that the mission objectives were met
+- Consider tactical output from mission execution:
+  - **Situational Reports (SITREP)**: SITREPs are routinely generated to provide updates to higher elements on a daily, weekly, per-phase, or on request.
+  - **Tactical Assessments**: Tactical assessments are low-level assessments that often contain their own MOEs and MOPs
+  - **OPNOTEs**: OPNOTEs are in-depth and technical about the events that occur during mission execution. However, OPNOTEs contain very specific timestamps and events rather than a high-level summary. When more detail than a high-level summary is needed, consult the OPNOTEs.
+- In addition, OPNOTEs are helpful in developing a execution timeline including, but not limited to:
+  - **Health and Status Reports**: US government agencies publish health and status reports on a regular basis to aid with situational awareness of current operational activities, which enables the capacity to build, defend, and operate in cyberspace.
+    - These reports have a variety of functions, but they are useful in establishing past trends and assess their impact on the mission partner’s network.
+  - **Cyber IR Reports**: DoD agencies must abide by the cyber incident handling program defined in the Chairman of the Joint Chiefs of Staff Manual (CJCSM) 6510.01B.
+    - This document outlines a specific IR report template. The completed reports are stored in the Joint Incident Management System (JIMS) on Secret Internet Protocol Router Network (SIPRNet). Past incidents provide a historic picture of the network as well.
+
+  <img width="755" height="382" alt="image" src="https://github.com/user-attachments/assets/cb972b1d-a613-41f0-b1d9-4dd4ce48901a" />
+
+
+
+
+
+
+
+
+
+
+
 
 
 
