@@ -1103,6 +1103,8 @@
   - Rule 30 — Allows both devices to communicate with the logging host in the security network
   - Rule 40 — Allows all other types of traffic
 
+## ASSESS
+
 
 
 
