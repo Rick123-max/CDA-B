@@ -1456,7 +1456,69 @@
 - Connecting each subtopic is the information related to the events.
 - Related events share attributes and are the result of an action.
 - They have a specific detail connecting them; these attributes would be granular-level details
-- 
+
+
+# MODULE 5
+
+## OPNOTES
+
+### OPNOTES Overview
+- OPNOTEs are important to the investigative and reporting lifecycle throughout the Cyberspace Operations (CO) process
+- It is vital that each of the participating CDAs record standardized OPNOTEs.
+- They must be clear and concise including, but not limited to, the following:
+  - Time/date
+  - Host name
+  - Internet Protocol (IP) address
+  - Description
+- Taking detailed notes allows teams to work effectively, efficiently, and easily overcome issues with misleading and uncertain data.
+- Creating detailed OPNOTEs provide both teams and system owners clarity on when and what was performed during the investigative process
+
+### Structure of OPNOTEs
+- The use of column headers is a common way of ensuring that OPNOTEs are consistent row to row and are easily consumed
+
+- Date and Time
+  - The Date and Time columns are based on the timeframe in which the action was performed or discovered
+  - This is not the date and time in which an artifact was logged by a platform or tool
+  - Log analysis date- and time-stamping is usually listed in a different column for timeline building later
+
+- Subject
+  - The Subject column header describes the subject of the findings or related artifacts
+  - Commonly used attributes in this column include **IP address**, **Uniform Resource Locator (URL)**, **username**, **hostname**, **artifact**, **action**, or **indicator**
+
+- Description
+  - ﻿Always use concise, precise, and accurate information when describing the important action or artifact.
+  - The Description column is the most critical column as it provides context and explanation for the occurrence
+
+- Supporting Information
+  - This column header refers to files of various types, which pertain to and support information listed in the Subject column.
+  - Some examples of supporting information include **system logs**, **Security Information and Event Management (SIEM) events**, **tool output**, and **screenshots**
+
+- Tags
+  - The Tags column is used to electronically mark one or more notes with a single attribute.
+  - This enables the user to search, filter, and group multiple related notes quickly and easily.
+
+### Reccomendations
+- Things you should do:
+  - Create detailed digital OPNOTEs compiled with supporting information such as screenshots
+  - Protect OPNOTEs and limit access to prevent unauthorized or undesired modification
+  - Include physical notes taken when computing devices are not availableUse multiple platforms to take OPNOTEs, if necessary
+  - Create opportunities for centralized logging of multiple participants
+  - Backup OPNOTEs and supporting information
+  - Follow all classification guidelines for proper handling and dissemination of information
+
+- Things you should not do:
+  - Save OPNOTEs to potentially infected hosts or networks Omit OPNOTEs because you are unsure or unfamiliar with the information
+  - Stop recording out of laziness or assumption that someone else logged something
+  - Omit notes because you made a mistakeLeave out information because it is sensitive in nature (however, follow classification guidelines)
+  - Be afraid to use a mind map to convey complex relationships between log events
+ 
+
+
+
+
+
+
+
 
 
 
