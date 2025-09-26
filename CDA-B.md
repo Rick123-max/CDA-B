@@ -1395,5 +1395,28 @@
 ### VPN Server
 - The VPN server acts as a secure tunnel connecting two networks.
 
-### Analyzing a Terrain Map
-- 
+## DETAILED THREAT ASSESSMENT REPORT
+
+### Overview
+- A detailed threat assessment report is a tool utilized by organizations to properly measure organizational readiness for probable threat actors, based on historical attacks
+- Detailed threat assessments are granular and can be assembled in preparation of, or after, a security breach
+- The goal of a detailed threat assessment report is to identify assets and information that might be affected during a cyber attack
+- Included in the report is information regarding:
+  - Threat actors
+  - Events
+  - Anomalies
+  - Vulnerabilities
+  - Assets of interest to be compromised
+
+- Timeline of events
+<img width="650" height="363" alt="image" src="https://github.com/user-attachments/assets/7d0f2153-b994-4196-bbd9-a0ffe1eb52a0" />
+
+- Key Components Detailed Threat Assessment Report
+  - A key function of a detailed threat assessment is the ability to determine the amount of risk an organization can expect to take on
+  - A detailed threat assessment describes the risk through assessment of identified threats, vulnerabilities, and compensating controls to determine the likelihood a vulnerability could be exploited and the potential impact should the vulnerability be exploited
+    <img width="1586" height="878" alt="image" src="https://github.com/user-attachments/assets/f65e8692-bd51-48a3-9c4a-704a20014a50" />
+
+
+
+
+
