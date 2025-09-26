@@ -1434,6 +1434,9 @@
 - Included in the findings of a detailed threat assessment is a section devoted to the primary threat to the organization.
 
 
+## MindMaps
+
+
 
 
 
