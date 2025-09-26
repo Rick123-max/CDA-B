@@ -1436,8 +1436,27 @@
 
 ## MindMaps
 
+### Overview of Mind Maps
+  - Mind maps are visual diagrams utilizing two-dimensional structures with connecting lines to connect ideas and events
+  - Connecting points to see how items relate to one another is an important benefit when dealing with elaborate information, such as during process planning, strategy development, and investigative events
+  - An effective mind map shows the interconnectivity of individual points or events that assemble together to create a larger event or project
+  - In cybersecurity, mind maps are effective for outlining and thinking through intricate events — often describing a breach or the investigative process that took place.
+  - There are multiple relations and data points surrounding a single event within a cybersecurity breach or investigation. These events could be compromised user accounts, computers, or network equipment, all of which play a part in a chain of events
+  - A cybersecurity mind map starts at the first sign of a breach and moves through the actions taken, how the actions  were linke d, and what the outcome was throughout the attack lifecycle.
 
+### Mind Map Central Topic
+- The mind map begins with a central topic or the basis of a compromise or investigation.
+- The central topic is the desired unifying event that occurred as part of a larger group of actions.
+- There is only one central topic conveyed in each mind map.
 
+### Understanding Subtopics
+- Subtopics are large steps or events taken during the breach or investigation
+- Information in subtopics is more detailed than the central topic, however, they are still more general than an operational note
+- In the cybersecurity context, the operational notes taken during an investigation would provide the information needed to populate subtopics
+- Connecting each subtopic is the information related to the events.
+- Related events share attributes and are the result of an action.
+- They have a specific detail connecting them; these attributes would be granular-level details
+- 
 
 
 
