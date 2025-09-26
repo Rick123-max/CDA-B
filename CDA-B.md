@@ -1416,6 +1416,25 @@
   - A detailed threat assessment describes the risk through assessment of identified threats, vulnerabilities, and compensating controls to determine the likelihood a vulnerability could be exploited and the potential impact should the vulnerability be exploited
     <img width="1586" height="878" alt="image" src="https://github.com/user-attachments/assets/f65e8692-bd51-48a3-9c4a-704a20014a50" />
 
+### Mapping Detailes Threat Assessment Report Info to Mitre ATTT&CK Framework
+- MITRE ATT&CK is a curated knowledge base and model for cyber adversary behavior, reflecting the various phases of an adversary’s attack lifecycle and the platforms they are known to target
+- At a high level, ATT&CK is a behavioral model that consists of the following core components:
+  - **Tactics**: Denoting short-term, tactical adversary goals during an attack (the columns)
+  - **Techniques**: Describing the means by which adversaries achieve tactical goals (the individual cells)
+  - Documented adversary usage of techniques and other metadata (linked to techniques)
+
+### Executive Summary
+- The detailed threat assessment begins with a brief overview of the compromise or investigation.
+- The overview includes the results of findings that occurred as part of a larger group of actions
+
+### Key Findings
+- Following the overview, the detailed threat assessment displays findings that support the overview.
+- The findings provide more detail and artifacts that support the overall topic. 
+
+- Included in the findings of a detailed threat assessment is a section devoted to the primary threat to the organization.
+
+
+
 
 
 
