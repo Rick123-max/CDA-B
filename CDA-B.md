@@ -1682,7 +1682,79 @@
 - MITRE ATT&CK Enterprise Mitigations
   - After the appropriate strategy is selected to fit the mission partner constraints and the severity of risk, an effective mitigation technique must be identified to fulfill that strategy.
   - The following are standardized mitigations in response to known attack vectors
-  - 
+
+### Risk Assessment | The NIST Risk Assessment Process
+- 
+<img width="1504" height="1058" alt="image" src="https://github.com/user-attachments/assets/20f7b4ac-62b2-4f62-800a-5ae59617f5ea" />
+
+- Identify Threat Sources and Events
+  - CPTs must determine the types of threat sources, threat events, and level of detail to be considered during engagements that include a risk assessment.
+  - The descriptions of threat events can likewise be expressed in highly-general terms (e.g., phishing, Distributed Denial-of-Service [DDoS]) or in highly-specific terms (e.g., the names of specific information systems, technologies, organizations, roles, or locations).
+  - The **MITRE ATT&CK framework** is especially helpful in this threat framing and source description process.
+
+- Identify vulnerabilities and predisposing COnditions
+  - In this step, CPTs determine the types of vulnerabilities that are to be considered during risk assessments and the level of detail provided in the vulnerability descriptions.
+  - The CPT and the supported organization discuss the supported organization’s vulnerability identification process.
+  - Vulnerabilities can be associated with organizational information systems (e.g., hardware, software, firmware, internal controls, and security procedures) or the environments in which those systems operate (e.g., organizational governance, external relationships, mission/business processes, enterprise architectures, and information security architectures).
+ 
+- Determine Likelihood of occurrence
+  - During this step, CPTs determine the likelihood that an adversary exploits vulnerabilities discovered in the previous step.
+  - NIST 800-30 describes this concept as follows:
+    - The likelihood of occurrence is a weighted risk factor based on an analysis of the probability that a given threat is capable of exploiting a given vulnerability (or set of vulnerabilities).
+    - The likelihood risk factor combines an estimate of the likelihood that the threat event will be initiated with an estimate of the likelihood of impact (i.e., the likelihood that the threat event results in adverse impacts).
+    - For adversarial threats, an assessment of likelihood of occurrence is typically based on: (i) adversary intent; (ii) adversary capability; and (iii) adversary targeting.
+    - For other than adversarial threat events, the likelihood of occurrence is estimated using historical evidence, empirical data, or other factors.
+    - Note that the likelihood that a threat event will be initiated or will occur is assessed with respect to a specific time frame (e.g., the next six months, the next year, or the period until a specified milestone is reached).
+ 
+- Determine Magniturde of Impact
+  - CPTs assist network owners and commanders in determining potential adverse impacts to a mission partner in terms of operations (e.g., missions, functions, image, and reputation), organizational assets, individuals, other organizations, and the Nation.
+  - They describe impact determinations and any assumptions related to the impact determination process, particularly addressing specific mission/business processes or information resources (e.g., information, personnel, equipment, funds, and IT).
+  - They describe impact determinations and any assumptions related to the impact determination process, particularly addressing specific mission/business processes or information resources
+ 
+- Determine Risk
+  - Risk tolerance is determined as part of the organizational risk management strategy to ensure consistency across the organization
+  - Organizations also provide guidance on how to identify reasons for uncertainty when risk factors are assessed, since uncertainty in one or more factors propagates to the resulting evaluation of level of risk, and how to compensate for incomplete, imperfect, or assumption-dependent estimates
+  - Consideration of uncertainty is especially important when organizations consider Advanced Persistent Threats (APT) since assessments of the likelihood of threat event occurrence can have a great degree of uncertainty.
+  - To compensate, organizations can take a variety of approaches to determine likelihood, ranging from assuming the worst-case likelihood (certain to happen in the foreseeable future) to assuming that if an event has not been observed, it is unlikely to happen.
+  - Organizations also determine what levels of risk (combination of likelihood and impact) indicate that no further analysis of any risk factors is needed. NIST uses a nonnumerical qualitative description for how to assess the risk (e.g., very low, low, medium, high, and very high).
+
+### Risk Assessment | The USCYBERCOM Risk Assessment Methodology
+- Another way of assessing risk is by determining risk at the intersection of a threat and a vulnerability influenced by likelihood and impact.
+- According to CWP 3-33.4:
+  - United States Cyber Command (USCYBERCOM) and subordinate commanders use the criticality, threat, and vulnerability methodology to assess risk and identify priority for CPT task management.
+
+- Criticality
+  - This criterion derives from the DoD determination of which critical systems or assets would have a debilitating impact on security, public health, or safety if incapacitated or destroyed.
+  - Refer to CWP 3-33.4 Chapter 3, Section 4.c.(7).(a) for more information.
+  - NIST SP 800-60 defines criticality as:
+    - A measure of the degree to which an organization depends on the information or information system for the success of a mission or of a business function.
+   
+- Threat
+  - The threat methodology is a characterization of the possible threat sources and the threat events that are likely to be encountered during the protection of the mission partner network
+  - These risk factors are derived from threat intelligence provided by the CPT All-Source Analyst cell, MITRE ATT&CK Navigator overlays of known threats (such as the overlays developed during M5L2 Overview of MITRE ATT&CK), or the results of a Threat Assessment or Events/Anomalies report developed earlier during CPT assess operations
+  - CWP 3-33.4, Appendix D describes those sections of the RMP as follows:
+    <img width="1506" height="200" alt="image" src="https://github.com/user-attachments/assets/b5c602de-66a0-4aa3-ae30-74b32ec04f1f" />
+
+- Vulnerability
+  - The vulnerability methodology is a characterization of actual avenues of attack available to potential threat actors for Malicious Cyberspace Activity (MCA)
+  - These are either highly-technical true or false determinations of technological weakness, or programatic non-technical determinations of compliance with industry standard policies and procedures
+  - CWP 3-33.4, Appendix D describes the vulnerability section of the RMP as follows:
+    <img width="1506" height="157" alt="image" src="https://github.com/user-attachments/assets/52b393c5-d60c-4215-886c-e1060ff6c4c3" />
+
+- Likelihood
+  - This factor is a simple probability that the expected threat sources and events impact the mission partner network.
+  - The development of that probability is more subjective and eased by experience, but can be aided by industry-standard tools, such as ACAS and MITRE ATT&CK Navigator, which simplifies the comparison of threats and vulnerabilities.
+
+- Impact
+  - This factor is heavily influenced by the mission partner’s own asset prioritization, key terrain analysis, and criticality assignment.
+  - The higher value that a specified asset possesses, the higher the potential impact is of a vulnerability leading to harm on the asset.
+  - CWP 3-33.4, Appendix D describes these sections of the RMP as follows:
+    <img width="1506" height="437" alt="image" src="https://github.com/user-attachments/assets/9a8ad84d-e3d0-4956-b38d-5223b3065b99" />
+
+<img width="1504" height="838" alt="image" src="https://github.com/user-attachments/assets/058a40f1-9713-4825-9655-f090689780d7" />
+
+
+
 
 
 
