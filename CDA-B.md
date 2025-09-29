@@ -1619,6 +1619,35 @@
 
 ## Advanced Usage of MITRE ATT&CK
 
+### Atomic Red Team Overview
+- Background
+  - Atomic Red Team is an open-source project maintained by Red Canary that contains a collection of tests.
+  - Analysts use the tests to evaluate and detect certain TTPs mapped to ATT&CK techniques.
+  - The tests are focused, have few dependencies, and are defined in a structured format that can be used by automation frameworks
+  - Red Canary has also released an execution framework as a PowerShell module called `Invoke-AtomicRedTeam` that allows network defenders to run the tests.
+  - The tests are small and enable highly portable detection.
+  - Furthermore, the mapping to the MITRE framework provides network defenders with easily actionable tests to immediately evaluate their defenses against a broad spectrum of attacks.
+
+- Key Beliefs of Atomic Red Team
+  - Precision
+    - Cyber defenders need to be able to test everything from specific technical controls to outcomes and should not operate with a hopes and prayers attitude toward detection.
+    - Defenders need to know which of their controls a program can detect, and what it cannot.
+    - Network defenders may not be able to detect every adversary, but they do need to know where their blind spots are to be able to implement the correct mitigating controls.
+  - Speed
+    - Most Atomic Red Team tests were written with the ability to be completed in less than five minutes.
+    - Most security tests and automation tools take a tremendous amount of time to install, configure, and execute. Red Canary coined the term atomic tests to convey the fact that there was a simple way to decompose tests so most could be run in a few minutes.
+  - Adaptability
+    - Cyber defenders need to continuously learn and adapt to how adversaries operate.
+    - Most network defenders do not have the ability to see a wide variety of adversary types and techniques crossing their networks.
+    - Defenders only come across a fraction of the possible techniques being used, which makes collaboration within the cybersecurity community essential for seeing more adversarial TTPs.
+
+      <img width="1504" height="1234" alt="image" src="https://github.com/user-attachments/assets/0e9160c3-d2dc-4999-962f-b018f53e9fb8" />
+
+
+
+
+
+
 
 
 
