@@ -1643,6 +1643,55 @@
 
       <img width="1504" height="1234" alt="image" src="https://github.com/user-attachments/assets/0e9160c3-d2dc-4999-962f-b018f53e9fb8" />
 
+## Risk Mitigation Plan (RMP)
+
+### Risk Mitigation | Strategies
+- Risk mitigation options are based on both the probability of occurrence and the severity of consequences for an identified risk
+
+  <img width="498" height="441" alt="image" src="https://github.com/user-attachments/assets/58c586d5-6ea3-4172-8ffe-70a81a7e6c8f" />
+
+- Risk mitigation strategies include:
+  - Assume/Accept
+    - This risk mitigation strategy **acknowledges the existence of a particular risk**, and makes a **deliberate decision to accept it** without engaging in special efforts to control it
+    - Approval by mission partners and/or network owners is required to implement this measure
+    - In order to successfully mitigate risk in this manner, mission partners must collaborate with the operational users to create a collective understanding of risks and their implications.
+    - Risks should be characterized as impacting traditional cost, schedule, and performance parameters and potentially degrading mission performance due to reduced technical performance or capability
+    - Ensure that they understand the vulnerabilities affecting a risk, countermeasures that can be performed, and residual risk that may occur. 
+  - Avoid
+    - This risk mitigation strategy **adjusts operational requirements or constraints to eliminate or reduce the risk or adapt to the risk**
+    - This adjustment could be accommodated by a change in funding, schedule, or technical requirements.
+    - Providing stakeholders with projections of adjustments needed to reduce risk associated with technology maturity and identifying any impacts resulting from dependencies on other efforts increases stakeholder buy-in.
+    - This information better enables mission partners and network owners to interpret the operational implications of an avoid option.
+  - Control
+    - This risk mitigation strategy **implements actions to minimize the impact or likelihood of the risk**
+    - A mission partner successfully controls risks by performing analysis of various mitigation options.
+    - In developing options for controlling risk in an operation, seek out potential solutions from similar risk situations of other partner organizations, industry, and academia
+    - When considering a solution from another organization, take special care in assessing any **architectural changes** needed and their implications.
+    - It is worth noting that when the severity of risk is high enough, controlling the risk is often the only appropriate strategy, as accepting or avoiding the risk results in unacceptable potential impact.
+  - Transfer
+    - In this strategy, **reassign organizational accountability**, **responsibility**, and **authority** to another stakeholder willing to accept the risk.
+    - It may make sense when the risk involves a narrow, specialized area of expertise not normally found in mission partner organizations.
+    - However, transferring a risk to another organization can result in dependencies and loss of control that may have their own complications. 
+  - Watch/Monitor
+    - This risk mitigation strategy requires **monitoring the environment for changes** that affect the nature and/or the impact of the risk, and is often employed in conjunction with other mitigation strategies.
+    - mission partners should periodically reassess the basic assumptions associated with the risk
+    - The environment should be routinely scanned to ascertain any changes that affect the nature or impact of the risk.
+    - The risk may have sufficiently changed such that the current mitigation is ineffective, or it may have diminished to where the resources devoted to it may be redirected.
+   
+### Risk Mitigation | Techniques
+- MITRE ATT&CK Enterprise Mitigations
+  - After the appropriate strategy is selected to fit the mission partner constraints and the severity of risk, an effective mitigation technique must be identified to fulfill that strategy.
+  - The following are standardized mitigations in response to known attack vectors
+  - 
+
+
+
+
+
+
+
+
+
 
 
 
