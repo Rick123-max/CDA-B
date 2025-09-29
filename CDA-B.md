@@ -1515,6 +1515,93 @@
 
 ## Overview of the MITRE ATT&CK
 
+### MITRE ATT&CK Framework
+- MITRE’s ATT&CK is a framework for modeling cyber threat adversary behaviors in their varied complexity
+- consists of a knowledge base of known behaviors, which characterizes those behaviors both at a high level for conceptual understanding and with the granular historical detail required to see how the model correctly fits actual attacks that have occurred.
+- reflects the various phases of an adversary’s attack lifecycle and the platforms they are known to target, but is free from the rigidity of a linear attack chain.
+- At a high level, ATT&CK is a behavioral model that consists of the following core components:
+  - **Tactics**: Short-term, tactical adversary goals during an attack (the columns)
+  - **Techniques**: The means by which adversaries achieve tactical goals (the individual cells)
+  - **Documented adversary usage of techniques and other metadata** (linked to techniques). ATT&CK is not an exhaustive enumeration of attack vectors against software, but the documented operation can be used to contextualize the impact of an attack, the actors known to employ the technique, and other information.
+
+- History of MITRE ATT&CK
+  - The first ATT&CK model was created in September 2013, and focused primarily on the Windows enterprise environment
+  - It was further refined in May 2015, with 96 techniques organized under nine tactics
+  - Based on the methodology used to create the first ATT&CK model, a complementary knowledge base called PRE-ATT&CK was created to focus on left of exploit behaviors
+  - As of 2021, ATT&CK includes techniques that cover:
+    - **Enterprise platforms**: Windows, macOS, Linux, PRE, Azure Active Directory, Office 365, Google Workspace, Software as a Service (SaaS), Infrastructure as a Service (IaaS), Network, and Containers
+    - **Mobile platforms**: Android and iOS
+    - **Industrial Control Systems (ICS)**
+
+- ATT&CK Matrix | Techniques
+  - Below are the tactics included in the ATT&CK Matrix:
+     1. Reconnaissance: Techniques that involve adversaries actively or passively gathering information that can be used to support targeting (e.g., staff/personnel, infrastructure, etc.).
+     2. Resource Development: Techniques that involve adversaries creating, purchasing, or compromising/stealing resources that can be used to support targeting.
+     3. Initial Access: Techniques that use various entry vectors to gain an initial foothold within a network (e.g., spearphishing link).
+     4. Execution: Techniques that result in running attacker-controlled code on a local or remote system (e.g., PowerShell).
+     5. Persistence: Techniques used to maintain persistent access to a system (e.g., logon scripts).
+     6. Privilege Escalation: Techniques used to gain higher-level privileges on a system or network (e.g., process injection).
+     7. Defense Evasion: Techniques used to avoid detection (e.g., Dynamic Linked Library [DLL] side-loading).
+     8. Credential Access: Techniques for stealing credentials such as account names and passwords (e.g., Kerberoasting).
+     9. Discovery: Techniques used to gain knowledge about the system and internal network (e.g., Network Sniffing).
+     10. Lateral Movement: Techniques used to enter and control remote systems on a network from the already compromised host (e.g., Pass the Ticket). Attackers typically have to pivot through multiple machines — usually the weakest link in the chain of machines — to ultimately reach their end objective.
+     11. Collection: Techniques used to gather information relevant to following through on the attacker’s objectives (e.g., input capture).
+     12. Command and Control (C2): Techniques attackers may use to communicate with systems under their control; often disguised to look like normal Hypertext Transport Protocol (HTTP) traffic (e.g., domain fronting).
+     13. Exfiltration: Techniques used to steal data from your network (e.g., exfiltration over web service).
+     14. Impact: Techniques used to disrupt availability or compromise integrity by manipulating business and operational processes (e.g., firmware corruption). Impact is the result on your system after the attacker accomplishes their ultimate goal and is the most recently added tactic.
+
+- The Cyber Kill Chain
+  - The alternate Lockheed Martin Cyber Kill Chain® does an excellent job of adapting a centuries-old military model of targeting and affecting the object of an attack to the modern landscape of cyberspace
+  - It also correctly captures what has been the general attack process of most early cyber attacks
+  - The model also struggles to provide the granular detail that defenders in a world of rapidly changing technological landscapes require to implement effective mitigations and functional controls.
+  - These details include **individual adversarial actions**, **connections between actions**, **relations between sequences of actions and tactical adversary objectives**, and **correlations with data sources**, **configurations**, and other countermeasures used for the security of a platform and domain
+
+- The ATT&CK Framework
+  - The ATT&CK framework is a dynamic model, evolving and updating to match the TTPs deployed by real-world threat actors
+  - The TTPs in ATT&CK define adversarial behaviors within an attack lifecycle in a way that allows the behaviors to be more effectively mapped to corresponding defensive actions.
+  - The ATT&CK model is also a useful construct to integrate threat intelligence and incident data together, in order to identify different threat actors and those actors' preferences for particular techniques
+  - By maintaining such a dynamic model, ATT&CK struggles to provide a step-by-step blueprint for how attacks are conducted.
+
+- Combining Models
+  - ATT&CK and the Cyber Kill Chain can be complementary.
+  - The detail that ATT&CK provides when combined with the ordered phases Cyber Kill Chain uses to describe high-level adversary objectives creates a powerful combination for learning how threat adversaries operate in cyberspace, but familiarity with a model eventually reveals how it can and should be broken.
+  - The difference between these models is that ATT&CK is designed not to be broken, but rather adapted and updated.
+ 
+### ATT&CK Navigator Overview
+- The ATT&CK Navigator is a free and open-source tool provided by MITRE to visualize ATT&CK TTPs.
+- It includes pre-loaded data for known attack group TTPs, as well as TTPs exploited by various pieces of malicious software
+- Each cell in ATT&CK Navigator can be scored and colored, allowing ATT&CK Navigator to be used by defenders for multiple purposes including:
+  - Visualizing sensor coverage and gaps by TTP
+  - Visualizing TTPs used by threat actors
+  - Comparing threat actor groups by TTPs
+  - Visualizing an organization’s risk by applying scores for impact or likelihood to a TTP
+
+- Attack navigator Controls
+  - Selection Controls
+    - Lock multi-tactic technique selection: Toggles whether selecting techniques also selects the same technique in other tactics
+    - Search: Search for cells to be selected
+    - Multi-select: Selects multiple techniques based on pre-loaded data like threat groups
+    - Deselect: Deselects currently selected techniques
+  - Layer Controls
+    - Layer information: Contains the name and description of the layer, which can be edited by the user
+    - Download layer as JSON: Downloads the current layer in JSON format
+    - Export to Excel: Converts the current layer to Excel format and downloads it
+    - Render layer to Scalable Vector Graphic (SVG): Generates an SVG image of the current layer
+    - Filters: Presents options for filtering the displayed techniques
+    - Sorting: Changes how techniques within each tactic are sorted
+    - Color setup: Changes background colors for techniques based on user-assigned score
+    - Show/hide disabled: Toggles whether or not disabled techniques are visible
+    - Toggle view mode: Toggles between various view modes
+  - Technique Controls
+    - Toggle state: Disables or enables the selected technique
+    - Background color: Sets a background color for the selected technique
+    - Scoring: Specify a score for the selected technique
+    - Comment: Sets a comment for the selected technique
+    - Clear annotations: Clears any changes to the technique selected
+   
+
+
+
 
 
 
