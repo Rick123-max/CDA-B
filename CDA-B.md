@@ -1617,6 +1617,7 @@
   - The data is categorized by platforms, adversary groups, tactics, and techniques defined in the MITRE ATT&CK Framework.
   - This data allows an organization to test a detection strategy or individual detection rule against simulated malicious events.
 
+## Advanced Usage of MITRE ATT&CK
 
 
 
