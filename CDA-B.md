@@ -1843,6 +1843,29 @@
   echo exiting...
   ```
 
+### Powershell
+- PowerShell is a CLI shell and scripting language designed specifically for system administration
+- PowerShell has a rich expression parser and a fully developed scripting language
+- The PowerShell Integrated Scripting Environment (ISE) is a host application for PowerShell
+- In PowerShell ISE, you can run commands and write, test, and debug scripts in a single Windows-based GUI with multiline editing, tab completion, syntax coloring, selective execution, context-sensitive help, and support for right-to-left languages.
+- PowerShell ISE allows users to utilize menu items and keyboard shortcuts to perform many of the same tasks that are executed in the Windows PowerShell console.
+- to set a line breakpoint in a script, right-click the line of code, and select **Toggle Breakpoint**.
+- Cmdlets are similar to Windows commands, but provide a more extensible scripting language
+- Powershell Features
+  - Cmdlets: Cmdlets perform common system administration tasks such as managing the registry, services, processes, event logs, and using Windows Management Instrumentation (WMI).
+  - Task-oriented: PowerShell scripting language is task-based and provides support for existing scripts and CLI tools.
+  - Consistent design: As cmdlets and system data stores use common syntax, and have common naming conventions, data sharing is easy. The output from one cmdlet can be pipelined to another cmdlet without manipulation.
+  - Simple to use: Simplified, command-based navigation lets users navigate the registry and other data stores similar to the file system navigation.
+  - Object-based: PowerShell possesses powerful object manipulation capabilities. Objects can be sent to other tools or databases directly.
+  - Extensible interface: PowerShell is customizable as independent software vendors and enterprise developers can build custom tools and utilities using PowerShell to administer their software.
+- Cmdlet vs Command
+  - Cmdlets are .NET Framework class objects; not just stand-alone executables.
+  - Cmdlets are easily constructed from as few as a dozen lines of code.
+  - Parsing, error presentation, and output formatting are not handled by cmdlets. It is done by the PowerShell runtime.
+  - Cmdlets process works on objects not on text stream, and objects can be passed as output for pipelining.
+  - Cmdlets are record-based as they process a single object at a time.
+
+
 
 
 
