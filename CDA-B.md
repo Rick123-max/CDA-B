@@ -1754,8 +1754,18 @@
 <img width="1504" height="838" alt="image" src="https://github.com/user-attachments/assets/058a40f1-9713-4825-9655-f090689780d7" />
 
 
+# MODULE 6
 
+## Command Shell & Batch Files
 
+### IOC's
+<img width="1950" height="1630" alt="image" src="https://github.com/user-attachments/assets/081d663a-9a85-4170-92c4-ab9f37f4c229" />
+
+### Windows CMD Shell
+- CMD has several built-in commands, such as dir (lists the current directory), cd (changes directory), as well as the ability to run executable binaries
+- The CMD CLI application provides an interface to the OS
+- The processes ConHost.exe and CMD show as running processes; ConDrv.sys is the Windows kernel driver that provides the communication infrastructure between ConHost and one or more CLI applications.
+- 
 
 
 
