@@ -1785,6 +1785,63 @@
 - The setx command operates off the current user, rather than system environment variables by default
   <img width="1950" height="1180" alt="image" src="https://github.com/user-attachments/assets/ea0d93bc-5676-4ba1-9b13-49cd7569c2d1" />
 
+### Loops and Conditionals
+- The basic structure of the if command is:
+      ``if [NOT] condition (command) [else (command)]
+        if [NOT] ERRORLEVEL number (command)
+        if [NOT] string1==string2 (command)
+        if [NOT] EXIST filename command
+      ``
+- not: Specifies that the command to be executed initiates if the condition is false.exist: Checks for the existence of a file or directory. In order to ensure the tested value is a directory and not a file, checking for a device file, such as NULL, may be used (e.g., exist “C:\NewFolder\NULL”)errorlevel: Compares the last returned errorlevel against a specified value. For example, errorlevel 0 checks for a return value of 0 (by convention, no error returned from the previous command). The error level may not be reset on some built-in commands if .bat files are used.string1==string2: Checks if the two string values are the same (e.g., %COMPUTERNAME%=="SYSTEM1” checks if the computer’s name is SYSTEM1).string1 OPERATOR string2: Compares the two values using the three letter operator:EQU: Equal toNEQ: Not equal toLSS: Less thanLEQ: Less than or equal toGTR: Greater thanGEQ: Greater than or equal to
+
+- `if not exist "C:\NewFolder\NULL" mkdir "C:\NewFolder"`
+
+### FOR Statement
+- `for %variable IN (set) DO command [command-parameters]`
+-  The for command is used to iterate each item in a set and perform some action/command.
+-  The variable used as the iterator — %variable in the above command outline — is a single character in the range a-z or A-Z, and is referenced as %%a or %%Z (%%z and %%Z are different variables).
+-  The use of the extra % operator is used in batch files and not from the CLI (where it is a single %).
+-  The various types of iterations are based on the switches below:
+  - /l: Series of values
+  - /f: Series of files
+  - /d: Series of directories
+  - /r: Each item in a directory tree
+- `for /l %%variable in (start,step,end) do (command)`
+- `for /l %%A in (0,2,10) do echo %%A`
+- two percent signs are used for BATCH FILES and single is used in CLI.
+- Looping through directories, recursively: `for /r "%USERPROFILE%" %%D in (*) do echo %%D`
+- Looping through directories for .bat files recursively: `for /r "%USERPROFILE%" %%D in (*.bat) do echo %%D`
+- Parsing File Content and Output: `for /f ["options"] %%variable in (source) do (command)`
+  - `@echo off
+      for /f "tokens=1-4" %%A in (hosts.txt) do ( echo host: %%A IP Address: %%B Department: %%C Email: %%D)`
+
+### GOTO Statements
+- Batch files support labels and the goto operand for program flow
+- Labels are specified by giving the label name preceded by :
+- The goto command is followed by the label specifying a location in the batch file to start executing instructions from next, which is a way to control the order in which instructions are executed.
+  ```
+  @echo off
+  if "%1"=="" (echo Error: No arguments) & (goto EXIT)
+  if "%1"=="1" goto SUBROUTINE1
+  if "%1"=="2" goto SUBROUTINE2
+  if "%1"=="3" goto SUBROUTINE3
+  goto EXIT
+  
+  :SUBROUTINE1
+  echo This is subroutine 1
+  goto EXIT
+  
+  :SUBROUTINE2
+  echo This is subroutine 2
+  goto EXIT
+  
+  :SUBROUTINE3
+  echo this is subroutine 3
+  goto EXIT
+  
+  :EXIT
+  echo exiting...
+  ```
 
 
 
