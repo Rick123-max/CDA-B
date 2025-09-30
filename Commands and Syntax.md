@@ -2,5 +2,5 @@
 
 - Endlocal: Returns environmental variables to their original values after a localization
 
-<img width="1000" height="1500" alt="image" src="https://github.com/user-attachments/assets/46e59443-30fe-4ed7-b23e-dfd67be6473e" />
+<img width="600" height="1000" alt="image" src="https://github.com/user-attachments/assets/46e59443-30fe-4ed7-b23e-dfd67be6473e" />
 
