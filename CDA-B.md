@@ -1765,6 +1765,14 @@
 - CMD has several built-in commands, such as dir (lists the current directory), cd (changes directory), as well as the ability to run executable binaries
 - The CMD CLI application provides an interface to the OS
 - The processes ConHost.exe and CMD show as running processes; ConDrv.sys is the Windows kernel driver that provides the communication infrastructure between ConHost and one or more CLI applications.
+
+### Batch Files
+- Windows originally used batch files as a way to perform a set batch of saved commands
+- These commands are executed non-interactively as a script that has some conditional flow control to branch which commands are executed under specific circumstances
+- Batch files contain Windows commands along with some flow control and comparison operators that are saved in a text file with a .bat or .cmd extension
+- The .cmd extension was introduced with the Windows NT family of OSs and were executed with CMD instead of the older COMMAND.COM.
+- COMMAND.COM is no longer included on Windows OSs and CMD executes both .bat and .cmd files as batch scripts.
+- Batch files are plain text files most commonly edited in notepad.exe.
 - 
 
 
