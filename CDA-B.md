@@ -1773,7 +1773,21 @@
 - The .cmd extension was introduced with the Windows NT family of OSs and were executed with CMD instead of the older COMMAND.COM.
 - COMMAND.COM is no longer included on Windows OSs and CMD executes both .bat and .cmd files as batch scripts.
 - Batch files are plain text files most commonly edited in notepad.exe.
-- 
+
+### Variables
+- Variables in batch files are case-sensitive and are assigned using the set command.
+- Variables from an interactive CMD session are case-insensitive.
+- Often localized variables in a batch file use lowercase variable names while system-wide environmental variables are uppercase
+- The set command does not check to see if a variable already exists; it holds data
+- Variables are read by surrounding the variable name with the % operator
+- To set a variable, the set command is used, and using an environment variable involves surrounding it with % to indicate that it is a variable
+- Generally, the setx command should only be used when permanently altering the environment variable is desired.
+- The setx command operates off the current user, rather than system environment variables by default
+  <img width="1950" height="1180" alt="image" src="https://github.com/user-attachments/assets/ea0d93bc-5676-4ba1-9b13-49cd7569c2d1" />
+
+
+
+
 
 
 
