@@ -1865,6 +1865,29 @@
   - Cmdlets process works on objects not on text stream, and objects can be passed as output for pipelining.
   - Cmdlets are record-based as they process a single object at a time.
 
+#### SYNTAX
+- Create a new Directory: `New-Item -Path 'C:\users\trainee\temp' -ItemType Directory`
+- Copy a folder to a new folder: `Copy-Item 'C:\users\trainee\temp' 'C:\users\trainee\temp2'`
+- Remove an Item: `Remove-Item 'C:\users\trainee\temp2'`
+- Check for existance of a folder: `Test-Path 'C:\users\trainee\new_temp'
+
+### Powershell Scripts
+- PowerShell scripts are stored in .ps1 files
+- A user can check this policy by running the Get-ExecutionPolicy command in PowerShell:
+- The Get-ExecutionPolicy command returns one of the following values:
+  - **Restricted**: No scripts are allowed (individual commands are still permitted). This is the default setting for workstations and client systems; it appears the first time the command is executed.
+  - **AllSigned**: Run scripts signed by a trusted developer. With this setting in place, before executing, a script confirms that you want to run it.
+  - **RemoteSigned**: Run your own scripts or scripts signed by a trusted developer. This is the default policy for servers. Scripts running remotely or those downloaded from the internet still must be signed by a trusted publisher.
+  - **Unrestricted**: Run any script you want.
+- Cmdlet Format
+  - A cmdlet always consists of a **verb** (or a word that functions as a verb) and a **noun**, separated with a hyphen (the verb-noun rule).
+  - Some of the most common verbs include:
+    - **Get**: To get something
+    - **Set**: To define something
+    - **Start**: To run something
+    - **Stop**: To stop something that is running
+    - **Out**: To output something
+    - **New**: To create something (new is not a verb, of course, but it functions as one)
 
 
 
