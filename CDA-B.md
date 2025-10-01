@@ -1967,6 +1967,7 @@
 <img width="613" height="471" alt="image" src="https://github.com/user-attachments/assets/e9a4dd97-1b3a-4ac4-b4cc-393a2ce0e9d9" />
 
 
+## Windows Management Instrumentation (WMI)
 
 
 
