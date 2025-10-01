@@ -1952,6 +1952,19 @@
 <img width="963" height="337" alt="image" src="https://github.com/user-attachments/assets/9c89c533-56cb-4a7e-9efa-43d9ef04676c" />
 - ```chmod u+x <script>```
 
+### Standard Input, Standard Output, and Standard Error
+<img width="963" height="236" alt="image" src="https://github.com/user-attachments/assets/ad5da30d-1f0f-480c-bc00-2ca4b65b0ae2" />
+- Typically for Linux-based systems, a special memory-based filesystem is mounted containing information on all the processes running on the system, including the FDs the program has opened and is mounted as /proc.
+- There are three standard files, also called streams, that are associated with input and output for programs: **/dev/stdin**, **/dev/stdout**, and **/dev/stderr**.
+- Streams have two ends, a source and a destination like a water hose or a pipe, and contain data.
+- Two additional Special Files
+  <img width="963" height="384" alt="image" src="https://github.com/user-attachments/assets/db45ec98-66ba-497f-bbe9-679d1a6eaeb2" />
+
+  <img width="963" height="786" alt="image" src="https://github.com/user-attachments/assets/981ee8a7-a434-46cb-b63d-770b8ac55e1c" />
+
+### List of Commands
+
+<img width="613" height="471" alt="image" src="https://github.com/user-attachments/assets/e9a4dd97-1b3a-4ac4-b4cc-393a2ce0e9d9" />
 
 
 
