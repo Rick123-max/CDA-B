@@ -1891,6 +1891,74 @@
   <img width="680" height="295" alt="image" src="https://github.com/user-attachments/assets/24006f88-8304-4c51-94ab-18a9929104e9" />
 
 
+## BASH
+
+### Intro to Bash
+- Bash is an interpreter that executes commands from an interactive interface, from standard input, or from a file
+- Bash is also known as the GNU (GNU not Unix) Bourne-Again Shell as it is fully compatible with the previous standard Bourne shell sh.
+- Bash provides a standard environment to execute built-in commands or other commands provided by the OS on which it is running
+- Not every system has a Graphical User Interface (GUI) so it is important that analysts and defenders have the ability to efficiently navigate and use text-based terminal shells
+- Remote access and configuration is also often done over a text-based terminal through a secure terminal session via programs like Secure Shell (SSH).
+- The ability to link commands and run them in scripts make shells like Bash extremely useful in sifting through large amounts of data and pulling out the pieces that are important to the analyst or defender.
+- Since Bash is interpreted, the same commands run interactively from a command prompt can be saved into a file as a script to be run at a later date, or perform automated or complex operations repeatedly
+- Unix/Linux OSs typically employ a shell for users as their login environment and to interact with the system.
+- Bash is also invoked to execute commands non-interactively, or as a subshell of Bash or another shell.
+- When a user logs into a Linux system that has the user’s login shell set to Bash, one of the system processes starts Bash in the context of the user’s profile, which includes user system accesses and security permissions
+- There are also files that are read/executed when the shell exits normally.
+- This is useful to set things like the default PATH variable for login shells.
+- **Inserting commands or scripts into these files is one of the ways Malicious Cyberspace Activities (MCA) execute files in the context of another user, maintain persistence, or harvest credentials**
+  <img width="776" height="206" alt="image" src="https://github.com/user-attachments/assets/9df21c3a-3461-4c98-bb82-3b9243ce4f3f" />
+  <img width="775" height="376" alt="image" src="https://github.com/user-attachments/assets/b1a49084-2222-442f-a5f9-aec384d3665b" />
+- When Bash is started as an interactive shell that is not a login shell, the file ~/.bashrc is the only file that is read, unless the -norc option is sent to the shell to not read the ~/.bashrc file
+- when Bash is started non-interactively, it inherits the contents of the $BASH_ENV variable, if it exists
+- Z shell, or zsh, is very similar to Bash in that it is backwards compatible with the Bourne shell (sh) and has many of the same capabilities as Bash, but uses different files and additional/alternate environment variables
+  <img width="768" height="555" alt="image" src="https://github.com/user-attachments/assets/9699ebbf-3873-4a85-940e-773dbe25553a" />
+
+## BASH PROMPT
+- A $ indicates a non-root (user Identifier [ID] other than 0) user and a # indicates commands are executed with root (user ID of 0) privileges.
+- The standard prompt is set in the PS1 variable and seen with the echo $PS1 command.
+  <img width="970" height="783" alt="image" src="https://github.com/user-attachments/assets/9100997e-f1d8-4c5a-af95-b5d82b272cff" />
+
+- The following example shows the full current working directory and the time in 24-hour format (HH:MM:SS):
+  - ```PS1="[\u@\h \w \T]\\$ "```
+ 
+### Parameters
+- **Parameters** are containers that store values including a name, a number, or a special character.
+- A **variable** is a container that has an associated name and is declared using the format `name=value`
+- Bash has several parameters that have special meanings or expansions. Some of the most common expansions include:
+  <img width="550" height="800" alt="image" src="https://github.com/user-attachments/assets/a0cbd627-e7a6-49bb-ae31-4c91b267bf26" />
+
+- Bash keeps a history containing a list of commands run from an interactive shell
+- The number of commands saved is controlled by the **HISTSIZE** variable and defaults to 500 commands
+- The **HISTCONTROL** and **HISTIGNORE** variables are set to not save commands that are duplicates or are prefaced with the characters described in the variable
+- The options are **ignorespace** and **ignoredup**, or **ignoreboth** to set both options.
+- To add ignorespace to the HISTCONTROL variable, enter the command:
+  - ```HISTCONTROL=$HISTCONTROL:ignorespace```
+- Bash history expansion is a powerful feature that allows a user to refer to a previous command without having to enter the entire command again. Some common history expansions are:
+  <img width="963" height="503" alt="image" src="https://github.com/user-attachments/assets/3ce191ad-1cb3-4380-883f-0c5cde120df1" />
+
+### Re-Introduction to VI/Vim
+- It uses the same basic functions as Vi but allows for enhanced features like syntax highlighting, external plugins, multi-level undo/redo, screen splitting for editing multiple files, and other features documented on the Vim manual page
+- Vim has two main modes: command mode (default) and insert-text mode
+  
+### MAN PAGES
+- There may be multiple manual pages for the same object if it is used in different sections
+- To open a manual page from a specific section, use the format man n command where n is the section number of the desired manual page
+-  The spacebar or CTRL+F advances the manual one page at a time, CTRL+B moves back one page at a time, gg moves to the start of the manual, SHIFT+G moves to the end of the manual, /STRING searches for the next occurrence of the text after the slash, and Q exits the manual.
+  <img width="963" height="563" alt="image" src="https://github.com/user-attachments/assets/c4cf5ad6-49e4-4aae-a97d-231466fbf684" />
+
+### CHMOD
+<img width="963" height="455" alt="image" src="https://github.com/user-attachments/assets/ef47d1c6-8f01-4860-ac03-32c74a036dde" />
+<img width="963" height="337" alt="image" src="https://github.com/user-attachments/assets/9c89c533-56cb-4a7e-9efa-43d9ef04676c" />
+- ```chmod u+x <script>```
+
+
+
+
+
+
+
+
 
 
 
