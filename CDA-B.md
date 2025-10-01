@@ -2043,6 +2043,11 @@
     - ```wmic <alias> DELETE```
     - ```wmic <alias> GET [<property list>] [<get switches>]```
     - ```wmic <alias> LIST [<list format>] [<list switches>]```
+    - ```wmic process list brief```
+    - ```wmic process where processid=2564 call getowner```
+    - ```wmic process where name="notepad.exe" list breif```
+    - ```wmic process where name="notepad.exe" get /all /format:list```
+    - ```wmic process where processid=2564 call terminate```
 - The following two commands returns the same information, the first specifying the namespace and class, and the second using only the PATH
   - ```wmic /namespace:\\root\cimv2 path win32_account get /all /format:list```
   - ```wmic path win32_account get /all /format:list```
@@ -2069,10 +2074,14 @@
   - ```Get-CIMInstance -ClassName Win32_Process```
   - ```Get-CIMInstance -ClassName Win32_Process | Get-Member```
   - ```Get-CIMInstance -ClassName Win32_Process | Format-Table -Property ProcessName, Caption, ProcessID, CommandLine```
-  - 
 
-
-
+### Use WMIC to Enumerate Network- and Remote Desktop-Related Services
+- ```wmic process where processid=2564 call terminate```
+- ```wmic nicconfig where index=0 call flushdns```
+- ```wmic service list brief```
+- ```wmic service where name="TermService" list /format:list```: **Queries status of TermService service, which deals with RDP**
+- ```wmic service where name="TermService" call ChangeStartMode "Disabled"``` **Disables RDP**
+- 
 
 
 
