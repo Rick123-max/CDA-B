@@ -40,6 +40,86 @@
     - username:password:user ID:group ID:user name or comment:home directory: command interpreter or shell
   - `cut -d ":" -f1,7 /etc/passwd`: parses out only the username and shell from /etc/passwd
 
+- **TR**: translates or delete characters from standard input; writing to standard output
+  - Common options:
+    - tr [OPTION]... SET1 [SET2]
+    - -d, --delete — Delete characters in SET1, do not translate
+    - -s, --squeeze-repeats — Replace each sequence of a repeated character in the last specified SET with a single occurrence of that character (squeeze a bunch of spaces into a single space)
+    - [:alnum:] — All letters and digits
+    - [:alpha:] — All letters
+    - [:blank:] — All horizontal whitespace
+    - [:digit:] — All digits
+    - [:lower:] — All lower case letters
+    - [:print:] — All printable characters including spaces
+    - [:punct:] — All punctuation characters
+    - [:space:] — All horizontal and vertical whitespace
+    - [:upper:] — All upper case letters
+
+- **SORT**: sorts lines of text files to standard output, or from standard input if no files are specified
+  - Common options:
+    - sort [OPTION]...[FILE]...
+    - -b, --ignore-leading-blanks — Ignore leading blanks
+    - -d, --dictionary-order — Consider only blanks and alphanumeric characters
+    - -f, --ignore-case — Fold lower case to upper case characters
+    - -g, --general-numeric-sort — Compare according to general numerical value
+    - -i, --ignore-nonprinting — Consider only printable characters
+    - -r, --reverse — Reverse the result of comparisons
+    - -o, --output=FILE — Write result to FILE instead of standard output
+    - -u, --unique — Output only the first of an equal run
+   
+- **DIFF**: compares files line by line to identify differences
+  - Common options:
+    - diff [OPTION]... FILES
+    - -q, --brief — Report only when files differ
+    - -c, -C NUM, --context[=NUM] — Output NUM (default 3) lines of copied context
+    - -u, -U NUM, --unified[=NUM] — Output NUM (default 3) lines of unified context
+    - -y, --side-by-side — Output in two columns--suppress-common-lines — Do not output common lines
+    - -r, --recursive — Recursively compare any subdirectories found
+    - -i, --ignore-case — Ignore case differences in file contents
+    - -E, --ignore-tab-expansion — Ignore changes due to tab expansion
+    - -Z, --ignore-trailing-space — Ignore white space at line end
+    - -b, --ignore-space-change — Ignore changes in the amount of white space
+    - -w, --ignore-all-space — Ignore all white space
+    - -B, --ignore-blank-lines — Ignore changes whose lines are all blank
+   
+- **SLEEP**: delays for a specified amount of time.
+
+- **WATCH**:  runs a command repeatedly, displaying its output and errors, which allows you to watch the programs output change over time
+  - Common options:
+    - watch [options] command
+    - -d, --differences — Highlight the differences between successive updates
+    - -n, --interval seconds — Specify update interval in seconds
+   
+- **KILL**: Sends a signal to a process or processes.
+  - kill [options] <pid> [...]
+  - -l, --list [signal] — List signal names
+  - -s, --signal <signal> — Specify the signal to be sent
+  - -9, -SIGKILL, -KILL — Alternate ways to send signal SIGKILL
+  <img width="963" height="689" alt="image" src="https://github.com/user-attachments/assets/0b6c9e65-57f2-428b-8de9-b6d987d40471" />
+
+- **LSOF**:  lists standard output file information about files opened by processes
+
+- **TIMEOUT**: runs a command with a time limit and kills it if stil running after a set duration.
+
+- **SED**: stream editor performs basic text transformations on an input stream
+
+- **AWK AND GAWK**: used for pattern scanning and processing of files and standard input.
+- awk is similar to sed in that it performs operations as part of a script that is a separate file or input on the command line.
+  - ```awk '{print}' /etc/passwd```
+  - ```awk '/bash/ {print}' /etc/passwd```
+  - ```awk 'BEGIN { FS=":" }; {print $1,$7}' /etc/passwd```
+  - ```awk 'BEGIN { FS=":" }; /bash/ {print $1,$4,$7}' /etc/passwd```
+  - ```cat /etc/passwd | awk 'BEGIN { FS=":" }; /bash/ {print $1,$4,$7}'```
+  - ```awk '{ FS=":" }; NR==3, NR==6 {print NR,$1,$NF}' /etc/passwd```
+- awk has a large quantity of built-in variables, a few common ones are listed below:
+  - $NF — Last field
+  - $NR — Line number
+  - $0 — All fields in the line
+
+
+
+
+
 
 
 
