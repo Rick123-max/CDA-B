@@ -1969,6 +1969,115 @@
 
 ## Windows Management Instrumentation (WMI)
 
+### Current Events
+- As WMI is used by system administrators for remote configuration and management, MCAs have used the same infrastructure and Application Programming Interfaces (API) to perform discovery, gain execution, and assist in lateral movement.
+- MITRE Adversarial Tactics, Techniques, and Common Knowledge (ATT&CK) identified WMI abuse as execution technique T1047.
+- In particular, the threat group identified by FireEye Threat Research as UNC2452 used WMI abuse as part of their SUNBURST backdoor to enumerate the installed drivers in late 2020 and early 2021.
+
+### WMI Architecture
+- WMI is a valuable tool for system administrators to aid in configuring local and remote Windows systems, but it is also frequently abused by threat actors during MCAs.
+- Threat actors continue to use WMI to aid in discovery and remote execution as a part of lateral movement.
+- **WMI relies on the WMI service for local/remote access, Server Message Block (SMB), and Remote Procedure Calls (RPC), over Transmission Control Protocol (TCP) port 135, to function. Put simply, this means WMI uses TCP port 135 to initiate communication with the remotely managed host, then switches to any random high port anywhere between TCP port 1024-65535.**
+- Some of the data threat groups can gain from using WMI include obtaining a list of all domain administrators, identifying any installed antivirus software, and listing all the running processes.
+- WMI abuse is mitigated by managing administrator accounts and access, and through credential reuse prevention.
+- WMI services are accessed using a variety of tools and APIs, most commonly using the WMIC.exe command line utility and PowerShell.
+
+### Detection
+- WMI abuse is detected by monitoring network traffic for the use of WMI connections, where not permitted by policy, and process monitoring of the WMIC utility to capture command line arguments — WMIC commands — that are specifically targeted for remote systems
+- PowerShell logging is configured using group policy under Administrative Templates > Windows Components > Windows PowerShell.
+- Windows has native logging of WMI events, but it is not enabled by default and does not show the WMI classes being queried in a friendly manner.
+- There are two main options to add WMI event logging/tracing:
+  - using the Event Viewer graphical application,
+  - and the wevtutil.exe command line program
+- Understanding where WMI is normally being used by system administrators is important as most systems do not normally use significant WMI resources.
+- Detecting where WMI is being used and during which normal times may assist in identifying malicious WMI activity.
+- Other methods of detecting WMI use and abuse is found in the logging of the results of their actions
+
+## WMI Architecture
+- WMI consists of three main components:
+  - WMI providers and the associated managed objects,
+    - Consist of a Dynamic Linked Library (DLL) and an associated Managed Object Format (MOF) file that define the managed objects, and provide the interface for retrieving data or performing functions — or methods — on those objects.
+    - Some of the common WMI providers installed by default are:
+      <img width="968" height="913" alt="image" src="https://github.com/user-attachments/assets/3edff14b-9d40-474a-aa23-82c71e30f914" />
+      - **CLASS = OBJECT**
+  - WMI infrastructure,
+    - WMI service — winmgmt — is the system component known as WMI Infrastructure.
+    - This service has two components:
+      - Common Information Model (CIM) Object Manager (COMOM) or WMI Core,
+      - and the WMI (also known as the CIM) Repository.
+      - The WMI repository is organized by hierarchically defined namespaces starting with root
+      - Some of the namespaces created by the WMI service on system startup are the **root\default** and **root\cimv2** namespaces
+      - The WMI service handles the requests from the management applications and the WMI repository and providers
+  - WMI consumers or management applications such as WMIC and PowerShell
+    -  A management application, like WMIC and PowerShell, that sends requests to the WMI service.
+    -  Management applications query data, enumerate data, execute provider methods, and subscribe to events using the appropriate API.
+    -  Applications only access the objects and methods that a WMI provider has defined and can handle.
+- The implementation of WMI provides a consistent standard framework for interacting with various objects and management data.
+- The WMI API converts the standard interface into the various system and library calls associated with the specific providers handling the managed objects.
+  <img width="700" height="585" alt="image" src="https://github.com/user-attachments/assets/8152c2f5-3ed4-4bc5-b16b-0743a96b4fe4" />
+
+### WMI Consumers
+- WMI Explorer is a Graphical User Interface (GUI)-based tool that makes it easy to enumerate the various namespaces, classes, and instances as well as the associated methods and properties associated with those instances.
+  <img width="1215" height="719" alt="image" src="https://github.com/user-attachments/assets/f9601845-279a-4d98-b39e-07e53dd17a48" />
+
+- The WMIC utility is a CLI for dealing with Windows's WMI providers through the WMI Infrastructure APIs provided for management applications.
+  - The format for the WMIC command is:
+    - ```wmic [global switches] <command>```
+-  Table 6.3-2 describes the global switches. The switches and commands are not case sensitive, but are displayed in various cases for readability.
+    <img width="966" height="2702" alt="image" src="https://github.com/user-attachments/assets/2917c72a-3c77-4b39-8d3b-5341f5cd0512" />
+    - **/NAMESPACE**: will be CIMV2
+    - To remotely run WMIC:
+      - **/NODE**
+      - **/USER**
+      - **/PASSWORD**
+- WMIC Aliases
+  - These are listed by entering wmic /? at a command prompt
+  - When using aliases, the format of the WMIC command is in one of the following:
+    - ```wmic <alias> [WMIObject]```
+    - ```wmic <alias> [<path where>]```
+    - ```wmic <alias> [<path where>] [<verb clause>]```
+  - Usage:
+    - ```wmic <alias> ASSOC [<format specifier]>```
+    - ```wmic <alias> CALL <method name> [<parameter list>]```
+    - ```wmic <alias> CREATE <assignment list>```
+    - ```wmic <alias> DELETE```
+    - ```wmic <alias> GET [<property list>] [<get switches>]```
+    - ```wmic <alias> LIST [<list format>] [<list switches>]```
+- The following two commands returns the same information, the first specifying the namespace and class, and the second using only the PATH
+  - ```wmic /namespace:\\root\cimv2 path win32_account get /all /format:list```
+  - ```wmic path win32_account get /all /format:list```
+- The Win32_Account class contains both system accounts and user accounts
+- WMIC has an alias for each type of account, so in order to retrieve the same information as in the previous commands, two aliases commands must be run:
+  - ```wmic sysaccount get /all /format:list```
+  - ```wmic useraccount get /all /format:list```
+- Table 6.3-3 describes some of the WMIC aliases used by analysts and defenders
+  <img width="512" height="668" alt="image" src="https://github.com/user-attachments/assets/fd33c11b-cf56-4166-a0a5-f2a4d21af40c" />
+  - **rdtoggle**: REMOTE DESKTOP PROTOCOL (RDP)
+
+### WMIC Where Clauses
+- WMIC Where clauses allow filters to be applied to the WMIC command being executed. An example of filtering the services for only svchost.exe is:
+  - ```wmic process where ”Name like 'svchost%'” get name,processid,parentprocessid,commandline```
+- The percent symbol is used as a wildcard to filter processes where the Name property starts with svchost.
+- The operators and wildcards that are available for Where clauses are in the table below.
+  <img width="965" height="823" alt="image" src="https://github.com/user-attachments/assets/3b2fd15b-a587-47f2-b171-61290430ff53" />
+  
+### Powershell and WMI
+- Unlike most shells that only accept and return text, PowerShell accepts and returns .NET objects
+- PowerShell provides this capability through various cmdlets such as Get-CIMInstance
+- While PowerShell's built-in cmdlets and .NET objects are powerful  — and all that is normally needed — the ability to query WMI objects is sometimes required to retrieve all the necessary data.
+- The simplest form of interacting with WMI from PowerShell is to start a PowerShell shell from the start menu and use Get-CIMInstance from the prompt:
+  - ```Get-CIMInstance -ClassName Win32_Process```
+  - ```Get-CIMInstance -ClassName Win32_Process | Get-Member```
+  - ```Get-CIMInstance -ClassName Win32_Process | Format-Table -Property ProcessName, Caption, ProcessID, CommandLine```
+  - 
+
+
+
+
+
+
+
+
 
 
 
