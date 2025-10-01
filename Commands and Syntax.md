@@ -11,3 +11,6 @@
 <img width="1950" height="984" alt="image" src="https://github.com/user-attachments/assets/baddc391-3947-46f0-85e6-60d1d7d2d29c" />
 
 <img width="1000" height="1200" alt="image" src="https://github.com/user-attachments/assets/1b5a2b5c-ee73-42e0-bda7-32b751cbd371" />
+
+- Get-Service -name "" " finds a service in powershell
+- Find a service in CMD: sc query ""
