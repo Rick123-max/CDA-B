@@ -1888,6 +1888,7 @@
     - **Stop**: To stop something that is running
     - **Out**: To output something
     - **New**: To create something (new is not a verb, of course, but it functions as one)
+  <img width="680" height="295" alt="image" src="https://github.com/user-attachments/assets/24006f88-8304-4c51-94ab-18a9929104e9" />
 
 
 
