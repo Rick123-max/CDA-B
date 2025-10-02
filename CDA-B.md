@@ -2171,6 +2171,35 @@
   - Get-PSProvider: Displays all available PSProviders
 
 
+### Interacting Remotely using powershell
+- Many remote commands require Windows Remote Management (WinRM) — including those used within this lesson — to be configured on the remote computer, as well as a host trusted by the local computer.
+- Security implications exist with the usage of PowerShell Remoting, especially with potentially compromised machines or networks
+- Depending on the method of authorization, the identity of the remote machine may not be validated — especially if Trusted Hosts is used to bypass verification.
+- In addition, compromised machines often intercept credentials or authentication hashes.
+- For this module, use the following commands:
+  - Get-Credential: Stores credentials after prompting for them; used with commands that require them, such as Invoke-Command or New-PSSession
+  - Invoke-Command: Runs a code block or script file on the local or a specified remote machine; uses the following parameters:
+    - Credential: Created via Get-Credential; used to connect to the remote computer
+    - ComputerName: Name of the computer to run commands on; accepts multiple computer names; must be resolvable via Domain Name System (DNS) or other name lookup
+    - ScriptBlock: Block of code to be run
+    - FilePath: File containing the script to be run
+    - Session: Session to invoke a command on (exclusive with ComputerName)
+  - New-PSSession (PowerShell Session): Creates a reusable session with the remote computer(s), variables, etc. on the remote session to be saved for the duration of the session.
+    - Credential: Created via Get-Credential; used to connect to the remote computer
+    - ComputerName: Name of the computer to run commands on; accepts multiple computer names; must be resolvable via DNS or other name lookup
+  - Invoke-WebRequest: Useful for interacting with web servers. For this lesson, used to download files via the PowerShell terminal.
+    - URI (Uniform Resource Identifier): Location of the file to be downloaded, e.g. _**http://speedtest.tele2.net/10MB.zip**_
+      - Megabyte (MB)
+    - OutFile: File to be written
+    - Credential: Created by Get-Credential, used to authenticate with the remote server for this request
+  - Start-BitsTransfer: Uses Background Intelligent Transfer Service (BITS) on Windows environments to download a file
+    - Source: Location of the file to be downloaded, e.g. http://speedtest.tele2.net/10MB.zip
+    - Destination: File to be written
+    - Credential: Created by Get-Credential, used to authenticate with the remote server for this request
+    - Asynchronous: Specifies whether or not a file is downloaded interactively
+  - Get-BitsTransfer: Lists active download jobs for BITS
+
+
 
 
 
