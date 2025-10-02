@@ -117,9 +117,21 @@
   - $0 — All fields in the line
 
 
+- `wmic /node:"172.16.5.2" /user:"administrator" rdtoggle list`: query RDP status on a device
+- `wmic /node:"172.16.5.2" /user:"administrator" rdtoggle where AllowTSConnections="0" call SetAllowTSConnections "1"`: turns on the RDP on a remote system
+- `wmic /node:"174.16.1.6" /user:"cda\trainee" os list brief`: shows OS info for a remote system
+- `wmic /node:"174.16.1.6" /user:"cda\trainee" os get BuildNumber,SerialNumber,LastBootUpTime`: Retrieve OS info including last boot up time
+- `wmic /node:"174.16.1.3" /user:"cda\trainee" os list brief /format:list`: Give info about a system
+- `wmic /node:"172.16.5.2" /user:"cda\trainee" /password:"Th1s is 0perational Cyber Training!" process call create "notepad.exe"`: runs a process on a remote system
+- `wmic /note:"172.16.5.2" where "ProcessID=2488" call terminate`: remotely kills a process
+- `wmic /output:os_info.txt os list brief`: outputs wmic to a file
+- `wmic /output:os_info.htm os list brief /format:hform`: outputs in HTML format
+- `wmic product get caption,identifyingnumber,installdate,version`: pulls specific information using WMIC
+- `**ntevent where "eventtype<3 and LogFile='system' and timegenerated>'20210101**'" get eventcode,eventidentifier,recordnumber,sourcename,timegenerated,type`: Used to retrieve WIN EVENT LOGS.
+- `wmic ntevent where "RecordNumber=4394 and LogFile='system'" list /format:list`: pulls a specific log
+- `wmic group list brief`: pulls configured Windows local groups
 
-
-
+<img width="1930" height="1406" alt="image" src="https://github.com/user-attachments/assets/845be887-d85a-4927-b229-c30290c778a2" />
 
 
 
