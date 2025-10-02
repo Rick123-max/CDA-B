@@ -116,7 +116,7 @@
   - $NR — Line number
   - $0 — All fields in the line
 
-
+### WMIC
 - `wmic /node:"172.16.5.2" /user:"administrator" rdtoggle list`: query RDP status on a device
 - `wmic /node:"172.16.5.2" /user:"administrator" rdtoggle where AllowTSConnections="0" call SetAllowTSConnections "1"`: turns on the RDP on a remote system
 - `wmic /node:"174.16.1.6" /user:"cda\trainee" os list brief`: shows OS info for a remote system
@@ -127,13 +127,25 @@
 - `wmic /output:os_info.txt os list brief`: outputs wmic to a file
 - `wmic /output:os_info.htm os list brief /format:hform`: outputs in HTML format
 - `wmic product get caption,identifyingnumber,installdate,version`: pulls specific information using WMIC
+- ```wmic process where processid=2564 call terminate```
+- ```wmic nicconfig where index=0 call flushdns```
+- ```wmic service list brief```
+- ```wmic service where name="TermService" list /format:list```: **Queries status of TermService service, which deals with RDP**
+- ```wmic service where name="TermService" call ChangeStartMode "Disabled"``` **Disables RDP**
 - `**ntevent where "eventtype<3 and LogFile='system' and timegenerated>'20210101**'" get eventcode,eventidentifier,recordnumber,sourcename,timegenerated,type`: Used to retrieve WIN EVENT LOGS.
 - `wmic ntevent where "RecordNumber=4394 and LogFile='system'" list /format:list`: pulls a specific log
 - `wmic group list brief`: pulls configured Windows local groups
 
 <img width="1930" height="1406" alt="image" src="https://github.com/user-attachments/assets/845be887-d85a-4927-b229-c30290c778a2" />
 
-
-
+### POWERSHELL
+- `Import-Module .\Example.ps1 -Force`: impots a module into current enviroment
+- `$person = New-Object Person`: create a variable
+- `$person.GenerateGreeting()`: Invoke a Method
+- `Get-ProcessesWithModules | Where Modules -contains "MSCOREE.DLL"`
+- `Get-ProcessesWithModules | Where ProcessName -eq "Explorer"`
+- `(Get-ProcessesWithModules | Where ProcessName -eq "Explorer").Modules | Sort`: Filters on loaded modules for specified process
+- `Get-Childitem -Path C:\ -Include XmlLite.dll -File -Recurse -ErrorAction SilentlyContinue`: Find the path of all instances os XmlLite.dll
+- `(Get-Process | Where ProcessName -eq "Explorer").Modules | Where Modulename -eq 'XmlLite.dll'`: Validates the version of the loaded module
 
  
