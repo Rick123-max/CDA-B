@@ -2087,6 +2087,34 @@
 
 ## PowerShell Objects, Properties, and Methods
 
+### Overview
+- PowerShell scripting is greatly enhanced by producing your own classes, properties, and methods.
+- Classes can be instantiated to produce objects - though, these are not the only types of objects in PowerShell.
+- Objects in PowerShell include:
+  - **Classes**
+    - Classes are objects defined by code with concrete properties and methods
+  - **PSCustomObject**
+  - **Hashtables**
+- The latter two types of objects are dynamic and may contain any property — they are only distinguished by convention.
+- The type system used by **PSCustomObject** and **Hashtables** is referred to as **_Duck Typing_** — if it behaves, looks, and sounds like an object of the specified type, then it is that type.
+
+- PowreShell Classes
+  - PowerShell version 5.0 and above include native syntax for classes, which contains methods and properties.
+  - PowerShell’s class syntax begins with a simple class declaration:
+    ```
+    class ClassName {
+
+    {
+    ```
+  - A class declaration begins with the class keyword, followed by the class name and a code block, indicated by braces.
+  - Methods are defined within a class — a simple method declaration follows:
+    ```
+          [String]SayHello([String]$name){
+          Return ("Hello " + $name + "!")
+      }
+    ```
+  - To find out more about PowerShell classes, use the Get-Help command:
+    - ` Get-Help about_Classes`
 
 
 
