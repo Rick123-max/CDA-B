@@ -147,5 +147,6 @@
 - `(Get-ProcessesWithModules | Where ProcessName -eq "Explorer").Modules | Sort`: Filters on loaded modules for specified process
 - `Get-Childitem -Path C:\ -Include XmlLite.dll -File -Recurse -ErrorAction SilentlyContinue`: Find the path of all instances os XmlLite.dll
 - `(Get-Process | Where ProcessName -eq "Explorer").Modules | Where Modulename -eq 'XmlLite.dll'`: Validates the version of the loaded module
+- 
 
  
