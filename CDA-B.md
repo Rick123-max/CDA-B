@@ -2081,7 +2081,12 @@
 - ```wmic service list brief```
 - ```wmic service where name="TermService" list /format:list```: **Queries status of TermService service, which deals with RDP**
 - ```wmic service where name="TermService" call ChangeStartMode "Disabled"``` **Disables RDP**
-- 
+
+
+# MODULE 7
+
+## PowerShell Objects, Properties, and Methods
+
 
 
 
