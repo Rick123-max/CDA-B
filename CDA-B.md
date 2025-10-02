@@ -2117,6 +2117,59 @@
     - ` Get-Help about_Classes`
 
 
+## Remote Endpoint Interaction
+
+### Interacting with Artifacts
+- File Hashing
+  - During the course of duties, situations occur that require the hashing of files — such as comparing artifacts against databases or compiling information for reports
+  - intelligence briefings often include hashes of known artifacts associated with a particular malware; validating their presence is part of the analyst’s responsibilities.
+  - PowerShell hashes files or other artifacts natively via the **Get-FileHash** cmdlet
+  - The Get-FileHash cmdlet uses these arguments:
+    - **Algorithm**: Hashing algorithm to use, such as Message Digest 5 (MD5), Secure Hashing Algorithm 1 (SHA1), or Secure Hashing Algorithm 256 (SHA256)
+    - **Path**: Path to the file to be hashed; accepts wildcards to evaluate multiple files or an array of strings
+  - The first unnamed parameter is inferred to be the Path argument (e.g., Get-FileHash example.txt).
+
+- .NET Encoding Classes
+  - Red teams and blue teams alike benefit from using various encoding methods, such as Base64 encoding, to perform their tasks
+  - In addition to Base64 encoding, .NET contains classes for converting between various text-encoding types, such as American Standard Code for Information Interchange (ASCII), Unicode Transformation Format – 8-bit (UTF-8),
+  - Use the [Convert]::ToBase64String and [Convert]::FromBase64String methods with one parameter for each (in these examples):
+    - [Convert]::ToBase64String(byte[])
+      - byte[]: Byte array (binary data) converted to a Base64 string
+      - returntype: String containing the Base64 encoded data
+    - [Convert]::FromBase64String(string)
+      - string: String converted to a byte array (binary data)
+      - return type: Byte[] containing the converted data
+
+### Working with Artifacts
+- Hashing a single file is accomplished using the **Get-FileHash** cmdlet.
+- This cmdlet performs a file hash and returns an object containing the results, which PowerShell formats and displays to Terminal.
+- Encoding .NET Classes
+
+### Utilizing PSProviders
+- PowerShell Providers (PSProviders) interact with databases or other data structures in a manner very similar to a filesystem, querying and navigating the underlying data using concepts of files and folders, much like a filesystem.
+- The FileSystem PSProvider interacts with the filesystem in PowerShell using cmdlets like Get-ChildItem.
+- Analysts use these PSProviders to search for artifacts (such as autorun entries) to detect persistence or unusual path environment variable entries used in library preference order attacks.
+- Use the following cmdlets in this exercise:
+  - Get-Item: Retrieves an object containing information about a particular item supplied by a PSProvider; uses the following parameter:
+    - Path: Location of the item; accepts wild cards, and inferred as the first unnamed parameter (e.g., Get-Item C:\Windows\System32\Hosts)
+  - Get-ChildItem: Lists all items in a specified or current directory; uses the following parameter:
+    - Path: Location of the directory to be enumerated; inferred from the first unnamed parameter (e.g., Get-ChildItem C:\Windows\System32)
+  - New-Item: Creates a new entry in the specified location; uses the following parameters:
+    - Path: Location of the item to be created (i.e., directory/folder/drive)Name: Name of the item to be createdValue: Initial value of the new item
+  - Move-Item: Moves an item to a specified location; uses the following parameters:
+    - Path: Location of the file to be moved; inferred from the first unnamed parameter Destination: Destination filename; inferred from the second unnamed parameter
+  - Set-Item: Replaces the contents of a specified item with a new value; uses the following parameters:
+    - Path: Path of the item to have its value changedValue: New item value
+  - Remove-Item: Deletes the specified item; uses the following parameter:
+    - Path: Path of the item to be removed; inferred from the first unnamed parameter
+  - Rename-Item: Renames a specified item; uses the following parameters:
+    - Path: Path of the item to be renamed; inferred from the first unnamed parameter NewName: New item name
+  - New-PSDrive: Maps a new PowerShell Drive (PSDrive) — used to simplify paths; uses the following parameters:
+    - Name: New drive name; addressable via Name:PSProvider:
+  - PSProvider that the PSDrive operates under
+    - Root: Root path that the PSDrive operates under
+  - Get-PSProvider: Displays all available PSProviders
+
 
 
 
