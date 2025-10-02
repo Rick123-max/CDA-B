@@ -147,6 +147,110 @@
 - `(Get-ProcessesWithModules | Where ProcessName -eq "Explorer").Modules | Sort`: Filters on loaded modules for specified process
 - `Get-Childitem -Path C:\ -Include XmlLite.dll -File -Recurse -ErrorAction SilentlyContinue`: Find the path of all instances os XmlLite.dll
 - `(Get-Process | Where ProcessName -eq "Explorer").Modules | Where Modulename -eq 'XmlLite.dll'`: Validates the version of the loaded module
+
+### File Hashing
+- `Get-FileHash .\Files\d1ejyvn0.ybv`: Get the hash of a file
+- `Get-FileHash .\Files\d1ejyvn0.ybv -Algorithm SHA1`: Gets the file hash in a different algorithm
+- ```
+  ### This gives a list of files in a directory. ###
+  $files = Get-ChildItem ".\Files"
+  foreach($file in $files) {
+    Write-Output $file
+  }
+  ```
+  ```
+  ### This gives a list of hashes for all files in a directory ###
+  foreach($file in $files) {
+    Get-FileHash $file.FullName
+  }
+  ```
+- `Get-ChildItem '.\Files' | Get-FileHash`: one line to get the file hashes
+- `Get-FileHash .\Files\*`: also gets file hashes of a directory
+
+ ```
+### This Explores Base64 Encoding ###
+$contents = [System.IO.File]::ReadAllBytes('C:\Users\trainee\Documents\Samples\Demo.ps1')
+[Convert]::ToBase64String($contents)
+```
+```
+### convert Base64 to a file and execute ###
+$base64 = [Convert]::ToBase64String($contents)
+$raw = [Convert]::FromBase64String($base64)
+[System.IO.File]::WriteAllBytes('C:\Users\trainee\Desktop\Demo.ps1', $raw)
+.\Demo.ps1
+###
+```
+
+### Interacting with the Alias Provider
+- `Get-PSProvider`: lists all PS Providers
+- `Get-ChildItem Alias:` Lists out all of the Aliases on the system
+- `New-Item -Path Alias:list -Value "Get-ChildItem"`: creates a new alias
+- `Rename-Item Alias:list enumerate`: Changes the name of an alias
+- `Set-Item Alias:enumerate "Get-Item"`
+- `Get-ChildItem Alias: | Where Definition -Eq "Get-Item"`: lists all aliases for a specifc CMDLET
+  
+### Interacting with the Environemnt PSProvider
+- `(Get-Item Path).Value`: lists the entire path variable
+- ```
+  ### Add a path to the Path env variable ###
+  $path = $Env:Path
+  $path = $path + "C:\Users\trainee\Documents\Samples;"
+  Set-Item Path $path
+  ```
+
+### Interacting with Registry PSProvider
+- The Registry PSProvider (available via the HKEY_LOCAL_MACHINE [HKLM]: and HKEY_CURRENT_USER [HKCU]: drives) is used to interact with the registry on the system
+  ```
+  ### View Run entries using HKCU: and HKLM: drives ###
+  Get-Item HKCU:\Software\Microsoft\Windows\CurrentVersion\Run
+  Get-Item HKLM:\Software\Microsoft\Windows\CurrentVersion\Run
+  ```
+  ```
+  ### User New-PSDrive to create new drive mapped to a folder ###
+  New-PSDrive -Name "WCurrentVersion" -PSProvider "Registry" -Root "HKLM:\Software\Microsoft\Windows\CurrentVersion"
+  ```
+- `Get-Item 'User Shell Folders'`: returns user shell folder
+
+### Interacting Remotely Using PowerShell
+- Web Request: `Invoke-WebRequest -URI "http:...exe" -Outfile (file name)`
+- `$credentials = Get-Credential`: stores credentials
+- `Invoke-Command -Credential $credentials -ComputerName 'cda-dc' -ScriptBlock {Get-FileHash 'C:\Users\Administrator\Desktop\hashme.txt'}`: Get a file hash of a file with a known path on a remote system
+- `[string[]] $computers = Get-Content 'Computers.txt'`: load a list of interactable computers
+```
+### Gathers info about all of the computers in the computers variable list
+foreach($computer in $computers){
+Invoke-Command -Credential $credentials -ComputerName $computer -FilePath C:\Users\trainee\Documents\Samples\GatherInfo.ps1
+}
+```
+
+### Downloading from Remote Computers
+- `$session = New-PSSession -ComputerName 'cda-dc' -Credential $credentials`: Opens a new PSSession
+- `Copy-Item -FromSession $session 'C:\Users\Administrator\Desktop\hashme.txt' -Destination 'C:\Users\trainee\Desktop\hashme.txt'`: copies a file from the session
+- ```
+  ### Compare newly hashed file to hash of same file on remote machine
+  PS C:\Users\trainee\Desktop> $local = Get-FileHash hashme.txt
+PS C:\Users\trainee\Desktop> $remote = Invoke-Command -Credential $credentials -ComputerName 'cda-dc' -ScriptBlock {Get-FileHash 'C:\Users\Administrator\Desktop\hashme.txt'}
+PS C:\Users\trainee\Desktop> $local.Hash -eq $remote.Hash
+```
+
+### Downloading files from Web Servers using PowerShell
+- `Invoke-WebRequest -Uri "http://training.local/TestFile.zip" -OutFile TestFile.zip`:  downloads a file located at a website
+- `(Get-FileHash TestFile.zip).Hash -eq "029C54D99DA58FE76CDA1C2FB365DE4FDC0173CB9A05A10B9DF417C0804D75CF"`: tests if the file hash matches a known good.
+- ```
+### Download payload from Website
+PS C:\Users\trainee\Desktop> Invoke-WebRequest -Uri "http://training.local/payload.ps1" -OutFile payload.ps1
+PS C:\Users\trainee\Desktop> .\payload.ps1
+```
+- `Start-BitsTransfer -Source "http://training.local/128.file" -Destination "C:\Files\128.file"`: download a large file
+- `Start-BitsTransfer -Asynchronous -Source "http://training.local/512.file" -Destination "C:\Files\512.file"`: downloads in the background
+- `Get-BitsTransfer`: shows status of download
 - 
 
- 
+
+
+
+
+
+
+
+  
