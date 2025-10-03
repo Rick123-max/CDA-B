@@ -2344,6 +2344,11 @@
 <img width="1904" height="1408" alt="image" src="https://github.com/user-attachments/assets/1bf5b27e-af14-45ae-a91e-72c7655d5826" />
 
 
+### SSH Scripting
+- The ssh command is a client program used for logging into a remote machine over an encrypted network connection and executing commands
+- It is done as an interactive session or as part of a script.
+- Ssh is immensely valuable to analysts to allow remote access to hosts that are physically separated and those that do not have a physical terminal associated with them.
+
 
 
 
