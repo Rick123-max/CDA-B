@@ -118,6 +118,7 @@
 
 ### WMIC
 - `wmic /node:"172.16.5.2" /user:"administrator" rdtoggle list`: query RDP status on a device
+- `wmic /node:"172.16.5.2" /user:"cda\trainee" /password:"Th1s is 0perational Cyber Training!" process get /all /format:list`:
 - `wmic /node:"172.16.5.2" /user:"administrator" rdtoggle where AllowTSConnections="0" call SetAllowTSConnections "1"`: turns on the RDP on a remote system
 - `wmic /node:"174.16.1.6" /user:"cda\trainee" os list brief`: shows OS info for a remote system
 - `wmic /node:"174.16.1.6" /user:"cda\trainee" os get BuildNumber,SerialNumber,LastBootUpTime`: Retrieve OS info including last boot up time
