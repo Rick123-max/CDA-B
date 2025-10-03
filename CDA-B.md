@@ -2199,13 +2199,149 @@
     - Asynchronous: Specifies whether or not a file is downloaded interactively
   - Get-BitsTransfer: Lists active download jobs for BITS
 
-### Bash Scripting
+## Bash Scripting
+
+### Compound Commands
+- A compound is a command executed in a subshell environment, executed in the current shell environment, executed in a group, evaluated as an arithmetic expression, evaluated as a conditional expression, or a series of commands executed within several flow control constructs.
+- Multiple commands are separated by a semicolon, and any command that has the ampersand (&) associated with it is executed in the background (asynchronously) while the next command is started before waiting for the background command to finish
+  <img width="969" height="1162" alt="image" src="https://github.com/user-attachments/assets/98e18456-f2bd-4431-a942-1d495560593c" />
+
+- Bash has an environment variable BASH_SUBSHELL, which increments each time a subshell is invoked
+
+  ```
+  trainee@cda-lin-hunt:~$ (echo $BASH_SUBSHELL); echo $BASH_SUBSHELL
+  trainee@cda-lin-hunt:~$ (echo "First: $BASH_SUBSHELL"; (echo "Second: $BASH_SUBSHELL")); echo "Third: $BASH_SUBSHELL"
+  ```
+- When the same type of command is formatted as a list, they must be terminated by semicolons and separated by spaces; the result is that all the commands are executed in the same shell.
+  - `{ echo "First: $BASH_SUBSHELL"; { echo "Second: $BASH_SUBSHELL"; } } ; echo "Third: $BASH_SUBSHELL"`
+- The sequence expansion in format {x..y} expands to all the integers or characters in that sequence.
+  <img width="976" height="118" alt="image" src="https://github.com/user-attachments/assets/b15006ad-c307-4428-aee6-c806a9f7e03a" />
+
+### Quoting
+- Quoting is used to remove the special meaning of certain characters or words to the shell.
+- The following meta-characters must be quoted to prevent them from separating words:
+  - `| & ; ( ) < > ! space tab`
+- There are three types of quoting in Bash: the escape character, single quotes, and double quotes
+- Quoting characters in single quotes (') preserves the literal value of each character within the quotes
+- A single quote may not occur between single quotes, even when preceded by a backslash
+- Quoting characters with double quotes (“) preserves the literal value of each character with the exception of $, ', \, and when history expansion is enabled, !
+- There are several escape sequences that are decoded in the format $'string', where string is replaced by one of the following sequences:
+  <img width="1526" height="1352" alt="image" src="https://github.com/user-attachments/assets/574830af-e5db-415b-b70b-8f427d0bde0d" />
+
+### Flow Control
+- The ability for Bash and other scripting languages to do the same operation on multiple objects, perform loops, and branch execution path is one of the most powerful aspects of scripting
+- Bash uses the following constructs for controlling flow for which commands are executed under specific conditions.
+  <img width="600" height="1200" alt="image" src="https://github.com/user-attachments/assets/5e0cff26-5ef1-4eb4-9fdf-70741d792305" />
+
+### For Loops
+- Creates empty files in /tmp directory
+  ```
+  cd /tmp
+  for i in {1..15}; do touch dummy_log$i.log; done
+  ls *.log
+  ```
+  
+  ```
+  for i in dummy_log{6..15}.log; do gzip $i; done
+  ls dummmy
+
+- `/tmp$ for (( c=1; c<=5; c++ )); do echo "This is number $c" >> dummy_log$c.log; done`
+
+### Select Statement
+- The select command generates a menu from the items in the word list
+- `select ip in 192.168.1.1 192.168.1.2 192.168.1.3; do echo "You selected: $ip"; done`
+  <img width="976" height="311" alt="image" src="https://github.com/user-attachments/assets/9f1e5b30-f9e2-4ce2-a7cb-8bf54b6809e2" />
+  
+### Case Statements
+- Case statements allow for complex conditional statements and branches of execution to be tested in a way that does not require multiple if statements.
+  ```
+  case word in
+    pattern1)
+        statements
+    ;;
+    pattern2)
+        statements
+    ;;
+    *)
+        statements
+    ;;
+  esac
+  ```
+- This example uses the previous select statement to do a test for the entry of user input
+  ```
+  #!/bin/bash
+
+  select ip in 192.168.1.1 192.168.1.2 192.168.1.3
+  do 
+    case $ip in
+  
+    192.168.1.1)
+  	echo "execute some command on $ip"
+    ;;
+  
+    192.168.1.2)
+  	echo "execute some command on $ip"
+    ;;
+  
+    192.168.1.3)
+  	echo "execute some other command on $ip"
+    ;;
+  
+    *)
+  	echo "default case, unknown"
+    ;;
+    esac
+  
+  done
+  ```
+  
+  ### If Statements
+  - Conditional statements using if are one of the most common ways to control the execution of a script and perform specific actions based on a condition.
+  - The if conditional performs a test, and then executes a list of commands.
+    ```
+    #!/bin/bash
+
+    select ip in 192.168.1.1 192.168.1.2 192.168.1.3
+    do 
+      
+     if [[ $ip == 192.168.1.1 ]]
+      then
+        echo "execute some command on $ip"
+      
+      elif [[ $ip == 192.168.1.2 ]]
+      then
+        echo "execute some command on $ip"
+    
+      elif [[ $ip == 192.168.1.3 ]]
+      then
+        echo "execute some other command on $ip"
+    
+      else
+        echo "default case, unknown"
+        break 
+      fi
+    
+    done
+    ```
+
+### While and Until Loops
+- While and until loops are useful for performing a set of tasks while (or until) a certain condition changes
+- `i="0"; while (( $i < 5 )); do echo $i; i=$((i+1)); done`
 
 
+<img width="1728" height="836" alt="image" src="https://github.com/user-attachments/assets/dc3f4db1-2ecd-4819-a0a5-0563bd02e4f3" />
 
+#### Arithmetic Operators
+<img width="1104" height="1936" alt="image" src="https://github.com/user-attachments/assets/9d401d40-068b-4009-8d15-80175094adcb" />
 
+#### IF Conditions
+<img width="967" height="779" alt="image" src="https://github.com/user-attachments/assets/7d9e70dc-ff93-4926-8e46-1bd904f7800d" />
 
+#### Operators for Files
+<img width="784" height="1200" alt="image" src="https://github.com/user-attachments/assets/3eaa59ea-3c85-4f73-861d-76517b184548" />
 
+#### Positional Parameters
+<img width="1904" height="1408" alt="image" src="https://github.com/user-attachments/assets/1bf5b27e-af14-45ae-a91e-72c7655d5826" />
 
 
 
