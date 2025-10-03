@@ -245,10 +245,18 @@ PS C:\Users\trainee\Desktop> .\payload.ps1
 - `Start-BitsTransfer -Asynchronous -Source "http://training.local/512.file" -Destination "C:\Files\512.file"`: downloads in the background
 - `Get-BitsTransfer`: shows status of download
 
+### SSH STUFF
+- `lsof -nP | grep LISTEN': list processes that have LISTEN sockets
+- `lsof -nP | grep LISTEN | tr -s " "`: compresses the output to only have single spaces
+- `lsof -nP | grep LISTEN | tr -s " " | cut -d " " -f 2`: cuts out the PID from the results
+- `lsof -nP 2>/dev/null | grep LISTEN | tr -s " " | cut -d " " -f 2 | sort -u`: same results, but pushes the errors to /dev/null and gets rid of duplicates.
 
 
-
-
+### NANO A SCRIPT
+- nano <script>
+- write script, CTRL X, Y, Enter
+- chmod u+x <script>
+- Run Script
 
 
 
