@@ -244,7 +244,9 @@ PS C:\Users\trainee\Desktop> .\payload.ps1
 - `Start-BitsTransfer -Source "http://training.local/128.file" -Destination "C:\Files\128.file"`: download a large file
 - `Start-BitsTransfer -Asynchronous -Source "http://training.local/512.file" -Destination "C:\Files\512.file"`: downloads in the background
 - `Get-BitsTransfer`: shows status of download
-- 
+
+
+
 
 
 
