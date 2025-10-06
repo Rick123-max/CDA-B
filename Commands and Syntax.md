@@ -260,6 +260,40 @@ PS C:\Users\trainee\Desktop> .\payload.ps1
 - Run Script
 
 
+### Using Powershell to View Loaded Libraries
+- Query for explorere process: `Get-Process explorer`
+- View loaded modules: `(Get-Process explorer).Modules`
+
+  ```
+  ### Find the processes for specified Module ###
+  $processes = Get-Process
+  foreach($process in $processes) {
+  >> foreach($module in $process.Modules){
+  >>  if ($module.ModuleName -eq 'advapi32.dll'){
+  >>   $process
+  >>  }
+  >> }
+  >>}
+  ```
+
+### Query Remote System using Powershell
+- Store the credentials: `$credentials = Get-Credential`
+- query current running processes on remote computer: `Invoke-Command -Credential $credentials -ComputerName 'cda-dc' -ScriptBlock {Get-Process}`
+- Coply collection locally: `$processes = Invoke-Command -Credential $credentials -ComputerName 'cda-dc' -ScriptBlock {Get-Process}`
+
+  ```
+  ### Filter processes for specific loaded modules ###
+    foreach($process in $processes) {
+  >> foreach($module in $process.Modules){
+  >>  if ($module -like '*advapi32.dll*'){
+  >>   $process
+  >>  }
+  >> }
+  >>}
+  ```
+  
+- Query to retrieve collection: `Invoke-Command -Credential $credentials -ComputerName 'cda-dc' -ScriptBlock {Get-Process explorer -Module}`
+
 
 
 
