@@ -2350,6 +2350,79 @@
 - Ssh is immensely valuable to analysts to allow remote access to hosts that are physically separated and those that do not have a physical terminal associated with them.
 
 
+# MODULE 8
+
+## Libraries
+
+### Overview
+- libraries are resources that contain code and/or data
+- Modern desktop and server OSs contain methodologies for loading and managing these libraries
+- While libraries are often used for native code that can be referenced via C/C++ or other languages with the ability to bind or link to native libraries, many managed languages and runtimes — such as .NET and Java — also use libraries for shared code or data.
+- Libraries are referenced by new programs via a process known as **linking**
+- Libraries are linked **statically** or **dynamically**
+- **Static linking** copies all the referenced portions of the library into the resulting program image
+- **dynamic linking** references the library instead of copying the library.
+- Common file extensions for libraries on Linux and Windows:
+  <img width="1100" height="335" alt="image" src="https://github.com/user-attachments/assets/11933120-f16d-4190-87a4-48066d2497fb" />
+
+### Static Libraries
+- On Windows, libraries that are intended to be **statically linked** use the **.lib** file extension by convention
+- Linux prepends these files with lib and the file ending with .a.
+- Since static libraries are copied to, and included in, the resulting binary at compile time, updating these libraries generally requires recompiling the program.
+- Tradeoffs for static libraries:
+  - Each application that references a static library requires the library to be loaded separately.
+    - May have performance implications due to being embedded in the application.
+    - This often results in larger assembly size, however, less overhead exists for method calls.
+  - Application updates require recompilation and distribution of the executable in order to take advantage of security patches in newer versions of the library.
+  - Statically linked libraries require modification of the executable to tamper with the functions of the library, making them less susceptible to many library-based attacks.
+
+### Dymanic Libraries
+- On Windows, **dynamic libraries** use the **.dll** file extension by convention; **Linux** uses **.so**.
+- These libraries are stored externally to the application, so they can be updated independently of the executable that uses them
+- In addition to compile-time linking, these libraries can be bound to at runtime
+- These libraries are typically unchanged during runtime
+- Modern OSs typically only load one copy of a library into system memory, mapping any further calls to the same memory location.
+- Tradeoffs for dynamic libraries:
+  - Most OSs share memory for each loaded library, meaning some memory savings are achieved for common libraries.
+  - Dynamic libraries can be updated independently of the program if binary compatibility is maintained by the new version of the library.
+  - Dynamic libraries, and their implementation, can be a source of security issues due to the possibility of an application loading a malicious library — for example, by replacing the original library or abuse of library search order.
+
+### Windows Libraries
+- Libraries shared by multiple applications might exist in a specific shared library, like an installation in **C:\Program Files\** or by convention by the library provider.
+- Libraries are also found in an application’s directory or in Windows system folders like System32
+- On Windows systems, there are various readily available programs to view modules (libraries) loaded by processes including **Process Explorer**, **Process Hacker**, **PowerShell’s Get-Process cmdlet**
+- Processes with links to dynamic libraries typically search for libraries in the following ways:
+  - Checks if the library is already loaded in memory
+  - Checks if knowndlls registry entry exists for the DLLControlled by HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\KnownDLLs — intended to speed up access to specific DLLs, however some security implications may exist if an attacker has elevated permissions on the host.
+  - Searching through various paths, which can happen in one of several ways:
+    - SafeSearch order (determined by the HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\SafeDllSearchMode registry key) enabled by default — the registry key must be both present and set to zero to disable it
+    - Legacy Search Order — if SafeSearch is disabled, or if an insecure alternate search method is used, such as with the SearchPath method when SetSearchPathMode is set to disable SafeSearch
+- SafeSearch Order:
+  - Directory application is located in
+  - System directory (typically C:\Windows\System32)
+  - 16-bit System directory (typically C:\Windows\System)
+  - Windows directory (typically C:\Windows\)
+  - Current working directory
+  - Directories listed in PATH environment variable
+- Legacy Search Order:
+  - Directory application is located in and loaded from
+  - Current working directory
+  - System directory (typically C:\Windows\System32)
+  - 16-bit System directory (typically C:\Windows\System)
+  - Windows directory (typically C:\Windows\)
+  - Directories listed in PATH environment variable
+
+### Examining Libraries
+- There are several classes of tools for analyzing libraries and executables, such as:
+	- Decompiler: Attempts to reconstruct a library or program executable into source code that can be compiled into the same assembly. 
+		- May require formatting and relabeling code in order to be comprehensible.
+	- Portable Executable (PE) Header/Metadata Analyzer: Examines the headers and other structures of an assembly to reveal information about the assembly, such as its dependencies and extracting resources from the file.
+	- String Analyzer/Dumper: Dumps all strings contained in an assembly for analysis.
+	- Disassembler: Breaks down native libraries into readable assembly code for analyzing behavior of a library or executable.
+	- Hex Editor: Allows viewing and editing of raw binaries; displays data using hexadecimal. Often contains the ability to view binary as various data formats, such as strings or integers.
+
+
+
 
 
 
