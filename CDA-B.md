@@ -2421,6 +2421,98 @@
 	- Disassembler: Breaks down native libraries into readable assembly code for analyzing behavior of a library or executable.
 	- Hex Editor: Allows viewing and editing of raw binaries; displays data using hexadecimal. Often contains the ability to view binary as various data formats, such as strings or integers.
 
+## Windows API
+
+### The Windows API
+- The Windows API is the intermediary interface that allows other programs to interact with the Windows OS
+- It can be used for many things such as
+	- manipulating or creating processes
+	- modifying the registry
+	- enabling network connections
+- It can be thought of as a collection of predefined functions to do everything that needs to be done within the OS
+- The API calls referenced are specifically tailored to the need of that attack and used in anomalous fashion.
+- The functions that make up the Windows API — and are used to communicate with the Windows OS — are stored and accessed via Windows library files known as DLLs, which can be grouped into categories
+- System Services: These libraries provide access to Windows file systems, devices, processes and threads, registry, and error handling.Library DLLs:
+	- kernel32.dll
+	- advapi32.dll
+	- ole32.dll
+- Graphics Device Interface: These libraries provide the functionality for outputting graphical content to monitors, printers, and other output devices.
+	- Library DLLs:
+		- gdi32.dll
+- User Interface (UI): These libraries include Common Dialog Box DLLs, which provide functions to create and interface with standard dialog boxes for opening and saving files, choosing color and font, etc.; Common Control Library DLLs, which provide access to status bars, progress bars, toolbars, tabs, and other advanced control features; and Windows Shell DLLs, which provide the functionality and modification of the OS shell.
+	- Library DLLs:
+		- comctl32.dll
+		- comdlg32.dll
+		- shell32.dll
+		- shlwapi.dll
+		- user32.dll
+- Network Services: These libraries provide access to the various networking capabilities of the OS, including Network Basic Input/Output System (NetBIOS), Windows Sockets (Winsock), Network Dynamic Data Exchange (NetDDE), Remote Procedure Calls (RPC), and many others.
+	- Library DLLs:
+		- ws2_32.dll
+  		- wsock32.dll
+		- wininet.dll
+		- netapi32.dll
+
+### API Calls Common in Windows Malware
+- Kernel32.dll: This is a very common DLL that contains core functionality, such as access and manipulation of memory, files, and hardware. Some of the common API calls in this DLL are:
+	- **ConnectNamedPipe**: Creates a server pipe for interprocess communication that waits for a client pipe to connect. Some backdoors and reverse shells use ConnectNamedPipe to simplify or obfuscate connectivity to a Command and Control (C2) server.
+	- **CreateFile**: Creates a new file or opens an existing file.
+	- **CreateFileMapping**: Creates a handle to a file mapping that loads a file into memory and makes it accessible via memory addresses. Launchers, loaders, and injectors use this to read and modify PE files.
+	- **CreateProcess**: Creates and launches a new process. If malware creates a new process, it needs to be analyzed as well.
+	- **CreateRemoteThread**: Starts a thread in a remote process. Launchers and stealth malware use CreateRemoteThread to inject code into a different process.
+	- **EnumProcesses**: Enumerates through running processes on the system. Malware enumerates through processes to find one into which to inject.
+	- **EnumProcessModules**: Enumerates the loaded modules (executables and DLLs) for a given process. Malware enumerates through modules when performing an injection.
+	- **GetModuleFilename**: Returns the filename of a module loaded in the current process. Malware uses this function to modify or copy files in the currently running process.
+	- **GetModuleHandle**: Obtains a handle to an already loaded module. Processes use GetModuleHandle to locate and modify code in a loaded module or to search for a good location to inject code.
+	- **GetProcAddress**: Retrieves the address of a function in a DLL loaded into memory. Imports functions from other DLLs and functions imported in the PE file header.
+	- **IsWoW64Process**: Used by a 32-bit process to determine if it is running on a 64-bit OS.
+	- **LoadLibraryA/LoadLibraryEx**: Function to load a DLL into a process.
+	- **OpenProcess**: Opens a handle to another process running on the system. This handle reads and writes to the other process memory or injects code into the other process.
+	- **SetFileTime**: Modifies the creation, access, or last modified time of a file. Malware often uses this function to conceal malicious activity.
+	- **VirtualAllocEx**: A routine that allocates memory in a remote process. Malware uses VirtualAllocEx as part of a process injection.
+	- **WriteProcessMemory**: Writes data to a remote process. Malware uses WriteProcessMemory as part of a process injection.
+
+- Advapi32.dll: This DLL provides access to advanced Windows core components, such as Service Manager and the registry.
+	- Some of the common API calls in this DLL are:
+		- **AdjustTokenPrivileges**: Enables/disables specific access privileges. It allows malware to gain additional permissions in a process injection attack.
+		- **ControlService**: Starts, stops, modifies, or sends a signal to a running service. Code needs to be analyzed that implements malicious services in order to determine the purpose of the call.
+		- **CreateService**: Creates a service started at boot time. Malware uses CreateService for persistence, stealth, or to load kernel drivers.
+		- **RegCreateKeyEx**: Creates a registry key.
+		- **RegDeleteKey**: Deletes a registry subkey and its values.
+
+- WSock32.dll and Ws2_32.dll: These are networking DLLs. A program that accesses either of these most likely connects to a network or performs network-related tasks.
+	- Some of the common API calls in this DLL are:
+		- **Accept**: Listens for incoming connections on a socket. Used by malware to communicate with the C2 server.
+		- **Bind**: Associates a local address to a socket to listen for incoming connections.
+		- **Connect**: Connects to a remote socket. Malware often uses low-level functionality to connect to a C2 server. Used by malware to communicate with the C2 server.
+		- **inet_addr**: Converts an Internet Protocol (IP) address string  — like 127.0.0.1 — to the Windows structure used by other functions, such as Connect. The IP addresses found in these calls — and used in malware —  may be used in network-based signatures to identify potentially malicious activity.
+			- NOTE: Not all network activity by malware is useful for signatures as legitimate programs may communicate with the same IP addresses.
+		- **Recv**: Receives data from a remote machine. Used by malware to receive data from a remote C2 server.
+		- **Send**: Sends data to a remote machine. Used by malware to send data to a remote C2 server.
+		- **WSAStartup**: Initializes low-level network functionality. Finding calls to WSAStartup is an easy way to locate the start of network-related functionality.
+
+- Wininet.dll: This DLL contains higher-level networking functions that implement protocols such as File Transfer Protocol (FTP), Hypertext Transfer Protocol (HTTP), and Network Time Protocol (NTP).
+	- Some of the common API calls in this DLL are:
+		- **FtpPutFile**: Uploads a file to remote FTP server.
+		- **InternetOpen**: Initializes the high-level internet access functions from Windows Internet (WinINet), such as InternetOpenUrl and InternetReadFile. Searching for InternetOpen is a good way to find the start of internet access functionality. One of the parameters to InternetOpen is the UserAgent, which may be a good network-based signature, if it is unique or not common.
+		- **InternetOpenUrl**: Opens a specific Uniform Resource Locator (URL) for a connection using FTP, HTTP, or Hypertext Transfer Protocol Secure (HTTPS). URLs, if fixed, may be good network-based signatures.
+		- **InternetReadFile**: Reads data from a previously opened URL.InternetWriteFile: Writes data to a previously opened URL.
+
+- Ntdll.dll: The interface to the Windows kernel. Importing this DLL is one way that one can gain access to the undocumented Windows Native API.
+	- NOTE: Executables generally do not import this DLL directly, although it is almost always imported indirectly through Kernel32.dll.
+	- If this DLL is imported directly, it is a significant red flag for a CDA.
+	- It implies that the author of the executable intended to use functionality not normally available to Windows programs.
+	- Some tasks, such as hiding functionality of malware or manipulating processes, use this interface.
+	- Additional information on many of these attacks is described in the MITRE Adversarial Tactics, Techniques, and Common Knowledge (ATT&CK) Technique ID T1106 Native API.
+
+- Most DLLs require **ntdll.dll** because it contains the system service dispatch instructions for the Windows executive.
+- Since user-mode processes have no other way of executing kernel-mode code and objects, **ntdll.dll** is the subsystem necessary to make allowed system calls to the kernel space.
+- Most DLLs require **ntdll.dll**, the exceptions being **GDI32.dll** and **User32.dll**, which can make system calls directly to **ntoskrnl.exe** — the Windows kernel.
+
+
+
+
+
 
 
 
