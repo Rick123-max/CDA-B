@@ -2421,6 +2421,126 @@
 	- Disassembler: Breaks down native libraries into readable assembly code for analyzing behavior of a library or executable.
 	- Hex Editor: Allows viewing and editing of raw binaries; displays data using hexadecimal. Often contains the ability to view binary as various data formats, such as strings or integers.
 
+### Attacks Involving Libraries
+- Dynamic libraries are used to achieve an attacker’s goal, including:
+	- Persistence
+	- Privilege Escalation
+	- Defense Evasion
+- The following techniques are used to accomplish one or more of the above tactics: 
+	- T1546.10: Event Triggered Execution: AppInit DLLs 
+		- Causes a library to be loaded any time an application that references User32.dll is executed, which encompasses most applications — allowing persistence.
+  		- DllMain entries are used to execute code under that application’s context, which potentially allows for privilege escalation. 
+	- T1055.001: Process Injection: DLL Injection
+		- DLL Injection: Attach to another process, then load a specified library — triggering the execution of code under that process’s context.
+  		- This allows for privilege escalation and some amount of defense evasion. 
+	- T1574.002: Hijack Execution Flow: DLL Side-Loading 
+		- DLL Side-Loading: Application manifest files describe the version of a library that is loaded.
+  		- If this manifest is vague or imprecise, an attacker can exploit this weakness to load a malicious library instead of the intended library.
+    	- This allows an attacker to gain persistence by hijacking a common process, some defense evasion by its nature of executing under a trusted process, and a potential for privilege escalation if the process has elevated permissions.
+		- T1574.001: Hijack Execution Flow: DLL Search Order Hijacking
+			- Hijack Execution Flow: DLL Load Order attack takes advantage of weaknesses in some applications and the order of paths those libraries are loaded from.
+   			- An attacker creates a malicious DLL that replaces a DLL expected by the application and executes code under the context of that application, allowing the attacker to potentially become persistent, escalate privileges, or evade defenses.
+		- T1574.006: Hijack Execution Flow: LD_PRELOAD 
+			- LD_PRELOAD: A shared library attack for Linux that allows an attacker to override which library loads when a process loads a specific library by setting the LD_PRELOAD environment variable
+
+### Detection
+- Detection for each of these techniques typically involves the detection of libraries being loaded from unusual locations
+- The installation of monitoring software is often necessary to detect these attacks, however, some of these methods leave behind artifacts — especially if in current use for persistence — such as:
+	-  T1546.010: AppInit DLL
+		- Registry entries, such as HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows\LoadAppInit_DLLs
+		- Malicious library in the path it is loaded from
+	- T1055.001: DLL Injection
+		- Malicious library or libraries used during the attack
+		- Loaded by processes 
+	- T1574.002: DLL Side-Loading 
+		- Malicious library or libraries used during the attack in C:\Windows\WinSXS folder 
+		- Library manifests in C:\Windows\WinSXS folder 
+	- T1547.004: DLL Load Order
+		- Malicious library in a search path
+	- T1574.006: LD_PRELOAD
+		- Malicious library used during the attack
+		- Persistent environmental variable change to the LD_PRELOAD variable
+- Detection of currently loaded malicious libraries is accomplished by querying modules loaded by processes on the system and analyzing them
+
+## Processes
+
+### Windows Processes
+- What is a Windows Process?
+	- A process is an executing program — typically based on the Portable Execution (PE) file format — isolated from other running programs on the same system
+	- a process is a container that stores all the necessary components for executing a program independently from other programs.
+	- A process has numerous elements including:
+		- A private virtual memory space
+  		- An executable program image
+		- Handles to kernel objects
+		- A security token
+  		- A unique Process Identifier (PID)
+		- One or more threads to execute instructions
+
+- Virtual Memory Space
+	- In Windows, memory space is divided into an area that user-mode processes access and a second area that is used exclusively by the kernel and kernel processes.
+ 	- The user mode virtual memory space is further divided between running processes
+  	- Each process’s user mode virtual memory space is private to that process; no processes are able to directly access another process’s virtual memory space.
+  	- However, such interference is possible through the Windows Application Programming Interface (API)
+  	- In contrast, kernel mode memory is shared by all processes on the system since there is only one kernel.
+  	- NOTE: Virtual memory is the modern OS’s representation of contiguous blocks of memory, whereas behind the scenes the processor is rapidly interchanging the data in use by Windows processes between Random Access Memory (RAM) and physical memory storage locations on the hard disk. These interchanges are seamless and transparent to the user, and allow larger programs to both become feasible and run faster.
+  	- In 32-bit systems, each process is allocated 2 Gigabytes (GB) for its user-mode memory space while the kernel gets 2GB shared across all processes.
+  	- In 64-bit systems, each process can theoretically be allocated Terabytes (TB) of user-mode memory space while the kernel also gets TBs of memory space across all processes.
+  	- This allocation is possible, even for systems that have a limited amount of RAM, through a process known as virtual memory mapping
+  	- each process sees the same range of memory addresses, but those addresses do not necessarily represent the real memory addresses in the computer’s physical RAM.
+  	- Processes, however, treat virtual memory addresses as though they were physical memory addresses.
+  	- The Windows Memory Manager, part of the kernel space Executive, decides where each process’s data is mapped in the computer’s physical RAM, or if it is stored on the computer’s hard drive in a process known as **Paging**.
+  	- The Windows Executive refers to the layer of kernel-mode components that provide a variety of services to device drivers, such as the management of objects, memory, processes and threads, inputs and outputs, and configurations.
+  	- **Paging** is the process by which Windows stores infrequently accessed information for processes on a system’s hard drive — in what is known as a **paging file** — freeing up space in the computer’s physical RAM.
+  	- When a process needs to access information stored in the paging file, a page fault occurs and Windows loads the necessary data from the page file into RAM.
+
+  	  <img width="504" height="466" alt="image" src="https://github.com/user-attachments/assets/371ed8ee-900e-4e10-bd2e-ea710d983404" />
+	  
+	- Modern Windows processes take advantage of Address Space Layout Randomization (ASLR).
+ 		- ASLR is a security mechanism that instructs the Windows loader randomize the base memory address of executables and the position of libraries, heap, and the stack in a processes' address space
+   		- ASLR is primarily intended to defend against memory-based exploits like buffer overflows by eliminating an exploit’s ability to rely on hardcoded memory addresses.
+     	- ASLR does not defeat memory based exploits or attacks, but increases the difficulty to reliably gain control of execution, reducing the likelihood of a successful attack.
+	- The **stack** is an area of memory determined at compile time, and is used as storage for temporary variables and functions used by a program.
+ 	- The **heap**, in contrast, is used to store data that is provided to the process at runtime because the developer cannot anticipate exactly what information is input into the program in advance.
+  	- Memory used by variables and functions stored in the stack is freed by the system automatically, whereas memory allocated on the heap must be specifically freed by the developer that coded the program.
+  	- Notably, in the interest of being memory efficient, system Dynamic Link Libraries (DLL) are shared between processes and commonly mapped to the same locations in virtual memory.
+
+- Handles to Kernel Objects
+	- Kernel objects are, generally speaking, the system elements Windows exposes to user processes to allow them to perform a wide array of actions within the system.
+ 	- Example actions include:
+  		- Creating a window
+	    - Outputting text to the screen
+	    - Creating, reading, editing, or deleting a file
+	- A **handle** is a reference to a resource.
+ 		- A process maintains a table of handles so it can access other resources on the system.
+		- In the case of kernel objects, handles are how programs are able to identify kernel elements and send instructions for performing the actions mentioned above.
+		- Handles are often used in conjunction with Windows API calls to access the details of a process, thread, or file.
+	- When a handle for a kernel object is sought, the Executive’s object manager instantiates the requested kernel object.
+ 	- Kernel objects maintain a reference counter, which keeps track of how many processes are interacting with it.
+
+- Security Token
+	- When a user logs into Windows, the system generates and associates a security token with that user account.
+ 	- Each process that user starts receives the security token, which includes the identity and privileges of the user account.
+  	- Windows uses the process’s security token to determine whether it is allowed to interact with a given resource, such as a file, or engaged in a privileged act.
+  	- Security tokens contain a range of information, such as:
+  		- the Security Identifier (SID) of the originating user account
+		- the SIDs for the groups which the account is a member
+		- a list of privileges held by that user or that user’s groups.
+
+- Unique PID
+	- Each process, when it is created, receives a unique PID.
+	- A PID can be used to locate a running process and create a handle to it, like a kernel object.
+	- A process’s Identifier (ID) is unique only so long as the process is running.
+	- Terminated processes free their IDs, which can then be used by other new processes on the system.
+
+
+
+   
+
+
+
+
+
+
 ## Windows API
 
 ### The Windows API
@@ -2454,7 +2574,7 @@
 		- netapi32.dll
 
 ### API Calls Common in Windows Malware
-- Kernel32.dll: This is a very common DLL that contains core functionality, such as access and manipulation of memory, files, and hardware. Some of the common API calls in this DLL are:
+- **Kernel32.dll**: This is a very common DLL that contains core functionality, such as access and manipulation of memory, files, and hardware. Some of the common API calls in this DLL are:
 	- **ConnectNamedPipe**: Creates a server pipe for interprocess communication that waits for a client pipe to connect. Some backdoors and reverse shells use ConnectNamedPipe to simplify or obfuscate connectivity to a Command and Control (C2) server.
 	- **CreateFile**: Creates a new file or opens an existing file.
 	- **CreateFileMapping**: Creates a handle to a file mapping that loads a file into memory and makes it accessible via memory addresses. Launchers, loaders, and injectors use this to read and modify PE files.
@@ -2472,7 +2592,7 @@
 	- **VirtualAllocEx**: A routine that allocates memory in a remote process. Malware uses VirtualAllocEx as part of a process injection.
 	- **WriteProcessMemory**: Writes data to a remote process. Malware uses WriteProcessMemory as part of a process injection.
 
-- Advapi32.dll: This DLL provides access to advanced Windows core components, such as Service Manager and the registry.
+- **Advapi32.dll**: This DLL provides access to advanced Windows core components, such as Service Manager and the registry.
 	- Some of the common API calls in this DLL are:
 		- **AdjustTokenPrivileges**: Enables/disables specific access privileges. It allows malware to gain additional permissions in a process injection attack.
 		- **ControlService**: Starts, stops, modifies, or sends a signal to a running service. Code needs to be analyzed that implements malicious services in order to determine the purpose of the call.
@@ -2480,7 +2600,7 @@
 		- **RegCreateKeyEx**: Creates a registry key.
 		- **RegDeleteKey**: Deletes a registry subkey and its values.
 
-- WSock32.dll and Ws2_32.dll: These are networking DLLs. A program that accesses either of these most likely connects to a network or performs network-related tasks.
+- **WSock32.dll** and **Ws2_32.dll**: These are networking DLLs. A program that accesses either of these most likely connects to a network or performs network-related tasks.
 	- Some of the common API calls in this DLL are:
 		- **Accept**: Listens for incoming connections on a socket. Used by malware to communicate with the C2 server.
 		- **Bind**: Associates a local address to a socket to listen for incoming connections.
@@ -2491,14 +2611,14 @@
 		- **Send**: Sends data to a remote machine. Used by malware to send data to a remote C2 server.
 		- **WSAStartup**: Initializes low-level network functionality. Finding calls to WSAStartup is an easy way to locate the start of network-related functionality.
 
-- Wininet.dll: This DLL contains higher-level networking functions that implement protocols such as File Transfer Protocol (FTP), Hypertext Transfer Protocol (HTTP), and Network Time Protocol (NTP).
+- **Wininet.dll**: This DLL contains higher-level networking functions that implement protocols such as File Transfer Protocol (FTP), Hypertext Transfer Protocol (HTTP), and Network Time Protocol (NTP).
 	- Some of the common API calls in this DLL are:
 		- **FtpPutFile**: Uploads a file to remote FTP server.
 		- **InternetOpen**: Initializes the high-level internet access functions from Windows Internet (WinINet), such as InternetOpenUrl and InternetReadFile. Searching for InternetOpen is a good way to find the start of internet access functionality. One of the parameters to InternetOpen is the UserAgent, which may be a good network-based signature, if it is unique or not common.
 		- **InternetOpenUrl**: Opens a specific Uniform Resource Locator (URL) for a connection using FTP, HTTP, or Hypertext Transfer Protocol Secure (HTTPS). URLs, if fixed, may be good network-based signatures.
 		- **InternetReadFile**: Reads data from a previously opened URL.InternetWriteFile: Writes data to a previously opened URL.
 
-- Ntdll.dll: The interface to the Windows kernel. Importing this DLL is one way that one can gain access to the undocumented Windows Native API.
+- **Ntdll.dll**: The interface to the Windows kernel. Importing this DLL is one way that one can gain access to the undocumented Windows Native API.
 	- NOTE: Executables generally do not import this DLL directly, although it is almost always imported indirectly through Kernel32.dll.
 	- If this DLL is imported directly, it is a significant red flag for a CDA.
 	- It implies that the author of the executable intended to use functionality not normally available to Windows programs.
@@ -2508,6 +2628,62 @@
 - Most DLLs require **ntdll.dll** because it contains the system service dispatch instructions for the Windows executive.
 - Since user-mode processes have no other way of executing kernel-mode code and objects, **ntdll.dll** is the subsystem necessary to make allowed system calls to the kernel space.
 - Most DLLs require **ntdll.dll**, the exceptions being **GDI32.dll** and **User32.dll**, which can make system calls directly to **ntoskrnl.exe** — the Windows kernel.
+
+### Windows API in Malicious/Non-Malicious Contexts
+- Each of these API calls exists because they can be and are used for many valid purposes and are commonly employed as such.
+- For example:
+	- **GetUserName** and GetComputerName are frequently and benignly used to obtain the current context in which a program is running. A piece of malware could use it for information gathering on a newly exploited system.
+ - **FindExecutable** is used to obtain the path to a Windows binary that a process relies on as a dependency.
+ - **GetTempPath** is used to enable one-off filesystem operations performed by processes, and is also a way for malware to create and hide its on-disk activity.
+ - The function **CheckKeyboardBuffer** could be used by normal software to determine whether an expected key was pressed, or it could be used by a piece of malware to peek at what is being typed.
+ - The Windows API exists because developers needed a reliable and well-defined method of accessing kernel-level information and objects while writing user-land code
+
+### DLL Injection
+- Classic DLL injection is an attack performed by writing the path of a malicious DLL into the virtual address space of a target process, resulting in malicious code execution under the guise of a remote thread created by the target process.
+- this type of attack can only be performed in the context of administrator-level permissions.
+- This is performed in three steps:
+
+#### Target Selection
+- After identifying a process for injection, such as explorer.exe, the malware searches through the existing processes by using the following API calls:
+	- **CreateToolhelp32Snapshot**
+		- CreateToolhelp32Snapshot is first called to enumerate heap or module states of a specified process or all processes.
+	- **Process32First**
+ 		- Process32First used to iterate through the snapshot structure returned from the first function, each returning information about the enumerated processes
+	- **Process32Next**
+ 		- Process32Next used to iterate through the snapshot structure returned from the first function, each returning information about the enumerated processes
+	- **OpenProcess**
+ 		- Once the malware has received the information for the target process from one of these API calls, it calls OpenProcess to obtain a handle to the target process.
+
+#### Memory Allocation
+- Once the handle to a target process is obtained, the malware injects the path to its malicious DLL with the following API calls:
+	- **VirtualAllocEx**
+ 		- VirtualAllocEx creates a virtual memory block large enough to hold a file path in order to have a writeable space inside the target process.
+   		- VirtualAllocEx is necessary for this step because prior to writing to a block of memory in a computer, the block must be allocated for use
+     	- When a process is allocating additional memory for its own use, it uses the function VirtualAlloc, but when it is allocating space in a different process, VirtualAllocEx is used.
+      	- It is important to note that VirtualAlloc and VirtualAllocEx are used to allocate larger scale blocks of memory, not small byte-sized chunks for variables.
+      	- For example, if a developer used the line:
+      		- `void* pAddress = VirtualAlloc(NULL, 8, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);`
+      	 - to allocate memory for an 8-byte value, the developer actually allocated an entire page of memory, the size of which varies from system to system, but is often four kilobytes (kb) rather than eight bytes.
+ 	- **WriteProcessMemory**
+  		- The malware then writes the path to the malicious DLL in the allocated memory using WriteProcessMemory.
+
+#### Remote Thread Creation
+- Finally, to execute code in the target process, the malware calls one of the following APIs:
+	- **CreateRemoteThreadNt**
+	- **CreateThreadEx** (undocumented)
+	- **RtlCreateUserThread** (undocumented)
+- Effectively, executing any one of these functions — by passing the address of the API call LoadLibrary and the address returned from VirtualAllocEx that points to the memory storing the malicious DLL path — successfully results in a remote process that executes the DLL on behalf of the malware.
+- NOTE: As remarked above, there are a number of undocumented API calls.
+	- These occur when developers internal to Microsoft add functionality to the common libraries but do not intend for their code to be widely accessed.
+ - They are undocumented for a number of reasons such as testing, not intended for long term use, or other reasons.
+ - These functions are subject to change at any time, and their inputs/outputs are not guaranteed to always be the same.
+ - Microsoft provides other functions that are documented as a go-between for the undocumented functions, which are intended for programmers to use.
+ - These undocumented functions can still be discovered by dumping the export table of a shared library — usually ntdll.dll — and tracing the functions back to their entry points and conducting a reverse engineering of the assembly code there.
+ - Since these functions do not provide an intuitive insight into their function until documentation is developed, they are valued tools of malware developers seeking to obfuscate their tools. That is often an indication of possible maliciousness. 
+
+
+
+
 
 
 
