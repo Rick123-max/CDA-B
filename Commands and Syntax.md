@@ -297,6 +297,13 @@ PS C:\Users\trainee\Desktop> .\payload.ps1
   
 - Query to retrieve collection: `Invoke-Command -Credential $credentials -ComputerName 'cda-dc' -ScriptBlock {Get-Process explorer -Module}`
 
+- Compile a Library in CLI: `gcc -shared -o dllmain.dll dllmain.cpp`
+
+### Query PowerShell for AppInit DLLs
+- `Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows" -Name "LoadAppInit_DLLs"`
+- `Get-ItemProperty -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows NT\CurrentVersion\Windows" -Name "LoadAppInit_DLLs"`
+- If either of these return a 1, then the system is configured to use AppInit.
+- The library or libaries loaded are discerned via: `Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows" -Name "AppInit_DLLs"`
 ### Viewing Standard Windows API Functions
 
 #### In CLI
@@ -307,10 +314,20 @@ PS C:\Users\trainee\Desktop> .\payload.ps1
   - The eq query operator filters results in which the selector’s value is equivalent to the trailing expression.
   - The [process] term is a regular expression, such as explorer or explore*.
 - Load all libraries loaded for wmiprvse.exe process on remote computer: `tasklist /s 172.16.3.2 /u Administrator /fi "imagename eq wmiprvse.exe" /m`
+- List all processes that have loaded DLL advapi32.dll: `listdlls -d advapi32.dll | more`
+
+#### ListDlls (CLI)
+- List all DLLLs loaded by cmd.exe: `listdlls cmd` or `listdlls -r cmd` 
 
 #### In Powershell
 - List all DLLs loaded by explorer.exe on local machine: `Get-Process “explorer” | Select-Object -ExpandProperty Modules -ErrorAction SilentlyContinue | Format-Table -Autosize`
 
+#### PROCMON FILTERS
+- These are some key operations filters that may be helpful in dynamic analysis:
+  - **Process Create**: This is an intuitive filter that logs an operation when a new process is created.
+  - **WriteFile**: This operation is logged when a process writes data to a file that it has obtained the appropriate handle for. It is logged both when modifying existing files and when creating new files.
+  - **RegSetValue**: This operation logs when the process modifies or adds to the Windows registry and sets a value to the identified key. This is a common form of persistence in many forms of malware, particularly to set autorun keys to start malware on boot, allowing it to survive power cycling a system.
+  - **SetDispositionInformationFile** and **SetDispositionInformationEx**: These operations log when a process changes the disposition, or state of a file, such as when it is deleted. This can be particularly useful for identifying when malware is cleaning up leftover artifacts of its operation, and enables a savvy CDA to create filters to watch for artifact creation in the first place as evidence of that malware at work.
 
 
 
