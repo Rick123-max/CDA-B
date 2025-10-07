@@ -2851,7 +2851,74 @@
 	- It is located on the hard disk at \Users\<username>\Ntuser.dat (older versions of Windows stored user profile information in \Documents and Settings\<username>\NTUSER.dat).
    <img width="967" height="659" alt="image" src="https://github.com/user-attachments/assets/e388b28e-07b1-495d-867a-9dc0774fe902" />
 
-- 
+### Common Registry Keys: 
+- Commands running when a user logs in:
+	- HKLM\Software\Microsoft\Windows\CurrentVersion\Run
+	- HKCU\Software\Microsoft\Windows\CurrentVersion\Run
+	- HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnce
+	- HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce
+	- HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnceEx (not created by default on Windows Vista and newer, but can be created by MCAs or system administrators)
+	- HKCU\Software\Microsoft\Windows NT\CurrentVersion\Run (legacy; older versions of Windows)
+- Refernce programs to run directly or as a dependency:
+	- HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders
+	- HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders
+	- HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders
+	- HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders
+- Used to control automatic startup of services during boot:
+	- HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunServicesOnce
+	- HKCU\Software\Microsoft\Windows\CurrentVersion\RunServicesOnce
+	- HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunServices
+	- HKCU\Software\Microsoft\Windows\CurrentVersion\RunServices
+- Policy settings set to specify startup programs:
+	- HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run
+	- HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer\Run
+- Custom actions added to Winlogon key for additional actions occuring for WIN7 or later:
+	- HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Userinit
+	- HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Shell
+- Programs can be listed in the load value of HKCU\Software\Microsoft\Windows NT\CurrentVersion\Windows to load when any user logs on.
+- MCAs have also been seen to modify the BootExecute value of HKLM\SYSTEM\CurrentControlSet\Control\Session Manager from the default autocheck autochk * to some other program or process.
+- The default value is used for file system integrity checks after an abnormal shutdown. Not all the above keys and values may be present on a system, but may be created by MCA to enable that feature.
+
+- HKLM
+	-  The majority of registry keys that are relevant to attackers and defenders are in the HKLM hive.
+	-  This root is maintained in memory. On boot-up the kernel loads the keys that are contained in HKLM from disk and creates others dynamically based on the hardware attached to the system.
+		<img width="967" height="710" alt="image" src="https://github.com/user-attachments/assets/7679db5a-3d66-4cce-afce-93cdcd315ff8" />
+
+	- The subkeys that have restricted access have restrictions for the **administrator** account and are normally modified under the context of the **SYSTEM** local account
+	- The **SYSTEM** local account is used by the OS and services that run under Windows to access Windows internals.
+	- The registry entries under the **SAM**, **SECURITY**, and **BCD** keys are modified and changed with specific tools and applications within Windows in order to limit and prevent accidental or intentional configuration changes that may make the system unusable.
+	- **regedit** runs with the context of the **SYSTEM** account to view these registry keys, but care should be taken as any changes can make the system unusable.
+	- To start regedit in the context of the SYSTEM account, use the **psexec** command from **Sysinternals** with the following command run from a command prompt started as administrator: `psexec -i -s regedit`.
+	- The switches start the process interactively (attach the process to a console so you can see the window and use it) and in the SYSTEM account context.
+	- Changes that an attacker may make can be detected by watching for changes to the **HKLM\SAM\SAM\DOMAINS\Account\Users\Names\<accountname>** keys (Sysmon Event Identifier [ID] 12).
+	- Validating when new users are added and changes to the Local Administrators group (HKLM\SAM\SAM\Domains\Builtin\Aliases\0000220\) can identify rogue accounts and MCA (Sysmon Event ID 13).
+	- Windows servers store domain accounts and groups in Active Directory (AD)
+ 	- The HKLM\SYSTEM key stores system-wide security policies and user-rights assignments and is linked to the HKLM\SAM keys.
+	- Both of these keys and their subkeys can be seen in regedit in the SYSTEM account context, but the information is not very useful as it is not in a format meant to be read and understood by humans and is mostly undocumented.
+	- The subkeys HKLM\SYSTEM\ControlSet001 and HKLM\SYSTEM\CurrentControlSet refer to specific Windows settings where CurrentControlSet is the currently running settings and not necessarily saved to ControlSet001 (or other number for multiple control sets).
+	- Other types of **portable devices** may also be found in the registry in the **HKLM\SOFTWARE\Microsoft\Windows Portable Devices\Devices** key.
+	- Windows stores window viewing information (size, view mode, icon, access time, date, etc.) about recently accessed folders and recently accessed documents from the File Explorer in the registry in multiple places
+		- HKU\<sid>\Software\Microsoft\Windows\Shell\Bags
+		- HKU\<sid>\Software\Microsoft\Windows\Shell\BagMRU
+		- HKU\<sid>\Software\Microsoft\Windows\ShellNoRoam\Bags
+		- HKU\<sid>\Software\Microsoft\Windows\ShellNoRoam\BagMRU
+	- This Key stores local service config settings: **HKLM\SYSTEM\CurrentControlSet\Services**
+	- Other programs like Service Control (SC), Windows Management Instrumentation Command-Line (WMIC), and reg can also change the values in this key to affect the execution of services.
+	- System administrators do not typically modify the registry entries directly as they use the built-in Windows tools to manage services.
+	- Monitoring for unauthorized changes can identify MCAs as services do not have frequent changes.
+- You can only interact with **HKU and HKLM** Remotely
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
