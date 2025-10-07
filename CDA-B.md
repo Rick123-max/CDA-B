@@ -2532,14 +2532,133 @@
 	- A process’s Identifier (ID) is unique only so long as the process is running.
 	- Terminated processes free their IDs, which can then be used by other new processes on the system.
 
+### Windows Threads
+- What is a Windows Thread?
+	- A thread is a type of entity within a process that actually executes instructions within a process
+ 	- Without at least one thread, processes are unable to function, and modern Windows processes typically have multiple threads at any given time.
+	- Each created process starts with one primary thread, which may then spawn additional threads.
+	- Each thread shares the process’s virtual memory space and system resources with other threads.
+ 	- A thread has multiple components:
+  		- **Memory**
+    		- Each new thread receives its own memory stack which it uses to store local variables and return addresses of functions it calls.
+			- Memory can also be dynamically allocated by a thread, which would be in the process’s heap;
+			- dynamic memory is shared between threads, while the stack memory is not.
+	    - **Execution context**
+     		- A thread’s context stores all the information the thread needs to execute its instructions, such as the value registers contained in the Instruction Pointer (Extended Instruction Pointer [EIP] on 32-bit systems and Return Instruction Pointer [RIP] on 64-bit systems).
+       		- Because a Central Processing Unit (CPU) core can only execute one instruction from a thread at a time, processors need to switch between executing different threads frequently.
+         	- The execution context is important because the OS is constantly switching between executing different threads — even across different processes.
+			- The context allows the thread to pick up where it left off while the OS allows it to continue its execution.
+			- Windows uses a mechanism called **Scheduling** to decide which threads to pause and which threads to allow to execute.
+	    - **Thread local storage**
+     		- TLS provides a mechanism for a thread to store data relevant only to it — without needing to share that information across other threads.
+	    - **Security toke**n
+     		- By default, a thread inherits the security token held by the process in which it spawns.
+			- However, threads also have the ability to impersonate another account, which allows them to access resources and perform privileged actions within the impersonated user’s security context.
+			- The token, which the thread inherits, is known as the primary token and, if impersonating another user’s security context, it also has an impersonation token.
+	    - **Message queue**
+     		- If a thread is intended to perform GUI actions, it has a message queue for receiving any events associated with its User Interface (UI).
+	    - **Thread ID**
+     		- Like processes, threads also have unique IDs that other applications can use to identify specific threads and create handles pointing to them.
+         	- A thread ID is only unique for as long as a thread exists; once a thread has finished executing, its ID is relinquished and can be reused by the system for a new thread.
+	    - State
+     		- Some states include
+       			- **Ready** (meaning the thread is available for the OS to execute it)
+				- **Standby** (meaning the thread has been selected as the next thread to execute)
+				- **Wait** (meaning the thread is currently paused and waiting for an operation to complete or a resource to become free)
+				- **Running** (meaning the thread is currently executing).
+	    - Priority
+     		-  Priorities rank from **Lowest** to **Highest** with categories like **AboveNormal** and **BelowNormal** in-between.
+			-  By default, threads have the Normal priority, which is right in the middle, but that can be modified programmatically.
+			-  Threads are scheduled for execution based on their priority. 
+
+### Standard Windows Processes
+- **System**: This is the process from which all other processes are initiated and is responsible for system memory and memory management in the Windows kernel. It is always PID 4 — any other PID is suspect.
+- **System Idle Process**: This process is simply a measure of how much free processor time is available.
+	- The amount of CPU time the system idle process is not occupying determines how much processing capability is currently applied to run actual tasks.
+- **Session Manager Subsystem - smss.exe**:
+	- This is a startup process activated by the main System process that
+ 		- creates environment variables
+		- starts the kernel and user modes of the Win32 subsystem
+		- creates Disk Operating System (DOS) device mappings
+		- creates virtual memory paging files
+		- starts the Windows login manager.
+- **Client Server Runtime Subsystem - csrss.exe**: This critical system process is a user-mode system service in the Win32 subsystem, which is primarily responsible for Win32 console handling and GUI shutdown.
+- **Windows Initialization - wininit.exe**:
+	- This process launches the Windows initialization procedure, which includes starting the majority of the background applications that are constantly running, such as the **Service Control Manager**, the **Local Security Authority Subsystem Service**, and the **Local Session Manager**.
+- **Service Control Manager - services.exe**:
+	- This process is a service started at boot that
+ 		- provides a Remote Procedure Call (RPC) interface for maintaining the database of installed services
+		- starting services and driver services either upon system startup or upon demand
+		- enumerating installed services and driver services
+		- maintaining status information for running services and driver services
+		- transmitting control requests to running services
+		- locking and unlocking the service database.
+- **Local Security Authority Subsystem Service - lsass.exe**:
+	- This process is responsible for enforcing security policy on the system, including logon verification, password policy, writing to Windows security logs, and the creation of access tokens.
+ 	- Credentials are often stored in lsass process memory for use by accounts during a login session.
+	- Since it contains those credentials, dumping lsass memory is a valued target of threat actors during the following types of attacks:
+- **Service Host Process - svc.exe**:
+	- Svchost.exe is a generic host process name for services that run from DLLs.
+	- Since DLLs cannot be run directly, the service host process is an executable shell that loads the Windows services libraries and executes them.
+	- There are often many svchost.exe entries in a running process list because if a single process was hosting every necessary Windows service, then the failure of that process would cause OS failure. So individual services are started from discrete instances of the service host process.
+	- described in MITRE technique ID **T1036.005** Masquerading: Match Legitimate Name or Location.
+ - Additionally, due to its role as a host for services running with NT\System level privileges, which are the highest possible privileges in a Windows OS, this process is a frequent target for process injection as well, described in **MITRE technique ID T1055 Process Injection**, or spoofing svchost.exe as a parent PID for a malicious process, described in **MITRE technique ID T1134.004 Access Token Manipulation: Parent PID Spoofing**.
+	- Since this process is commonly seen but simultaneously poorly understood by the average user, this process name is a frequent target of masquerade by threat actors to attempt to hide through obfuscation
+- **Desktop Windows Manager - dwm.exe**:
+	- This process is a compositing window manager that renders a variety of graphical effects such as transparent windows, live taskbar thumbnails, and high-resolution monitor support
+	- Windows uses this process to create one composite view of all the windows on the screen before sending it to your monitor.
+	- It uses the graphics buffers for each application and composites them together into one view.
+	- This prevents the uncertainty of effects that might be caused by applications writing their windows directly to the screen.
+- **System Monitor - sysmon64.exe**:
+	- While not standard to the Windows OS, this process is a standard endpoint logging application.
+	- It is a system service and device driver, and logs all activities dictated in its configuration directly to the Windows Event Log.
+	- It logs process creation, network connections, and modifications to file metadata such as creation time.
+
+- **VMware Guest Authentication Service — VGAuthService.exe**: This process is part of the Virtual Machine Software (VMware) tool suite that provides authentication for vSphere guest operations.
 
 
-   
+- **Microsoft Malware Protection Engine — MsMpEng.exe**: This process is part of the Windows security architecture that checks the system for malware and manages security updates to the system. 
 
 
+- **Microsoft Office Alternative User Input — ctfmon.exe**: This is the Microsoft process that controls the Office language bar and alternative user inputs — such as through speech or a stylus — or using the onscreen keyboard inputs for foreign languages.
 
 
+- **Console Windows Host — conhost.exe**
+	- This process is a host process for the Windows console, a category of applications that includes the Windows CMD.exe, Windows PowerShell, and other terminals hooking into the Windows console. This is a child process of csrss.exe, which was the host of the Windows console in earlier versions of the Windows OS. Each instance of CMD.exe spawns its own instance of conhost.exe.
 
+- **DLL Launcher — rundll32.exe**
+	- This application is used to launch functionality stored in shared DLL files.
+	- The valid process is normally located at C:\Windows\System32\rundll32.exe, but sometimes malware uses the same filename and runs from a different directory in order to disguise itself, so determining the executable file path is important if this process is suspect.
+	- Additionally, threat actors may abuse the allowlists or false positives from normal operations associated with rundll32.exe to proxy execution of malicious code.
+	- By bootstrapping a shared module through rundll32.exe, instead of executing directly, they may avoid defensive mechanism on a system.
+	- This method is described further in **MITRE technique ID T1218.011 Signed Binary Proxy Execution: Rundll32.**
+
+- **Windows Explorer — explorer.exe**
+	- This process manages the graphical shell component of the Windows OS, which includes the taskbar, Start menu, desktop, file manager, and other OS-wide UI features. As both a highly visible and common process in the Windows OS, the Windows Explorer is a common target during privilege escalation, such as injecting shared library code into Explorer’s memory (MITRE ID T1055.001 Process Injection: Dynamic-link Library Injection) or spoofing explorer.exe as a parent process of a spawned PowerShell session rather than the malicious Office document that an unwitting user opened (MITRE ID T1134.004 Access Token Manipulation: Parent PID Spoofing). Searching for this process during the Discovery phase of post-exploitation allows a threat actor to determine if a user is logged on to the compromised system (MITRE ID T1057 Process Discovery).
+
+-** Memory Compression**: The task of compressing memory for efficient memory management has historically been a role of the System process, but in recent versions of Windows 10 has become the responsibility of the memory compression process. 
+
+
+- **Sink to Receive Asynchronous Callbacks for WMI Client Application — unsecapp.exe**
+	- This process, as part of the WMI subsystem, is a channel for synchronizing information between the system and a remote computer. It is required for any program, service, or driver to interface with the Windows management framework and allows proper responses to requests and instructions from such software.
+
+
+- **WMI Provider Service — WmiPrvSE.exe**
+	- This process performs essential error reporting and monitoring functions, and allows other applications on the computer to request information about the system. The management and monitoring services it provides are useful to some third-party applications. It allows those applications to run tasks and issue commands in a way that Windows understands.
+
+
+- **DLL Host/Component Object Model (COM) Surrogate — dllhost.exe**
+	- This process is designed to launch one or more Windows OSs or applications. It runs a COM object outside the original process that requested it. If the COM object crashes, only the COM surrogate process crashes with it, rather than the requesting host process. If a developer is not fully confident in the code being loaded for an application, that developer likely employs the COM surrogate to host the code.
+
+- **Microsoft Distributed Transaction Coordinator — msdtc.exe**
+	- This process is responsible for coordinating distributed transactions requested by client applications that span multiple resource managers across all servers, such as databases, message queues, and file systems.
+
+
+- **Windows Search — SearchIndexer.exe**
+	- This process indexes the Windows file system in order to power the Windows search service and the functions that use it, such as the search boxes in the Start menu and Windows File Explorer.
+
+
+- **Windows CLI — CMD.exe**: This process is the CLI/terminal itself.
 
 ## Windows API
 
@@ -2680,6 +2799,59 @@
  - Microsoft provides other functions that are documented as a go-between for the undocumented functions, which are intended for programmers to use.
  - These undocumented functions can still be discovered by dumping the export table of a shared library — usually ntdll.dll — and tracing the functions back to their entry points and conducting a reverse engineering of the assembly code there.
  - Since these functions do not provide an intuitive insight into their function until documentation is developed, they are valued tools of malware developers seeking to obfuscate their tools. That is often an indication of possible maliciousness. 
+
+# MODULE 9
+
+## Registry
+
+### Techniques and Mitigations:
+- The MITRE ATT&CK framework details the following techniques specifically associated with the Windows registry:
+	- T1012 Query Registry: Through a variety of tools, threat groups access the registry to query for system configuration data to include security credentials, users, permissions, antivirus or host intrusion detection/protection software, and other system profiling data
+ 		- https://attack.mitre.org/techniques/T1012/
+	- T1112 Modify Registry: Through a variety of methods, threat groups interact with the Windows registry to hide configuration information within registry keys, remove information as part of cleaning up, or as part of other techniques to aid in persistence and execution
+ 		- https://attack.mitre.org/techniques/T1112/
+	- T1552.002 Unsecured Credentials: Credentials in Registry: Threat groups search the registry on compromised systems for insecurely stored credentials
+ 		- https://attack.mitre.org/techniques/T1552/002/
+	- T1574.001 Boot or Logon Autostart Execution: Registry Run Keys/Startup Folder: Threat groups modify the registry to achieve persistence by adding a program to a startup folder or referencing it with a registry run key
+ 		- https://attack.mitre.org/techniques/T1547/001/
+	- T1574.011 Hijack Execution Flow: Services Registry Permissions Weakness: Threat groups execute their own malicious payloads by hijacking the registry entries used by services, use flaws in the permissions for registry to redirect from the originally specified executable to one that they control, in order to launch their own code at service start, and change local service configuration information in the registry
+ 		- https://attack.mitre.org/techniques/T1574/011/
+- The key mitigation MITRE ATT&CK has identified is to restrict the registry permissions so that specific permissions are required to modify certain hives or keys in the registry. This is not an absolute mitigation as threat groups often use privilege escalation techniques to gain execution as a user that can modify those restricted keys. Monitoring is essential for critical keys to identify MCA.  
+	- M1024 Restrict Registry Permissions: Restrict the ability to modify certain hives or keys in the Windows registryhttps://attack.mitre.org/mitigations/M1024/ 
+
+### Registry Description and Structure
+- Registry Description
+	- Registry data is read during the following principal events:
+		- Initial boot: The boot loader reads the list of boot device drivers to load into memoryKernel boot: The kernel reads settings that specify which device drivers to load and settings for other subsystems (memory manager, process manager, etc.)
+		- Log on: During a user’s log on, File Explorer reads per-user settings from the registry (includes drive-letter mappings, wallpaper, screensaver, desktop appearance, etc.)
+		- Application startup: Applications read systemwide and per-user settings during startup (can include licenses, menu and toolbar settings, recent documents, and other application settings)
+	- Applications and the system may read and update the registry at any time to set and read configuration settings
+ 	-  Other events that modify the registry include inserting and removing hardware, installing or removing applications, installing or removing device drivers, and changing system settings.
+
+	<img width="1933" height="1887" alt="image" src="https://github.com/user-attachments/assets/34d84bd9-3205-4fff-afe5-b089ec991969" />
+
+- Registry Structure
+	- The registry is organized into six root keys, five of which can be accessed via reg.exe (reg) and Registry Editor (regedit).
+ 	- The sixth, HKEY_PERFORMANCE_DATA, is stored outside the registry, but contains the location of the data and is accessed by querying the RegQueryValueEx Windows API function.
+
+<img width="967" height="746" alt="image" src="https://github.com/user-attachments/assets/e0be5662-3b1e-4d17-8ef8-7e7d205a87eb" />
+
+	- The registry can be visually viewed and changed using regedit as well as from command line programs like reg and PowerShell.
+	- Documentation for using reg in batch files can be found by entering reg /? in a command prompt session. 
+	- This lesson focuses on manipulating the registry using PowerShell. PowerShell uses the Get-ChildItem cmdlet to query the registry with a path of -PATH Registry::<ROOT KEY>. 
+	- PowerShell uses either the root key as specified in Table 9.1-3 or the abbreviation. 
+	- Get-ChildItem -Path Registry::HKEY_Current_User and Get-ChildItem -Path Registry::HKCU are both valid syntaxes. 
+	- The cmdlet Get-ItemProperty -Path is used for registry keys to return the values for that key. This is different from Get-ChildItem as that cmdlet retrieves the child keys in the specified path.
+
+### HKU and HKCU Root Keys
+- The HKU root key contains the profile settings for all users with a profile on the current system, based on their Security Identifier (SID).
+	- There is also a subkey for DEFAULT, which is used for processes running under the local system account.
+	- If a user logs into the system for the first time and does not have a roaming profile, a profile is created for them based on the profile stored in the %SystemDrive%\Users\Default directory.
+- The HKCU root key is a link to the currently logged-in user’s SID key in the HKU root key.
+	- It is located on the hard disk at \Users\<username>\Ntuser.dat (older versions of Windows stored user profile information in \Documents and Settings\<username>\NTUSER.dat).
+   <img width="967" height="659" alt="image" src="https://github.com/user-attachments/assets/e388b28e-07b1-495d-867a-9dc0774fe902" />
+
+- 
 
 
 
