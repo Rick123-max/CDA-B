@@ -307,6 +307,9 @@ PS C:\Users\trainee\Desktop> .\payload.ps1
 ### Viewing Standard Windows API Functions
 
 #### In CLI
+
+<img width="595" height="503" alt="image" src="https://github.com/user-attachments/assets/1b1d311f-cc3c-4802-b4b4-976fdefcd3e7" />
+
 - Loads all libraries loaded for explorer.exe process: `tasklist /fi "imagename eq explorer.exe" /m`
   - The /m switch displays all modules — meaning all loaded DLLs — associated with the selected processes.
   - The /fi switch is a filter. It uses the quoted string immediately following the switch as a query on the list of all processes returned by tasklist.
@@ -315,12 +318,37 @@ PS C:\Users\trainee\Desktop> .\payload.ps1
   - The [process] term is a regular expression, such as explorer or explore*.
 - Load all libraries loaded for wmiprvse.exe process on remote computer: `tasklist /s 172.16.3.2 /u Administrator /fi "imagename eq wmiprvse.exe" /m`
 - List all processes that have loaded DLL advapi32.dll: `listdlls -d advapi32.dll | more`
+- Filter for firefox.exe using PID: `tasklist /FI "PID eq XXXX"`
+- Kill a task using PID: `taskkill /PID XXXX /F` /F is used to force kill
+- Kill a task using name: `taskkill /IM notepad.exe /F`
+- Start a task using file path: `C:\...\.exe"`
+- Search for process info: `tasklist /FI "WINDOWTITLE eq Mozilla*"`
+- Kill task via previous info: `taskkill /FI "WINDOWTITLE eq Mozilla*" /F`
+- List running processes on remote system: `tasklist /S CDA-ACCT-1 /U "CDA\trainee" /P "Th1s is 0perational Cyber Training!"`
+  
+
 
 #### ListDlls (CLI)
 - List all DLLLs loaded by cmd.exe: `listdlls cmd` or `listdlls -r cmd` 
 
 #### In Powershell
 - List all DLLs loaded by explorer.exe on local machine: `Get-Process “explorer” | Select-Object -ExpandProperty Modules -ErrorAction SilentlyContinue | Format-Table -Autosize`
+
+  <img width="768" height="178" alt="image" src="https://github.com/user-attachments/assets/cc621a97-b48e-4d36-bc0a-324c55f0926c" />
+
+- List info about a process via PID: `Get-Process -id XXX`
+- List info via name: `Get-Process -name "firefox"`
+- List multiple processes: `Get-Process -name exp*,pow*
+- To kill a process: `Stop-Process -name firefox`
+- Start a process: `Start-Process -FilePath "notepad.exe"`
+- Kill a process via PID: `Stop-Process -id XXX'
+- Run following command to see PPID for running processes: `Get-CimInstance -Class Win32_Process | Select-Object ProcessId,ProcessName,ParentProcessId`
+- Get the owner of a process: `Get-Process -name [name] -IncludeUserName` OR `Get-CimInstance -class Win32_Process -filter "name = '[name]'" | Invoke-CimMethod -MethodName GetOwner`
+- Print WMI object for powershell.exe: `Get-CimInstance -class Win32_Process -filter "name = 'powershell.exe'" | Format-List *`
+- Utilize GetOwner WMI method: `Get-CimInstance -class Win32_Process -filter "name = 'powershell.exe'" | Invoke-CimMethod -MethodName GetOwner | Format-List *`
+- Get list of runing process on remote system: `Invoke-Command -ComputerName CDA-ACCT-1 -ScriptBlock {Get-Process}`
+- 
+  
 
 #### PROCMON FILTERS
 - These are some key operations filters that may be helpful in dynamic analysis:
@@ -330,5 +358,62 @@ PS C:\Users\trainee\Desktop> .\payload.ps1
   - **SetDispositionInformationFile** and **SetDispositionInformationEx**: These operations log when a process changes the disposition, or state of a file, such as when it is deleted. This can be particularly useful for identifying when malware is cleaning up leftover artifacts of its operation, and enables a savvy CDA to create filters to watch for artifact creation in the first place as evidence of that malware at work.
 
 
+#### REGISTRY FROM POWERSHELL
+- Use Get-ChildItem to list registry keys: `Get-ChildItem -Path Registry::HKCU`
+- Query a specific key: `Get-ItemProperty -PATH Registry::HKCU\Environment`
+- Query a specific key filtering out information: `Get-ItemProperty -PATH Registry::HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run | select * -Exclude PS*`
+- Create a registry key: `New-Item -path Registry::HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce`
+- Copy the path of a differnt key: `Copy-ItemProperty -Path Registry::HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -name OneDrive -Destination Registry::hkcu\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce`
+- Check the path for a key: `Get-ItemProperty -Path Registry::HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce`
+- Remove the path for a key: `Remove-Item -path Registry::HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce`
+- Query key using -Recurse option: `Get-ChildItem -Path Registry::HKLM\SYSTEM\CurrentControlSet\Enum\USBSTOR -Recurse`
+- Query for mounted devices: `Get-ItemProperty -Path Registry::HKLM\SYSTEM\MountedDevices`
+- Query for local service config settings: `Get-ChildItem -Path Registry::HKLM\SYSTEM\CurrentControlSet\Services`
+- Info for Get-ItemProperty:
+  <img width="1256" height="204" alt="image" src="https://github.com/user-attachments/assets/3cdc8407-011d-477e-87f0-0c5a34a51d89" />
 
-  
+- Query value of Run Key: `Get-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run`
+- Add a registry value: `Set-ItemProperty -path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run' -Name 'test' -value 'C:\Windows\System32\notepad.exe`
+  - Validate: `Get-ItemProperty -path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run`
+- Edit a path: `Set-ItemProperty -path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run' -Name 'test' -value 'C:\Windows\System32\calc.exe'`
+- Rename a value: `Rename-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run' -Name 'test' -NewName 'test2'`
+- Delete a value: `Remove-ItemProperty -path 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run' -Name 'test2'`
+
+#### REGISTRY FROM CLI
+- Get info on reg command: `reg /?`
+  <img width="407" height="403" alt="image" src="https://github.com/user-attachments/assets/c41b541e-683f-4d0b-a419-343ac80f1274" />
+
+  - Syntax: **reg (QUERY | ADD | DELETE | COPY | SAVE | LOAD | UNLOAD | RESTORE | COMPARE | EXPORT | IMPORT | FLAGS) [Parameter List]**
+- Info on reg query command: `reg query /?`
+  <img width="591" height="735" alt="image" src="https://github.com/user-attachments/assets/6c732598-4b5e-499d-8cae-8241d4da411c" />
+
+- Query a specific key: `reg query HKLM\Software\Microsoft\Windows\CurrentVersion\Run`
+- Add a value to a key and validate it was added:
+  - Add value: `reg add HKLM\Software\Microsoft\Windows\CurrentVersion\Run /v test /t REG_SZ /d “c:\Windows\System32\notepad.exe”`
+  - Validate: `reg query HKLM\Software\Microsoft\Windows\CurrentVersion\Run`
+- Delete a value to a key: `reg delete HKLM\Software\Microsoft\Windows\CurrentVersion\Run /v test`
+- Add a subkey: `reg add HKLM\Software\Microsoft\Windows\CurrentVersion\Run\test`
+- delete subkey: `reg delete HKLM\Software\Microsoft\Windows\CurrentVersion\Run\test`
+
+#### Remote Registry Querying
+- Store Credentials: `$cred=Get-Credential`
+- Remotely execute a query on Profilelist key: `Invoke-Command -ComputerName cda-dc -Credential $cred -Command {Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList'}`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
