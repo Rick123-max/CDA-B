@@ -279,6 +279,9 @@ PS C:\Users\trainee\Desktop> .\payload.ps1
 ### Query Remote System using Powershell
 - Store the credentials: `$credentials = Get-Credential`
 - query current running processes on remote computer: `Invoke-Command -Credential $credentials -ComputerName 'cda-dc' -ScriptBlock {Get-Process}`
+- Query for suspicious processes: `Invoke-Command -Credential $credentials -ComputerName 'cda-dc' -ScriptBlock {Get-Process powershell -module}`
+- Query for which user ran a process: `Invoke-command -computername cda-acct-1 scriptblock {Get-process -name powershell -includeusername}`
+- Query for powershell on a remote system: `Get-ciminstance -class win32_process -filter "name = 'powershell.exe'" - computername cda-acct-1 | format-list * `
 - Coply collection locally: `$processes = Invoke-Command -Credential $credentials -ComputerName 'cda-dc' -ScriptBlock {Get-Process}`
 
   ```
@@ -294,6 +297,19 @@ PS C:\Users\trainee\Desktop> .\payload.ps1
   
 - Query to retrieve collection: `Invoke-Command -Credential $credentials -ComputerName 'cda-dc' -ScriptBlock {Get-Process explorer -Module}`
 
+### Viewing Standard Windows API Functions
+
+#### In CLI
+- Loads all libraries loaded for explorer.exe process: `tasklist /fi "imagename eq explorer.exe" /m`
+  - The /m switch displays all modules — meaning all loaded DLLs — associated with the selected processes.
+  - The /fi switch is a filter. It uses the quoted string immediately following the switch as a query on the list of all processes returned by tasklist.
+  - The imagename query selector indicates that results are filtered by the canonical name of the process.
+  - The eq query operator filters results in which the selector’s value is equivalent to the trailing expression.
+  - The [process] term is a regular expression, such as explorer or explore*.
+- Load all libraries loaded for wmiprvse.exe process on remote computer: `tasklist /s 172.16.3.2 /u Administrator /fi "imagename eq wmiprvse.exe" /m`
+
+#### In Powershell
+- List all DLLs loaded by explorer.exe on local machine: `Get-Process “explorer” | Select-Object -ExpandProperty Modules -ErrorAction SilentlyContinue | Format-Table -Autosize`
 
 
 
