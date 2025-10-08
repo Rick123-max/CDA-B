@@ -370,6 +370,7 @@ PS C:\Users\trainee\Desktop> .\payload.ps1
 - Query for mounted devices: `Get-ItemProperty -Path Registry::HKLM\SYSTEM\MountedDevices`
 - Query for local service config settings: `Get-ChildItem -Path Registry::HKLM\SYSTEM\CurrentControlSet\Services`
 - Info for Get-ItemProperty:
+  
   <img width="1256" height="204" alt="image" src="https://github.com/user-attachments/assets/3cdc8407-011d-477e-87f0-0c5a34a51d89" />
 
 - Query value of Run Key: `Get-ItemProperty -Path HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run`
@@ -385,6 +386,7 @@ PS C:\Users\trainee\Desktop> .\payload.ps1
 
   - Syntax: **reg (QUERY | ADD | DELETE | COPY | SAVE | LOAD | UNLOAD | RESTORE | COMPARE | EXPORT | IMPORT | FLAGS) [Parameter List]**
 - Info on reg query command: `reg query /?`
+  
   <img width="591" height="735" alt="image" src="https://github.com/user-attachments/assets/6c732598-4b5e-499d-8cae-8241d4da411c" />
 
 - Query a specific key: `reg query HKLM\Software\Microsoft\Windows\CurrentVersion\Run`
@@ -398,6 +400,62 @@ PS C:\Users\trainee\Desktop> .\payload.ps1
 #### Remote Registry Querying
 - Store Credentials: `$cred=Get-Credential`
 - Remotely execute a query on Profilelist key: `Invoke-Command -ComputerName cda-dc -Credential $cred -Command {Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList'}`
+
+#### SERVICES
+- Get a list of services: `tasklist /svc`
+- View usage for sc.exe (SC): `sc`
+  
+  <img width="677" height="810" alt="image" src="https://github.com/user-attachments/assets/745d64ad-81c3-48b3-931d-87f4d08ec6b0" />
+
+  <img width="606" height="413" alt="image" src="https://github.com/user-attachments/assets/83a00ada-ae90-491f-9158-38d1d2b6fcbd" />
+
+- Query the status of all services: `sc query`
+- Query a specific service to include PID: `sc queryex spooler`
+- Query config settings for a service, including the Path to the binary: `sc qc spooler`
+- Query the description of a service: `sc qdescription spooler`
+- Query the state of a service: `sc query state=all`
+- Query privileges of a service: `sc qprivs spooler`
+  
+  <img width="1354" height="722" alt="image" src="https://github.com/user-attachments/assets/2fae7854-17b6-41c2-8aed-99aaf48b6bda" />
+
+#### Remote Services
+- FROM CLI:
+  - Query services of remote system: `sc \\cda-dc query`
+  - Remotely stop a service: `sc \\cda-dc stop spooler`
+  - remotely check status of service: `sc \\cda-dc query spooler`
+  - remotely start a service: `sc \\cda-dc start spooler`
+- FROM POWERSHELL
+  - Query services: `Get-Service -computer cda-dc`
+  - Query status of specific service: `Get-Service -computer cda-dc "spool*"``
+  - View Properties: `Get-Service -computer cda-dc "spool*" | Select-Object *`
+  - Use WMI to view details of a service: `Get-CIMInstance win32_service | ?{$_.Name -like '*spool*'} | select *`
+  - `Get-CIMInstance -ComputerName cda-dc win32_service | ?{$_.Name -like '*spool*'} | select *`
+  - Pull information from multiple systems at once: `Get-CIMInstane -ComputerName **INSERT COMPUTER NAMES HERE DELIM BY A COMMA (no spaces)** win32_service | ?{$_.Name -lile '*sysmon*'}`
+ 
+#### Cetficicates
+- View CA certs registerd with AD domain: `certutil -adca`
+
+#### WINDOWS LOGS
+- FROM CLI:
+  - Load the manual for wevtutil: `wevtutil /?`
+  
+    <img width="599" height="623" alt="image" src="https://github.com/user-attachments/assets/aa5a53c3-8046-4325-9c83-85cc23a9ece6" />
+  
+  - Query five most recent logs in the System log: `wevtutil qe System /c:5 /f:text /rd`
+    - The qe option followed by System is the syntax for querying events from the specified System log
+    - The /c:5 option tells this utility to display a count of the last five entries
+    - The /f:text option tells this utility to format the output in readable text; the default output format is XML.
+    - The /rd option tells this utility to list events in reverse direction, which means newest first.
+    - While not necessary here, if the output is too long for the user to scroll through, it can be helpful to pipe it to a terminal scroll utility using the syntax | more, or write it to a file using the syntax >> file.txt.
+  - Return all System logs with event ID 104 - Log Clear: `wevtutil qe System /q:"*[System[(EventID=104)]]" /f:text`
+    - Basic Format: `/q:*[<logname>[(<xmlvalue=value>)]]`
+  - Load all error level logs within System logs: `wevtutil qe System /q:"*[System[(Level=2)]]" /f:text | more`
+  - Load all Error and Warning Level Logs: `wevtutil qe System /q:"*[System[(Level=2 or Level=3)]]" /f:text | more`
+  - List most recent events of System log on remote system: `wevtutil /r:CDA-ACCT-1 /u:"CDA\trainee" /p:"Th1s is 0perational Cyber Training!" qe System /c:1 /f:text /rd`
+    - Basic Format: `wevtutil /r:[computer name OR IP] /u:[username] /p:[password] [remaining options]`
+   
+- FROM POWERSHELL:
+- 
 
 
 
