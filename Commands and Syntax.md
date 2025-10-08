@@ -455,7 +455,45 @@ PS C:\Users\trainee\Desktop> .\payload.ps1
     - Basic Format: `wevtutil /r:[computer name OR IP] /u:[username] /p:[password] [remaining options]`
    
 - FROM POWERSHELL:
-- 
+  - Get info on Get-WinEvent: `Get-help Get-WinEvent`
+
+    <img width="1661" height="368" alt="image" src="https://github.com/user-attachments/assets/1ba47ed5-c37e-4a67-986a-021a5debe8f6" />
+
+  - List number of log entries in each event log: `Get-WinEvent -ListLog *`
+  - list five most recent entries in System log: `Get-WinEvent -LogName System | Select-Object -First 5`
+  - Determine number of entries in a log file from a specific source: `Get-WinEvent -LogName System | Group-Object -Property ProviderName -NoElement | Sort-Object -Property Count -Descending | Format-Table Name,Count`
+    - The **Get-WinEvent** cmdlet uses:
+      - The -LogName parameter to specify the System log;The event objects are sent down the pipeline to the Group-Object cmdlet. 
+    - The **Group-Object** cmdlet takes all the objects streamed from another cmdlet’s output and groups them by a specified field.
+      - The **-Property** option takes as its value a property name, in this case Source, as the field to group objects.
+      - The **-NoElement** option omits the members of the group from the output. This prevents the logs themselves from being included and returns only the counts and associated sources.
+    - The **Sort-Object** cmdlet sorts the input stream by specified fields.
+      - The **-Property** option takes as its value a property name, in this case Count, as the field to sort objects.
+      - The **-Descending** option is the direction in which to sort the objects, in this case from highest to lowest.
+    - The **| Format-Table** cmdlet appended to the end of the command formats the output so that each property of each object returned is printed in an appropriately-sized column.
+    - This formatting makes some output more readable and prevents long strings from being truncated.
+      - In this command, the fields **Name**,**Count** are specified to include in the formatted table. Alternatively, the wildcard * is used to specify that all fields should be included.
+      - When there are too many properties in the objects returned as output, Format-List performs a similar function, but with each property printed on its own line in a list of objects.
+      - The cmdlet **Out-Gridview** performs a similar and comparable function to Format-List.
+  - obtain all errors from a specific log file: `Get-WinEvent -LogName System | Where-Object -Property Level -eq 2 | Format-Table Level,Id,Message`
+    - Basic formatting: `Get-WinEvent [options] | Where-Object -Property Level -EQ [Level #]`
+  - obtain all events for a specific event ID: `Get-WinEvent -LogName System | Where-Object -Property ID -EQ 104`
+    - Basic Format: `Get-WinEvent [options] | Where-Object -Property ID -EQ [Event ID]`
+  - Obtain all logs containing something in the description: `Get-WinEvent -LogName System | Where-Object -Property Message -Match 'winlogbeat' | Format-List *`
+  - Below Code Block specifies a time window for a query:
+    ```
+    $Begin = '5/24/2021'
+    $End = '5/26/2021'
+    Get-WinEvent -FilterHashtable @{LogName="System"; StartTime=$Begin; EndTime=$End} | Format-List TimeCreated,Id,Message
+    ```
+    - The **-FilterHashTable** option takes as a value a hash table of the form @{[property]=[value],…}. Hash tables are a powerful query mechanism. With some syntax experimentation, many queries introduced in this lesson can also be performed with a hash table filtering Get-WinEvent output.
+
+ - REMOTELY FROM POWERSHELL
+   - Retrieve most recent event from System log: `Invoke-Command -ComputerName CDA-ACCT-1 -ScriptBlock {Get-WinEvent -LogName System | Select-Object -First 1 | Format-List *}`
+   - 
+
+
+
 
 
 
