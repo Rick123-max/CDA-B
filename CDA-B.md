@@ -3014,6 +3014,94 @@
   	   		- This is useful when examining logs collected from multiple systems, but should not be considered the device that caused an event(such as when a remote logon is initiated, the Computer field still shows the name of the system logging the event, not the source of the connection).
 		- Description: A large text block where additional information specific to the event being logged is recorded. This is often the most significant field for the analyst.
 
+### Task Scheduler Logs
+- Logs of scheduled tasks can be helpful for assessing recurring behavior on a system.
+- Because of the routine predictability of scheduled tasks, they are frequently a method of persistence after threat actors have gained a foothold in a compromised system, as described in **MITRE ID T1053 Scheduled Task/Job**.
+- These include regular system tasks, application updates, and routine integrity checks or information pulls by processes.
+- If an attacker were to put a routine task on a system, for example to execute a callback to a Command-and-Control (C2) server every day, logs of that kind of task could be found here. A regular inspection of these logs is helpful to identify anomalies.
+
+### PowerShell Logs
+- PowerShell logs can be extremely useful data to comb through if a threat adversary is expected to have used PowerShell during a compromise.
+- These logs record the commands that were run, the output of the commands, and de-obfuscates any encoded commands, which are common in PowerShell adversarial actions.
+- There are three forms of PowerShell logging.
+	- Module Logging — Event ID 4103
+ 		- This policy logs pipeline execution details such as variable initialization, command invocations, some portions of scripts, some de-obfuscated code, and some data formatted for output.
+   		- It may not reliably capture the commands executed, but these events record valuable output not captured in other sources.
+	- Script Block Logging — Event ID 4104
+ 		- This policy logs entire blocks of code as they are executed, including scripts and commands.
+		- It also records the decoded commands, whether obfuscated with Exclusive Or (XOR), Base64, Rotate by 13 (ROT13), encryption, etc., in addition to the original obfuscated code, as it has access to the decoded commands before the system is able to process them.
+		- However, this form of logging does not record output from the executed code.
+	- Transcription
+		- This policy creates a unique text-based record of every PowerShell session.
+		- It writes to a unique session log file with all terminal input and output, exactly as it appears, including the timestamp and metadata for each command.
+		- The shortcoming of this form of logging is that the content of any executed scripts or output written to other destinations, such as the file system, is not captured in the transcript.
+		- A remote system is the best place to configure this form of logging to write to, so a potential attacker does not have access and is not able to delete them.
+- On this system, all three forms of logging are enabled, which is the recommended and highest security setting.
+- However, if PowerShell is used frequently on the system, either explicitly or for automated administration tasks, this sort of logging quickly consumes disk space, so a robust archiving or exporting process should be in place.
+- Additionally, routinely examining the logs in a timely manner, so that vast amounts of data are not in backlog during a hunt operation, is ideal.
+
+### Events of Interest to DCOs
+- Some of the important event IDs are:
+	- Account Creation Events
+		- **Event 4720** is the event A user account was created. — It is important to investigate such events when no new users are expected on the domain, as creating valid accounts is often a persistence method employed by threat actors.
+			- This persistence technique is described in **MITRE Technique T1136: Create Account**.  
+		- **Event 4732** is the event A member was added to a security-enabled local group. — This event is important to monitor when a user is added to a local or domain administrator’s group, as this is a method, in combination with user account creation — mentioned above — that threat actors maintain privileged access in a network.
+			- This is an addendum to **MITRE Technique T1136: Create Account**,  and is employed to ensure that the persistence maintained includes privileged access to a compromised system.
+   
+	- Account Logon Events
+		- **Event 4624** is the event An account was successfully logged on. — This is generally a good thing, but it is also important to search for evidence of account logins where there should be none. It is important to pay attention to the Message field of these entries, as the Username field does not indicate which user is logging on to the system.
+			- The Logon Type field is especially important in this type of event.
+   			- This access technique usually follows successful reconnaissance using **MITRE Technique T1589.001: Gather Victim Identity Information: Credentials**. 
+		
+		<img width="963" height="582" alt="image" src="https://github.com/user-attachments/assets/036f48c9-26b2-405f-a293-4c56409dd73d" />
+
+	- **Event 4625** is the event An account failed to log on. — This is the opposite and analogous case of 4624. A number of these logs in short succession on the same accounts is indicative of a brute force password attack in progress.
+		- There are a number of codes indicating why the logon failed that help with analysis of these events. The most useful code in detecting a brute force attack is **0xC000006A**, in occurs when a threat actor attempts numerous wrong passwords against a valid user account.
+		- This credential access technique is described in **MITRE Technique T1110: Brute Force**. 
+
+<img width="963" height="837" alt="image" src="https://github.com/user-attachments/assets/c0de7159-2c8a-4681-9513-acf2f25fa882" />
+- **Event 4672** is the event Special privileges assigned to new logon. — This event indicates that a user in a highly privileged group, such as local or domain administrators, has logged on and given the appropriate privileges to their logon session. If an adversary has obtained an administrator-level account, this event indicate those logins, so finding these events with an unauthorized administrator account is indicative of privileged adversary persistence in the network.
+	- This access technique usually follows successful reconnaissance to obtain administrator credentials using **MITRE Technique T1589.001: Gather Victim Identity Information: Credentials**.  
+
+- Other Windows Internals Events
+- **Event 7030** is the event Service is marked as an interactive service. — This event triggers when the system is configured to not allow interactive services, so that the service may not function properly. This event may fire when an adversary attempts to install a service as a persistence mechanism but did not realize that the host did not allow such a service.
+	- This persistence or privilege escalation technique is described in **MITRE Technique T1543.003: Create or Modify System Process: Windows Service**.  
+
+- **Event 7045** is the event A new service was installed. — This event indicates a successful installation of a Windows service, which is a routine event. However, when MCA is suspected, each of these event should be investigated to determine if the installed service is benign.
+	- The most relevant information to pay attention to in examining these logs is the Service Name, Service Type, and Service Start Type. Services that start automatically (Service Start Type 2) are highly favored by attackers for persistence.
+	- This event also logs when adversaries use the persistence technique is described in **MITRE Technique T1543.003: Create or Modify System Process: Windows Service**.  
+
+<img width="963" height="521" alt="image" src="https://github.com/user-attachments/assets/d442f0ba-cfb8-4ac9-82bd-ce6b0cfbe28e" />
+
+<img width="963" height="448" alt="image" src="https://github.com/user-attachments/assets/1f99bd20-71df-4571-b83f-55a845735c85" />
+
+
+- **Event 4688** is the event A new process has been created. — This event triggers often and is largely normal operating activity, so in a blind hunt, these logs are more noise than helpful. However, when the malicious process is known, searching for that process in these logs can reveal a great deal of information about how that process was spawned (i.e., potential vulnerabilities exploited) and other processes that were spawned by the malicious process as a parent (i.e., potential behavior post-compromise).
+	- This persistence or privilege escalation technique is described in **MITRE Technique T1543: Create or Modify System Process**.
+
+- **Event 4670** is the event Permissions on an object were changed. — This event is indicative of change of permissions on objects such as files, processes, registry, etc. If an attacker takes possession of such objects for privilege escalation or to encrypt/destroy them, this event may fire.
+- An example of this event logging is when adversaries use the defense evasion technique described in **MITRE Technique T1222.001: File and Directory Permissions Modification: Windows File and Directory Permissions Modification**.
+
+- **Event 4657** is the event A registry value was modified. — Since the Windows registry is essentially the reference database for settings, data, and important facts that the OS and all applications within its use to function, this event logs often when auditing is enabled, because the registry is constantly being modified. Once MCA is confirmed, and the compromised user or process is identified, filtering these events for that suspect identifier yields important data about what an adversary was attempting to accomplish or what artifacts were left behind.
+- This persistence or privilege escalation technique is described in **MITRE Technique T1547.001: Boot or Logon Autostart Execution: Registry Run Keys/Startup Folder**.  
+
+### Creating Custom Views
+- Important Event ID's for DCO: 4624, 4625, 4720, 4732, 7030, 7045, 4688, 4670, 4672, 1006, 1007, 4657
+
+### SYSMON LOGGING
+- Sysmon is a Windows device driver developed by Sysinternals to provide high-fidelity logging of system activity. It provides more data about changes to the registry, file system, and services than is available in standard Windows logs
+- It also logs greater detail about process creation, Domain Name System (DNS) query, and network connection events
+- Sysmon was built with the goal of offering detailed cyber security-focused event logs that expose specific attacker tactics or add more detail than native Windows event logs
+- Sysmon logs are often preferred by security analysts and incident responders over native Windows event logs that provide similar information. However, Sysmon events are generated and stored in the same fashion as native Windows logs
+- Useful Sysmon Events
+
+<img width="963" height="775" alt="image" src="https://github.com/user-attachments/assets/a7393554-fe54-4858-8a66-a1dc2fca0d34" />
+
+	- Other Sysmon events may be useful for more niche purposes, such as identifying specific attacker tactics like named pipe creation (Sysmon ID 17)
+	
+
+
+
 
 
 
