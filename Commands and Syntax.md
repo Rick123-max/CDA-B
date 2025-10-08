@@ -490,7 +490,7 @@ PS C:\Users\trainee\Desktop> .\payload.ps1
 
  - REMOTELY FROM POWERSHELL
    - Retrieve most recent event from System log: `Invoke-Command -ComputerName CDA-ACCT-1 -ScriptBlock {Get-WinEvent -LogName System | Select-Object -First 1 | Format-List *}`
-   - 
+   - `Invoke-Command -ComputerName CDA-ACCT-1 -ScriptBlock {Get-WinEvent -LogName System | Where -Property ID 7045 | select message | Format-List *}`
 
 
 
