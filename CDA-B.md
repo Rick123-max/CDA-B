@@ -2909,6 +2909,131 @@
 - You can only interact with **HKU and HKLM** Remotely
 
 
+## Services
+
+### Windows Services
+
+<img width="538" height="355" alt="image" src="https://github.com/user-attachments/assets/ece18002-8cc8-4eff-b276-281389be42e0" />
+
+- Windows services are applications running in the background of the OS that provide tasks that do not need user interaction.
+- This includes implementing **device/driver support**, **networking**, **authentication**, **remote access**, and other hardware-related interfaces.
+- Windows services are **user-mode processes** similar to UNIX daemon processes, which are detached from a terminal and **run in the background**
+- They can be configured to start at **boot-time**, **manually**, or on an **as-needed basis**, and controlled by other applications like the **Service Control Manager (SCM)**.
+- The **SCM** is a special system process — running as **services.exe** — that is responsible for starting, stopping, and interacting with service processes.
+- Services are defined in the registry under **HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services**
+- Windows Service Control Programs (**SCP**) manage Windows services via the **SCM** using Remote Procedure Calls (**RPC**), through Application Programming Interface (**API**) functions.
+- **SCPs** include the services.msc snap-in for the Microsoft Management Console (**MMC**), the CLI utility **sc.exe**, and any **RPC** client calling the appropriate service's API functions
+- Service applications must register as a service with the system using the CreateService function.
+- The SCM receives messages from the function and creates the appropriate registry keys.
+- Registry keys that are associated with the service locations in the registry that have not registered through the CreateService function with the SCM are not actually treated as services.
+- Services have three main names, and also can have a description of the service defined in the registry:
+	- **Process name**: The name of the running process like svchost.exe, spoolsvc.exe, or mdm.exe (seen using the tasklist /svc, Task Manager, or Process Explorer applications)
+	- Internal name: Defined in the registry
+	- Display name: Seen in administrative tools (optional; if not defined the internal name is used)
+- Windows drivers are also loaded like services, and their configuration details are also housed in the same location in the registry.
+- Service device and filesystem drivers are loaded into memory, started using similar Windows function calls, and added and managed by the SCM.
+- Service recovery options include:
+	- Restart the serivce
+	- Restart the computer
+	- Run a program
+	- Take no action
+
+### SCM
+- The SCM is the main orchestrator of Windows services.
+- The SCM (services.exe) is started early in the boot process and launches services that have automatic startup configured.
+- Services are started based on the registry key **HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\ServiceGroupOrder\List**.
+- Before the SCM executes the auto-start services, it creates the \Pipe\Ntsvcs RPC named pipe, which is used to interface between the SCM and the SCP.
+- After handling the auto-start services, the SCM queues and starts the Automatic (Delayed Start) services.
+- These services are not as integral to the early start-up of the OS and typically have dependencies that are in the auto-start group
+- There are several reasons multiple services share a single process.
+- Each process has some overhead associated with it that takes up system resources.
+- Mapping multiple services into a single process saves some of those resources
+- One disadvantage to this practice is that if a service in a shared process has errors, which cause the process to exit, all the services in the shared process also terminate.
+- Windows has a standard process for hosting services called the Service Host (svchost.exe) process.
+- Recall from the earlier tasks, there are multiple svchost.exe processes running, each of them hosting specific services.
+- All services that specify svchost.exe -k <sometext> as their image path in the registry share the same process, if the argument <sometext> is the same (e.g., netsvcs).
+- The Service Manager application looks similar to other SCPs except it has additional entries for device and filesystem drivers
+- Windows services that share a running process are listed as shared, and services that have a standalone process are listed as win32.
+
+### Windows Services Event Logs
+- Windows servers log state changes (running, stopped, paused, etc.) for services by default, however, Windows client OSs — like Windows 10 — do not log state changes for services by default.
+- Service events are logged in the System log with the Service Control Manager as the source
+  <img width="1354" height="1376" alt="image" src="https://github.com/user-attachments/assets/96c3b8f9-7ec6-4321-a878-60b86bbab9b0" />
+
+- Additionally, System Monitor (sysmon) IDs 12 and 13 are associated with the registry, and can be used to monitor for changes to the values associated with services.
+
+### Organizational Certificate Authorities
+- Windows uses Public Key Infrastructure (PKI) to authenticate and validate digital certificates.
+- Windows domains have many uses for certificates including authentication and authorization.
+- An Active Directory (AD) server can be configured with the Certificate Services (AD CS) role to manage issuing and authenticating certificates within a domain or organization.
+- The requester (intermediate or end entity) designates the ways a particular certificate can be used.
+- The CA signer verifies the request was from the expected entity and signs and issues the certificate.
+	 <img width="1936" height="1364" alt="image" src="https://github.com/user-attachments/assets/b0671522-9a6f-48bd-9097-6a675f88498d" />
+
+- The **certsrv** (graphical) and **certutil** (command-line) applications are included by default to assist in managing installed and signed certificates the AD CS server issues.
+- Third-Party CAs
+	- Third-party CAs are those root certificates that are not issued by Microsoft or the organization, and are the vast majority of the certificates included by default in Windows OSs.
+
+## Windows Logging
+
+### Windows Events
+- Windows event logs are the historical record of every major and minor system event.
+- Every program that starts on a system posts a notification in an event log, and every well-behaved program posts a notification before it stops.
+- Every **system access**, **security change**, **non-standard OS behavior**, **hardware failure**, and **driver malfunction** all end up in one event log or another.
+- Event Log Format
+	- Modern Windows systems store logs in the **%SystemRoot%\System32\winevt\logs** directory by default in the binary Extensible Markup Language (**XML**) Windows event logging format, designated by the **.evtx** extension
+ 	- For remote logging, a remote system running the Windows Event Collector service manages subscriptions of logs produced by other systems
+  	- The types of logs to be collected can be specified at a granular level and transport occurs over **HTTPS** on port **5986** using **WinRM**
+  	- Group Policy Objects (GPO) can be used to configure the remote logging facilities on each computer.
+  	- Events can be logged in the **Security**, **System**, and **Application** event logs
+  	- The **Setup** event log records activities that occurred during installation of Windows.
+  	- The **Forwarded** Logs event log is the default location to record events received from other systems.
+  	- These five logs are the default logs for base installations of modern Windows OSs.
+  	- By default, Microsoft systems set a maximum log file size at **20480 KB**, and upon reaching that size, it deletes oldest entries first as space is needed to fill the log with more events
+  	- Alternative policy options include:
+  		- archiving old logs in a separate file to make more space, which eventually creates a hard disk space issue unless the logs are moved elsewhere;
+		- changing the log file maximum size, which is still dependent on the amount of disk space available
+		- manually clearing logs, which creates an issue with continuous monitoring, as full logs simply do not capture new events.
+  	- Event log entries have several fields in common:
+		- **Log Name**: The name of the event log where the event is stored. Useful when processing numerous logs pulled from the same system.
+		- **Source**: The service, Microsoft component, or application that generated the event.
+		- **Event Identifier (ID)**: A code assigned to each type of audited activity. This code is one of the most important fields in an entry, as it is by this code that complex and specific queries can be formed to examine a particular type of behavior.
+		- **Level**: The severity assigned to the event in question.
+  	- Possible event log severity levels:
+  	  
+  		<img width="963" height="413" alt="image" src="https://github.com/user-attachments/assets/58ea9ec4-dcc7-4cc2-983c-339f197f7434" />
+
+		- User: The user account involved in triggering the activity or the user context that the source was running as when it logged the event.
+  			- Note that this field often indicates System or a user that is not the cause of the event being recorded.
+		- Operation Code (OpCode): Assigned by the source generating the log.
+			- Its meaning is left to the source.Logged: The local system date and time when the event was logged.
+		- Task Category: Assigned by the source generating the log.
+  	   		- Its meaning is left to the source.
+  	   	- Keywords: Assigned by the source and used to group or sort events.
+  	   	- Computer: The computer on which the event was logged.
+  	   		- This is useful when examining logs collected from multiple systems, but should not be considered the device that caused an event(such as when a remote logon is initiated, the Computer field still shows the name of the system logging the event, not the source of the connection).
+		- Description: A large text block where additional information specific to the event being logged is recorded. This is often the most significant field for the analyst.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
