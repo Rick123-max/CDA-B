@@ -491,7 +491,26 @@ PS C:\Users\trainee\Desktop> .\payload.ps1
  - REMOTELY FROM POWERSHELL
    - Retrieve most recent event from System log: `Invoke-Command -ComputerName CDA-ACCT-1 -ScriptBlock {Get-WinEvent -LogName System | Select-Object -First 1 | Format-List *}`
    - `Invoke-Command -ComputerName CDA-ACCT-1 -ScriptBlock {Get-WinEvent -LogName System | Where -Property ID -Eq 7045 | select message | Format-List *}`
+   - Stop a service: `Invoke-command -computer cda-acct-3 -scriptblock {stop-service backdoor}`
+   - Query a service: `Invoke-command -computer cda-acct-3 -scriptblock {get-service backdoor}`
+   - Delete a service: `Invoke-command -computer cda-acct-3 -scriptblock {sc.exe delete "backdoor"} OR Remove-Service`
+
+
+
+#### Scheduled Tasks Logs
    - List 10 most recent entries in Task Scheduler: `Get-WinEvent -LogName 'Microsoft-Windows-TaskScheduler/Operational' -ErrorAction SilentlyContinue | Select-Object -First 10 | Format-List *`
+
+#### PowerShell Logs
+   - List out 10 most recent PowerShell Logs: `Get-WinEvent -LogName 'Microsoft-Windows-Powershell/Operational' -ErrorAction SilentlyContinue | Select-Object -First 10 | Format-List *`
+   -  Find all events showing users added to admin group: `Get-WinEvent -LogName Security | Where-Object -Property Id -eq 4732 | Where-Object -Property Message -Match "Administrators" | Format-List Message`
+   -  Query archived application log for first entry: `Get-WinEvent -Path 'C:\Investigation\winevent\application_saved.evtx' | Select-Object -First 1`
+
+#### SYSMON LOGS
+   - `Get-WinEvent -Path 'C:\Investigation\winevent\application_saved.evtx' | where-porperty id -eq 4720 | select messaage| Format-list *`
+   -  `Get-WinEvent -Path 'C:\Investigation\sysmon\sysmon_saved.evtx' | Where-Object -Property ID -Eq 3 | Where -Property message -like '*download*' | Format-List *`
+   -  `Get-WinEvent -Path 'C:\Investigation\sysmon\sysmon_saved.evtx' | Where-Object -Property ID -Eq 13 | where message -match zoomupdate.exe | Format-List`
+
+
 
 
 
