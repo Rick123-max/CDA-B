@@ -506,9 +506,9 @@ PS C:\Users\trainee\Desktop> .\payload.ps1
    -  Query archived application log for first entry: `Get-WinEvent -Path 'C:\Investigation\winevent\application_saved.evtx' | Select-Object -First 1`
 
 #### SYSMON LOGS
-   - `Get-WinEvent -Path 'C:\Investigation\winevent\application_saved.evtx' | where-porperty id -eq 4720 | select messaage| Format-list *`
-   -  `Get-WinEvent -Path 'C:\Investigation\sysmon\sysmon_saved.evtx' | Where-Object -Property ID -Eq 3 | Where -Property message -like '*download*' | Format-List *`
-   -  `Get-WinEvent -Path 'C:\Investigation\sysmon\sysmon_saved.evtx' | Where-Object -Property ID -Eq 13 | where message -match zoomupdate.exe | Format-List`
+   - `Get-WinEvent -Path 'C:\Investigation\winevent\application_saved.evtx' | where-property id -eq 4720 | select message| Format-list *`
+   -  `Get-WinEvent -Path 'C:\Investigation\sysmon\sysmon_saved.evtx' | Where-Object -Property ID -Eq 3 | select timecreated,message | Where -Property message -like '*download*' | Format-List *`
+   -  `Get-WinEvent -Path 'C:\Investigation\sysmon\sysmon_saved.evtx' | Where-Object -Property ID -Eq 13 | where message -match ZoomUpdate.exe | Format-List`
 
 
 
