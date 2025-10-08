@@ -490,7 +490,8 @@ PS C:\Users\trainee\Desktop> .\payload.ps1
 
  - REMOTELY FROM POWERSHELL
    - Retrieve most recent event from System log: `Invoke-Command -ComputerName CDA-ACCT-1 -ScriptBlock {Get-WinEvent -LogName System | Select-Object -First 1 | Format-List *}`
-   - `Invoke-Command -ComputerName CDA-ACCT-1 -ScriptBlock {Get-WinEvent -LogName System | Where -Property ID 7045 | select message | Format-List *}`
+   - `Invoke-Command -ComputerName CDA-ACCT-1 -ScriptBlock {Get-WinEvent -LogName System | Where -Property ID -Eq 7045 | select message | Format-List *}`
+   - List 10 most recent entries in Task Scheduler: `Get-WinEvent -LogName 'Microsoft-Windows-TaskScheduler/Operational' -ErrorAction SilentlyContinue | Select-Object -First 10 | Format-List *`
 
 
 
