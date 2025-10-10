@@ -72,3 +72,8 @@
 
 - Force ASBR go generate a default route: `default-information originate`
 
+- `sh ip bgp "network id"` - Shows info regarding bgp routing
+- list all bgp neighbors - `sh ip bgp all`
+- display local asn and BGP Neighbors, along with Up/Down times (Established connection) - `sh ip bgp summary`
+- `sh ip ospf neighbor` - shows ospf neighbors
+- `sh ip route ospf`
