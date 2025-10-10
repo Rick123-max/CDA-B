@@ -40,4 +40,7 @@
   ```
 
 - Show the spanning tree information: `show spanning-tree root`
-- 
+
+- Enable OSPF on a router:
+  - Enable OSPF process: `router ospf <process-id>`
+  - Assign interfaces to areas: `<network or IP address> <mask> <area-id>`
