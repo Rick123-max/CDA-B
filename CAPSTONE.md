@@ -291,8 +291,332 @@
 15. Select _Trust Center Settings_, then _Macro Settings_; change the setting to _Disable all macros without notification_
 16. Open _Windows Defender Settings_ and ensure that the following are selected _Real-Time Protection: **On**; Cloud-Based Protection: **OFF**; Automatic Sample Submission: **OFF**; Enhanced Notifications: **ON**_
 
-### Phishing Attack and Defense
-1. 
+## Active Directory Attacks and Defenses
+### AD Tactics and Techniques
+#### Kerberoasting
+- Kerberoasting is a post-exploitation technique that allows any compromised user to gather Service Tickets (ST), which are encrypted with the service account’s password.
+- Recall that STs are obtained to gain access to resources after an account authenticates to Kerberos and obtains a Ticket Granting Ticket (TGT).
+- Any user can request a ticket for any service by default as long as they have a valid TGT.
+- Services are identified by Service Principle Names (SPN), which is a unique Identifier (ID) of a service instance.
+- If an account has an associated SPN, then they can obtain the password hash for the service account, though the attacker still has to be able to brute force the password.
+- User accounts associated with services are the most vulnerable, as administrators often sets the passwords for these accounts once and then forgets about them.
+- User accounts associated with SPNs are also protected by weaker encryption than SPNs associated with computer accounts (e.g., the LocalSystem account).
+- Service accounts are more valuable than typical user accounts since they often have significant privileges, which may allow the attacker to quickly move laterally within an AD domain and potentially escalate their privileges.
+- Kerberoasting is a MITRE ATT&CK sub-technique with the identifier **T1558.003**.
+
+#### Unconstrained/Constrained Delegation
+- Delegation, in a nutshell, allows a user or computer to impersonate another account.
+- Unconstrained delegation means that the user or computer can impersonate any service, whereas constrained delegation specifies what services the user or computer is allowed to impersonate by reusing end-user credentials.
+- Due to security implications, delegation is disabled by default, but has legitimate use.
+- For example, consider a mail server with webmail services enabled. When a user logs onto the webmail service to access their emails, they must be authenticated before gaining access to the resources they requested.
+- The webmail service authenticates the user, stores their TGT, then forwards their TGT to the DC on the user’s behalf any time they need to access resources within the domain from the webmail server.
+- Delegation can be attacked by compromising the machine or account that has delegation privileges, and then extracting all the TGTs in memory.
+- This technique would fall under MITRE ATT&CK technique ID 1558: Steal or Forge Kerberos Tickets.
+
+#### DCSync
+- DC replication is a valid and necessary function of AD that allows DCs to synchronize data between them.
+- Adversaries abuse this functionality by simulating the behavior of a DC and asking other DCs for an entire copy of their AD database, which includes user credentials.
+- For this attack to be successful, the adversary needs an account with administrator, domain administrator, or enterprise administrator privileges.
+- Alternatively, the adversary needs the permissions of Replicating Directory Changes, Replicating Directory Changes All, or Replicating Directory Changes in Filtered Set.
+- This attack is known under the MITRE ATT&CK technique ID **1003.006** as a credentialed access tactic.
+
+#### Pass-the-Ticket
+- As per MITRE:
+   - Adversaries may Pass the Ticket (PtT) using stolen Kerberos tickets to move laterally within an environment, bypassing normal system access controls.
+      - PtT is a method of authenticating to a system using Kerberos tickets without having access to an account's password [or password hash].
+      - Kerberos authentication can be used as the first step to lateral movement to a remote system.
+- When adversaries gain access to a host, they may attempt to dump OS credentials, which may present them with a valid Kerberos TGT.
+- The stolen TGT then allows adversaries to request service tickets for any service within the domain, effectively masquerading as that user on the domain.
+- PtT attacks are extremely effective following the compromise of a host with delegation enabled.
+- PtT is a defense evasion or lateral movement tactic with the MITRE ATT&CK sub-technique ID T550.003.
+
+#### Pass-the-Hash
+- A Pass-the-Hash (PtH) attack relies on weaknesses within New Technology Local Area Network (LAN) Manager (NTLM).
+- NTLM is a suite of security protocols that relies on challenge-response mechanisms to provide a Single Sign-On (SSO) solution.
+- The challenge response sequence for NTLM involves the following:
+   1. The client requesting access to a resource on a server sends a negotiation message.
+   2. The server sends back a challenge message, which is a 16-byte random number.
+   3. The client returns the challenge to the server, encrypted by the hash of the user’s password.
+   4. The server sends the encrypted challenge back to the DC to verify that the password hash used was correct.
+- Since the hash rather than the password is used during the encryption process, the hash is sufficient to access resources on behalf of the user when using NTLM security protocols.
+- While Kerberos is the default authentication protocol starting with Windows 2000 and later releases, NTLM security protocols are still used for legacy support, as well as a backup in the case that Kerberos fails to authenticate a user.
+- PtH is a MITRE ATT&CK sub-technique with the ID T1550.002 and can be used for lateral movement and defense evasion.
+
+#### Golden/Silver Ticket Attack
+- If an adversary has the NTLM password hash of service accounts, then they can issue tickets for those services.
+- For a typical service, the adversary can forge service tickets, which is known as a Silver Ticket attack.
+- In the worst case scenario, if the Kerberos Ticket Granting Ticket (KRBTGT) service account NTLM password hash is compromised, then the adversary can forge TGTs for any account in the AD, known as a Golden Ticket attack.
+- Golden and silver ticket attacks fall under the MITRE ATT&CK tactic credentialed access, and are referred to by the sub-technique IDs **1558.001** and **T558.002** respectively.
+
+#### User Access Control Bypass
+- In a nutshell, User Access Control (UAC) is a security feature implemented starting with Windows Vista that prompts the administrator for consent for applications requiring administrative access.
+- Administrative accounts also have a user-level access token and a superuser access token, so even administrators running programs from a privileged account need to indicate their approval in a prompt.
+- The primary intent of UAC is to ensure that most applications run with user-level privileges unless the administrator specifies otherwise, which would prevent accidental system changes or malware compromising a system.
+- UAC bypass circumvents the prompt so that it does not appear, which may seem trivial, but adversaries often only have remote access and cannot approve the prompt.
+- This corresponds to MITRE ATT&CK ID T1548.002 and can be used for privilege escalation and defense evasion.
+- Despite being a MITRE ATT&CK sub-technique, many methods have been discovered to mitigate this security feature.
+- UACMe is a Github repository that keeps track of some of them.
+
+### AD Tactics and Techniques | Execution and Persistence
+#### Execution
+- Upon hearing AD, the first thing that should come to mind is Windows OSs.
+- While not a feature of AD, the following utilities can be leveraged by an adversary to execute commands within AD environments as they primarily contain Windows OSs:
+   - **Windows PowerShell**: A powerful object-oriented, scripting language that is tightly integrated with the Windows OS.
+      - It is identified by MITRE ATT&CK sub-technique ID **T1059.001**.
+   - **CMD**: Command-Line Interface (CLI) that is not as robust as Windows PowerShell, but is still widely used within Windows environments.
+      - Threats actors often gain primary access through a CMD shell, then access PowerShell or other utilities.
+      - It is identified by MITRE ATT&CK sub-technique ID **T1059.003**.
+   - **Visual Basic**: Adversaries may abuse Visual Basic (VB) and its derivatives — including VBScript and Visual Basic for Applications (VBA)— for execution.
+      - VB is a programming language created by Microsoft with interoperability with many Windows technologies.
+      - Common abuses include embedding macros in Office documents, which are then executed with the VB Runtime Library.
+      - It is identified by MITRE ATT&CK sub-technique ID **T1059.005**.
+   - **Windows Management Instrumentation**: Windows Management Instrumentation (WMI) is a Windows administration feature that provides a consistent environment for local and remote access to Windows system components.
+      - Locally, it uses the WMI service for local execution, and Server Message Block (SMB) and Remote Procedure Call Service (RPCS) for remote execution.
+      - It is identified by MITRE ATT&CK technique ID **T1047**.
+   - **Component Object Model**: Component Object Model (COM) is an Interprocess Communication (IPC) component of the native Windows Application Programming Interface (API) that enables interaction between software objects or executable code that implements interfaces.
+      - Client objects can call methods of server objects, which are typically Dynamic-Link Libraries (DLLs) or executables.
+      - When used as an execution tactic, it is identified by MITRE ATT&CK sub-technique ID **T1559.001**.
+      - Existing COM objects can also be used to obtain persistence in an attack known as COM hijacking, which falls under MITRE ATT&CK sub-technique **T1546.015**.
+   - **Dynamic Data Exchange**: Another IPC component, Dynamic Data Exchange (DDE) is a client-server protocol for single use and/or continuous communications between applications.
+      - Once a link between applications is established, they can exchange strings, notifications, and requests for command execution.
+      - While DDE has been superseded by COM, it can still be enabled in Windows 10 and be used in Microsoft Office 2016 via registry keys.
+      - As with VB macros, DDE commands can be inserted into Office documents.
+      - It is identified by MITRE ATT&CK sub-technique ID **T1559.002**.
+
+
+#### Persistence
+- While not specific to AD, persistence in AD makes it very easy to set logon scripts for users, groups, and computers granted the adversary has sufficient privileges.
+- Adversaries can leverage Group Policy Objects (GPO) to configure settings including, but not limited to, the following that would enable persistence within a domain:
+   - Logon or startup scripts
+   - Registry keys on machines within a domain
+   - Malicious services
+   - User accounts
+
+### AD Tactics and Techniques | Discovery and Lateral Movement
+#### Discovery
+- AD is a database of sorts. Since it stores all objects known to it within the database, attackers who have compromised an AD domain and have the appropriate permissions can use the data within AD to gain more information about the objects in the domain.
+- For example, attackers can get lists of all users, groups, and computers within a domain, which can reveal critical information and where to find it.
+- Some native tools available to perform discovery tasks in AD are:
+   - **Directory Service Query**: Directory Service Query (DSQuery) is a CMD utility that queries the objects in AD by employing user-specified search criteria.
+   - **AD PowerShell Module**: A suite of PowerShell cmdlets that allow a user to query AD objects with Windows PowerShell.
+      - Some cmdlets in this suite used to gather information about a directory are **Get-AdUser**, **Get-ADDomain**, **Get-AdComputer**, **Get-AdGroup**, **Get-AdGroupMember**, and **Get-AdObject**.
+   - **Net Commands**: The net commands can be accessed through CMD and are primarily used to manage network resources.
+      - However, net commands can be used by adversaries to **enumerate users, shares, computers, groups, localgroups**, etc.
+   - **WMI**: Previously cited as an execution mechanism, adversaries also use WMI to enumerate hosts.
+      - WMI Command-line (WMIC) provides a utility usable through CMD to do this.
+      - WMIC can be used to **get processes, user accounts, groups**, etc.
+
+#### Lateral Movement
+- These services can be used to move laterally within AD environments. However, they are not limited to just AD environments and can be found on standalone workstations.
+   - **Remote Desktop Protocol**: Remote Desktop Protocol (RDP) allows users to access a Windows desktop remotely.
+      - This is disabled by default on workstations, but due to its utility, it is frequently enabled on servers and workstations.
+      - Adversaries can impersonate a legitimate user given the correct credentials.
+      - It is identified by MITRE ATT&CK sub-technique ID **T1021.001**.
+   - **SMB**: SMB is a network file-sharing protocol that allows applications to read and write files and request services from server programs in a computer network.
+      - Historically, many vulnerabilities have been found in SMB that proved devastating to computer networks globally.
+      - Conficker in 2008 and WannaCry in 2017 are worms that propagated using exploits against SMB that both resulted in millions of dollars in damages for the systems they infected.
+      - It is identified by MITRE ATT&CK sub-technique ID **T1021.002**.
+   - **Windows Remote Management**: Windows Remote Management (WinRM) is Microsoft’s implementation of the Web Services-Management protocol, which allows hardware and OSs from different vendors to interoperate.
+      - WinRM can be used to obtain management data locally and remotely through WMI.
+      - While WinRM is part of the OS, a listener must be enabled to perform remote operations.
+      - It is identified by MITRE ATT&CK sub-technique ID **T1021.006**.
+   - **Distributed COM**: Distributed COM (DCOM) extends COM functionality so that actions performed through COM can be done remotely by using Remote Procedure Call (RPC).
+      - By default, only administrators can activate and launch COM objects remotely.
+      - This lateral movement sub-technique corresponds to the MITRE ATT&CK ID **T1021.003**.
+
+### AD Tools
+#### BloodHound 
+- Bloodhound is a visualization tool that assists with finding paths to exploiting AD principles and other objects.
+- It maps things out as nodes, which represent AD objects such as users, groups, or computers.
+- Nodes are connected by links known as Edges. Edges are how nodes relate to one another.
+- Some examples of edges are:
+  <img width="962" height="786" alt="447fc6a9-08c4-4eb3-8a73-590129bbd4f4" src="https://github.com/user-attachments/assets/ea791a55-eb4f-45c6-af11-b820639ee076" />
+
+- **Bloodhound Components**
+   - **SharpHound** is the official data collector for BloodHound.
+      - It is written in C# and uses native Windows API functions and Lightweight Directory Access Protocol (**LDAP**) namespace functions to collect data from DCs and domain-joined Windows systems.
+      - SharpHound is an executable file uploaded after compromising a host to collect AD data.
+   - **AzureHound**, as per the Bloodhound documentation, uses the Az Azure PowerShell module and Azure AD PowerShell module for gathering data within Azure and Azure AD.
+      - NOTE: Microsoft Azure, commonly referred to as Azure, is a cloud-computing service created by Microsoft for building, testing, deploying, and managing applications and services through Microsoft-managed datacenters.
+   - **Bloodhound.py**, while not officially supported by the Bloodhound team, is a Python script that collects data from Linux, OSX, or Windows systems with Python installed.
+      - **Domain credentials are required to run the script**.
+   - **BloodHound Graphical User Interface (GUI)**
+      - This is where most analysis occurs. After obtaining a database of the target’s AD structure, the database is opened in the Bloodhound GUI where the user can begin analyzing paths.
+
+#### Mimikatz
+- **Mimikatz** is an open-source tool written in C by Benjamin Delphy, which interfaces with Windows security-related processes to conduct attacks such as **PtH**, **PtT**, **Golden Ticket attacks**, etc.
+- It is a popular tool used in many AD attacks. MITRE ATT&CK identifies Mimikatz under the **tool ID S0002**.
+
+#### PowerSploit
+- **PowerSploit** is an open-source, offensive security framework comprised of PowerShell modules and scripts that perform a wide range of tasks related to penetration testing such as code **execution**, **persistence**, **bypassing anti-virus**, **reconnaissance**, and **exfiltration**. MITRE ATT&CK refers to PowerSploit as **tool ID S0194**.
+
+#### PowerShell Empire
+- **PowerShell Empire** is a robust, post-exploitation framework that includes a **PowerShell 2.0 Windows agent** and a **pure Python 2.6/2.7 Linux agent**, which allows users to run several modules with capabilities including **privilege escalation**, **data collection**, and **persistence** on supported hosts.
+- It supports **Metasploit Framework (MSF) integration** as well.
+- MITRE ATT&CK has PowerShell Empire listed under the **tool ID S0363**.
+- Supported modules of note are **Mimikatz**, **PowerSploit**, and **Invoke-BypassUAC**, which is a collection of **UAC Bypass techniques**. 
+
+### Using AD Tools
+1. Open _BloodHound_ and log in via given credentials
+2. Change the display settings by selecting the gear icon and setting the following settings:
+   - **Node Collapse Threshold**: Default (5)
+   - **Edge Label Display**: Always Display
+   - **Node Label Display**: Always Display. This option can also be toggled by entering the CTRL key.
+   - **Query Debug Mode**: Default (Unselected)
+   - **Low Detail Mode**: Default (Unselected)
+   - **Dark Mode**: Default (Unselected)
+3. Right-Click the _Domain Admins_ group
+   - The options are as explained:
+      - Set as Starting Node: The location to start from within the domain. For example, if you had a subnet that consisted of standard users who could potentially fall victim to a phishing or drive-by attack, then you would set one of these users as your starting point.
+      - Set as Ending Node: The location to end at from within the domain. This is your high-value target to which you would like to gain access (e.g., they have intelligence value or they are a privileged user).
+      - Shortest Paths to Here: Calculates all shortest paths to this node. Depending on the size of the database, this operation may take some time. The shortest path is typically the path of least resistance to gaining access to the system or user from a red team perspective.
+      - Shortest Paths to Here from Owned: Calculates all the shortest paths to this node from the nodes that you marked as owned. For example, you manage to compromise a standard user via a phishing email. You mark them as owned to record that you have access to the user. You then use this functionality to check the shortest path to compromise a domain administrator in this case.
+      - Edit Node: Edit the data associated with the node.
+      - Mark Group as Owned: Allows the user to record an object as exploited, which enables other features such as Shortest Paths to Here from Owned as well as provides parameters for prebuilt queries.
+      - Unmark Group as High Value: High-value groups are indicated with the gem icon. There are also pre-built queries that find the shortest path to exploiting high-value targets. Unsurprisingly, the Domain Admins group is automatically marked as high-value.
+      - Delete Node: Deletes the node from the Neo4j database.
+4. Select _DOMAIN ADMINS@CONTOSO.LOCAL_
+5. Select the _Database Info_ tab. This displays info about the datbase, along with useful metadata. (ON PREM OBJECTS gives a count of types of objects in the database)
+6. Select the _Analysis_ tab. This stores useful pre-built quieries to examin the database.
+7. Select _Find Shortest Paths to Domain Admins_ and then Select _DOMAIN ADMINS@CONTOSO>LOCAL_
+
+### Effectively Detecting COmpromises in AD
+- As per Microsoft’s recommendations, a successful audit policy has the following attributes for effectively detecting compromises:
+   - High likelihood that occurrence indicates unauthorized activity
+   - Low number of false positives
+   - Occurrence should result in an investigative/forensics response
+- Two types of events should be monitored and generate alerts:
+   - Those events in which even a single occurrence indicates unauthorized activity
+   - An accumulation of events above an expected and accepted baseline
+      - In the first case, these events should never — or rarely — occur, so a single event should be investigated.
+         - An example of this is if your organization has a policy that states domain administrators should never log on to another host that is not a DC, yet a logon event for a domain administrator occurs on an end-user workstation.
+      - The second case is more complex to configure, and requires an understanding of typical user and system behavior within a network environment.
+         - An example of the second case is hitting a threshold for failed logons to detect password brute forcing attacks.
+- Attached is a list of Microsoft’s recommendation for events that should be investigated for further context (see Appendix L — Events to Monitor).
+- A Potential Criticality of High warrants investigation.
+- Potential criticalities of Medium or Low should only be investigated if they occur unexpectedly or in numbers that significantly exceed the expected baseline in a measured period of time.
+
+<img width="963" height="1057" alt="c76f5a0a-6b14-4988-b7a9-b5ada903a831" src="https://github.com/user-attachments/assets/0e306106-c68e-4822-ba02-e01b29452238" />
+
+### Generally Useful WinEvent Log IDs
+- The Windows Security event log is a good starting point for detecting Malicious Cyberspace Activity (MCA) on a host.
+- Windows Security event logs are also commonly forwarded to a Security Information Event Manager (SIEM).
+- Once MCA has been detected, these security event IDs may further illuminate what the adversary did while they were in the network.
+
+- **Event ID 4624** — An account was successfully logged on:
+   - When an account successfully authenticates and a session is generated, this event is generated.
+   - Information in the event includes who logged on, what method they used to log on (e.g., over the network or locally), and their privilege level.
+   - These event logs are very useful for monitoring who was logged on before an incident occurred, which may provide a lead to finding other MCA.
+
+- **Event ID 4625** — An account failed to log on:
+   - This event is generated if an account logon attempt failed when the account was already locked out.
+   - It also generates for a logon attempt after which the account was locked out.
+   - Adversaries may generate these logs when attempting to access different user accounts without the necessary credentials.
+
+- **Event ID 4648** — A logon was attempted using explicit credentials:
+   - This event occurs when a process attempts a logon by explicitly stating that account’s credentials.
+   - Normal occurrence of this may occur during batch jobs, using the runas command, WinRM logins, etc.
+   - These events may raise more flags if a privileged account was associated with the credentials.
+   - If **switching logins during a session, an event code 4648 is likely generated**.
+
+- **Event ID 4663** — An attempt was made to access an object:
+   - This event indicates that a specific operation was performed on an object.
+   - An object is defined as either a **filesystem**, **filesystem object**, **kernel**, **registry object**, or **removable device**.
+   - This event can illuminate what files or data the adversary was trying to access on the target.
+
+- **Event ID 4688** — A new process has been created:
+   - Documents each program or process that a system executes, its parent process, the user that spawned the process, privilege level, etc.
+   - While these events may generate a lot of noise, they are very useful in determining what occurred during an attack.
+
+- **Event ID 4672** — Special privileges assigned to new logon:
+   - Tracks whether any special privileges were associated with new logons.
+   - This is another noisy event since every logon of SYSTEM triggers this event.
+   - In accordance with monitoring privileged accounts, however, this event could provide valuable accountability and correlation data, e.g. which account initiated the new log on.
+
+#### Powershell logging
+- PwwerShell maintains its own event logs outside of Windows Security event logs.
+- Event IDs from the PowerShell logs of note include:
+   - **Event ID 4103**: Corresponds to Module Logging.
+      - Module logging records pipeline execution details as PowerShell executes including variable initialization and command invocations.
+      - Module logging records portions of scripts, some deobfuscated code, and some data formatted for output.
+      - This logging captures some details missed by other PowerShell logging sources, though it potentially may not capture the commands executed.
+   - **Event ID 4104**: Corresponds to PowerShell script block logging, which is not enabled by default.
+      - Script block logging records blocks of code as they are executed by the PowerShell engine, and captures the full contents of code executed by an attacker including scripts and commands.
+      - It captures the output of deobfuscated commands unlike event ID 4103.
+      - NOTE: Updated versions of Windows Management Framework (version 4.0 or 5.0 depending on your OS) may need to be installed to enable enhanced PowerShell logging.
+
+### Attacks and Identification Strategies
+- After the CDA detects a breach, they need to determine the actions undertaken on the target and how they were accomplished.
+- How did the adversary gain domain administrator privileges? How did they circumvent UAC?
+- The following list provides attack detection for common attacks that occur within AD environments discussed in previous tasks.
+- The presence of these events on their own is not indicative of an attack; the events need contextualization from earlier alerts to which a CDA can associate these events and determine an attack has occurred.
+   - **Kerberoast**: This can be detected under **event ID 4769** — A Kerberos service ticket was requested.
+      - If the **TicketEncryptionType is 0x17** in the event, it means the ticket is encrypted with the **Rivest Cipher (RC) 4 cipher**, which is a weaker algorithm that an adversary can break more easily.
+   - **DCSync**: Artifacts generated include events with the **ID 4662** — An operation was performed on an object, and the following possible Globally Unique Identifiers (GUID) and their associated control access right:
+      - **1131f6ad-9c07-11d1-f79f-00c04fc2dcd2**: Directory Service (DS) Replication Get Changes
+      - **1131f6ad-9c07-11d1-f79f-00c04fc2dcd2**: DS Replication Get Changes
+      - **All9923a32a-3607-11d2-b9be-0000f87a36b2**: DS Install Replica
+      - **89e95b76-444d-4c62-991a-0facbeda640c**: DS Replication Get Changes in Filtered Set
+      - A GUID is Microsoft’s implementation of a universally unique ID for distributed computing, which identifies COM object and class interfaces.
+      - NOTE: **Event ID 4662 may not be enabled by default** as it is a noisy event, and may require a registry revision to begin generating events.
+   - **PtH**: Recall that NTLM authentication needs to be used for a PtH attack to be successful.
+      - Logon attempts with NTLM authentication may be suspect.
+      - To detect PtH techniques, consult **event ID 4624** — An account was successfully logged on, and **4648** — A logon was attempted using explicit credentials.
+      - On the **source** that initiates the login, there is an **event ID 4624 with a logon type 9**, which is a **NewCredential logon type**, and a logon process of **SecLogo**, as well as an **event ID of 4648**.
+      - On the **target** that the adversary is attempting to log on to, there is another **event ID of 4624 with a logon type 3**, which means it was an **NTLM logon**.
+      - On the **DC**, there is an **event ID of 4768** — A Kerberos authentication ticket or TGT was requested, **4769** — A Kerberos service ticket was requested, and **4776** — The computer attempted to validate the credentials for an account.
+   - **PtT**: Since this attack allows the attacker to masquerade as a user by stealing a ticket rather than requesting a ticket, it is difficult to detect such an attack as their activity would appear as the legitimate user’s activity.
+      - However, users are allowed to renew tickets for up to seven days, which an adversary would likely do to prolong their access within the network and generates an **event ID 4770** — A Kerberos service ticket was renewed.
+      - The CDA needs to correlate these events with alerts and further analysis to determine that PtT occurred.
+      - Regardless, if a user account was compromised, the CDA can assume their ticket and their credentials were compromised.
+   - **Unconstrained/Constrained Delegation**: Delegation, at its core, simply allows for ticket reuse.
+      - If an adversary was able to compromise a target with delegation privileges, then they would be able to extract the TGTs of users connecting to that computer.
+      - Attacks leveraging ticket reuse have the same identification strategy as PtT attacks.
+   - **Golden Ticket Attack**: These attacks are also difficult to detect.
+      - An indication of a Golden Ticket Attack can be seen by checking the expiration date of a suspected forged TGT.
+      - The Microsoft default is 10 hours, but a forged TGT may have an expiration date much further in the future, as tools such as Mimikatz set longer expiration dates by default.
+      - In addition, some forged TGTs may be formatted differently from legitimate TGTs if the adversary did not make the effort to mimic the structure of an existing ticket.
+      - In the case of a more sophisticated adversary that attempts to blend in, the absence of logs in this case would be a giveaway if ticket forgery occurred.
+      - A user typically acquires a TGT from the DC’s Authentication Service (AS), which involves an AS Request from the client, and a AS Response from the server.
+      - This results in an **event ID of 4768** — A Kerberos authentication ticket (TGT) was requested.
+      - The absence of this event ID points toward ticket forgery, but needs correlation with other logs to confirm that this attack occurred.
+   - **Silver Ticket Attack**: Silver ticket forgery omits more authentication steps; no TGT is needed so the first two steps can be ignored.
+      - The next step of presenting a TGT to the Ticket Granting Service (TGS) for a service ticket and receiving one in this case is omitted as well.
+      - In short, no communication occurs with the DC when forging a service ticket.
+      - This means there would be an **absence of event IDs 4768 and 4769** when they should exist, correlated with any event logs that exist on the server that received the forged ticket.
+   - **UAC Bypass**: This can be detected through process tracing, which appears under **event ID 4688**.
+      - The following command finds binaries that automatically elevate from a user-level context to an administrative context:
+         - `Strings -sc:\windows\system32\*.exe | findstr /I autoelevate`
+- Binaries used in the past include eventviewer.exe and sdclt.exe. Sdclt.exe is a process associated with Windows Backup and Restore functionality.
+
+<img width="963" height="963" alt="b89decba-ff6a-41f1-9bd9-ccdd42c99268" src="https://github.com/user-attachments/assets/f4412625-46f6-4589-9deb-3b94418642fd" />
+
+- Using other native features of Windows OSs also generates log entries.
+- Much of the native features have their own event logs which usually provide more detail than the security logs.
+- Once you have an idea of which applications they exploited, you can search these logs for further information for lateral movement.
+- This list is not all inclusive.
+   - **SMB**
+   - **RDP**
+   - **WinRM**
+   - **WMI**
+
+### Identify AD Attacks
+- In this task, use the Elastic Stack to examine artifacts left from a few common AD attacks.
+- The attacks covered are:
+   - Kerberoast
+   - DCsync
+   - PtH
+- In addition, observe events of interest related to **command execution**, **lateral movement**, and **persistence**.
+
+1. Log into Kibana, go to the discover page, and enter the timerange as specified by the Intel
+2. 
+
+
+
+
+
+
+
 
 
 # MOD 17
