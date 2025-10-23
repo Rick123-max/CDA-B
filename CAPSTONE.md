@@ -609,13 +609,204 @@
 - In addition, observe events of interest related to **command execution**, **lateral movement**, and **persistence**.
 
 1. Log into Kibana, go to the discover page, and enter the timerange as specified by the Intel
-2. 
+2. Examine a Kerberoast attack first
+3. Filter for `event.module:windows_eventlog and event.code:4769`
+   - Toggle the following fields:
+      - winlog.event_data.ServiceName
+         - Name of the service or resource to be accessed. This can be a computer account or user account.
+      - winlog.event_data.TargetUserName
+         - Account attempting to access the resource. This can be a computer account or user account.
+      - winlog.event_data.TicketEncryptionType
+         - Encryption type that is obfuscating the ticket contents.
+         - Table 16.3-4 lists ticket encryption types from Microsoft documentation:
 
+           <img width="962" height="699" alt="4b809dd5-c481-4828-9174-5bc424f79e6c" src="https://github.com/user-attachments/assets/68732257-373b-437a-b608-23d39dc9f113" />
 
+### Identify AD Attacks | Kerberoasting
+- Kerberos utilizes symmetric key encryption to maintain confidentiality (i.e., the same key to encrypt and decrypt data).
+- The key is oftentimes derived from the password hash, though this depends on the cipher-suite selected, which is determined by the Ticket Encryption Type.
+- Both ticket encryption types of **0x12** and **0x17** use **hashes to encrypt**.
+- The cipher-suite associated with ticket encryption type 0x17 uses Rivest Cipher 4 (RC4) and Message Digest 5 (MD5).
+- RC4 is a fast encryption algorithm that has existed since the 1990s, and has been associated with a few notable security vulnerabilities, particularly with the Wireless Fidelity (Wi-Fi) standard Wired Equivalent Privacy (WEP).
+- The hashing algorithm used with this ticket encryption type is MD5, which has been deemed cryptographically insecure.
+- The cipher-suite associated with ticket encryption type 0x12 uses Advanced Encryption Standard 256 (AES256) and Secure Hashing Algorithm 1 (SHA1).
+- AES256 is a more modern encryption algorithm that is harder to break; the 256 denotes that the key length is 256 bits.
+- SHA1 is the hashing algorithm used, and is a stronger hashing function than Message Digest (MD) 5.
+- Tickets with the encryption types 0x17 are much easier to brute force, which allows an adversary to expand their access within the network.
+- Kerberoasting typically involves tickets with 0x17 as they are the most susceptible to cracking.
+- Some common service accounts that are likely to allow lateral movement as per ADsecurity.org are:
+   - **Advanced Group Policy Management (AGPM) Server**: Often has full control rights to all GPOs
+   - **Microsoft Structured Query Language (SQL) Server (MSSQL)/MSSQLSvc**: Administrator rights to SQL server(s), which often have interesting data
+   - **Forefront Identity Manager (FIM) Service**: Often has administrator rights to multiple AD Forests
+   - **Security Token Service (STS)**: VMWare SSO service that could provide backdoor VMWare access.
+      - Adversaries also often only search for accounts with administrative privileges.
+- In addition, the user requesting the tickets made several other service ticket requests within a very short time frame (within seconds), which is not typical user activity.
+- This activity would very likely be related to Kerberoasting.
 
+### Identifying AD Attacks | DCSync
+1. Run the query `event.module:windows_eventlog and message:"1131f6ad-9c07-11d1-f79f-00c04fc2dcd2"` (This looks for **DC Replication**)
+2. Toggle the fields **winlog.event_data.SubjectDomainName and user.name**
+   - **winlog.event_data.SubjectDomainName**
+      - The domain name of the replicated domain. If there are multiple domains in a forest, then this field denotes which domain was replicated
+   - **user.name**
+      - The username of the account that requested a DCSync.
+3. Expand the _Message_ field, this gives information on the alert that occured.
 
+### Identifying AD Attacks | Pass-The-Hash
+1. Run the query `event.module:windows_eventlog and event.code:4624 and winlog.event_data.LogonType:9 and winlog.event_data.LogonProcessName:SecLogo`
+2. Toggle the following fields:
+   - **user.name**
+   - **winlog.computer_name**
+   - **winlog.event_data.Subject**
+   - **LogonID**
+   - **winlog.event_data.TargetLogonID**
 
+### Identifying AD Attacks | Correlation
+1. Run the following query to find activity associated with the new session: `winlog.event_data.SubjectLogonId:0x32e6b93`
+2. Toggle the **event.code** field
 
+### Identifying AD Attacks | PowerShell Usage
+1. Sort the previous events in ascending order
+2. Toggle the **winlog.event_data.NewProcessName** and **winlog.event_data.CommanLine** fields
+3. Go to the 4648 event code and look at the _Message_ field
+   - The user is now attempting to authenticate to an administrator account in the domain on a DC whereas before it was limited to a local account.
+   - The associated process name was powershell.exe
+4. Deselect the two fields and run the query `event.code:4103 and winlog.user.name:patricia.hans and host.name:"cda-exec-3"`
+   - **EVENT CODE 4103**: PowerShell cmdlet was executed
+5. Toggle the **winlog.event_data.Payload** field to see the cmdlet and switches utilized
+6. Add `and (message:"cda-dc" or message:174.16.1.6)` to the query
+   - THis does not tell us who is running the session, but based on the previous **4648** code for using explicit credentials, we assume that _Patricia.Hans_ is using the ADMIN Credentials
+7. Run the following to determine the commands the attacker used on the DC: `event.code:4103 and winlog.user.name:administrator and host.name:"cda-dc.cda.corp"`
+8. Toggle the **winlog.event_data.ContextInfo** field
+   - Viewing this shows us that `C:\windows\system32\wsmprovhost.exe -Embedding` was ran on the server-side of a WinRM session.
+
+### Implementing Mitigations in AD
+- Microsoft provides many general recommendations for protecting AD against compromises.
+- Some of their security principles include: 
+#### Protect Privileged Accounts
+- From the common AD attacks chain, it becomes clear that privileged accounts pose a potential liability to network security.
+- Once a privileged account becomes compromised, it becomes trivial to move across the domain.
+- These accounts include:
+   - **Local administrators**
+   - **Domain administrators**
+   - **Enterprise administrators**
+- Other built-in accounts that a CDA may want to safeguard include:
+   - **Account operators**: Members can administer domain user and group accounts.
+   - **Schema administrators**: A universal group in the forest root domain with only the domain's built-in Administrator account as a default member; similar to the Enterprise Administrator group.
+      - Membership in the Schema Administrator group can allow an attacker to compromise the AD schema.
+   - **KRBTGT**: The KRBTGT account is the service account for the Kerberos Key Distribution Center (KDC) in the domain.
+      - This account has access to all account credentials stored in AD.
+      - This account is disabled by default and should never be enabled.
+   - **Print operators**: Members of this group can administer domain printers.
+   - **Read-only Domain Controllers (RODC)**: Contains all read-only DCs.
+   - **Replicator**: Supports legacy file replication in a domain.
+   - **Server operators**: Group members can administer domain servers.
+   - **Backup operators**: Members of this group can override security restrictions for the purpose of backing up or restoring files.
+- Use privileged accounts for only administration or their intended purpose.
+- A policy can be implemented that requires administrators to have a user account and a separate administrator account, which is only used for activities that require administrative privileges.
+- MITRE ATT&CK also has Privileged Account Management as a mitigation technique under the **identifier M1026**.
+
+#### Implement Principle of Least Privilege
+- From the Microsoft Windows Security Resource Kit:
+   - Always think of security in terms of granting the least amount of privileges required to carry out the task.
+   - If an application that has too many privileges should be compromised, the attacker might be able to expand the attack beyond what it would if the application had been under the least amount of privileges possible.
+   - For example, examine the consequences of a network administrator unwittingly opening an email attachment that launches a virus.
+   - If the administrator is logged on using the domain administrator account, the virus will have Administrator privileges on all computers in the domain and thus unrestricted access to nearly all data on the network.
+- Attackers are likely to follow the path of least resistance — there is even a tool dedicated to finding it that was covered earlier this lesson — which involves abusing simple mechanisms such as privilege overreach. 
+
+#### Consider Using a Secure Administrative Host
+- A Secure Administrative Host is a workstation or sever that has been configured for the purpose of creating a secure platform from which privileged accounts can perform administrative tasks.
+- Secure Administrative Hosts are dedicated solely to administrative functionality, and do not have extraneous applications such as email clients, productivity software, or web browsers.
+- In addition, multi-factor authentication is often used on these hosts via enabling smart cards.
+
+#### Configure an Audit Policy
+- If an adversary is determined — with enough time and resources — they are likely to succeed; all it takes is one user clicking on a phishing email after all.
+- Having a good audit policy in place allows the network defender to quickly identify which accounts and machines are compromised.
+- Configuring an audit policy for privileged accounts is essential as these accounts have high potential to cause damage.
+- MITRE ATT&CK also has auditing as a mitigative measure under the **technique ID M1047**.
+
+#### Secure DCs
+- DCs provide physical storage for AD Directory Services (AD DS) databases.
+- Securing DCs involves both technical and physical measures.
+- This involves maintaining network segmentation, keeping the latest version of Windows, implementing RDP restrictions, blocking internet access, etc.
+- In the case that these measures are not enough, the DC needs regular backups, as the only way to be sure that a compromise was remediated is to restore it to a last-known good state.
+- MITRE ATT&CK lists AD configuration as a mitigative measure, under **technique ID M1015**.
+
+- There are also a few Security Technical Implementation Guides (STIG) for AD that provide recommendations for a baseline of security.
+- Many of the recommendations overlap with Microsoft’s recommendations. The high severity findings for Administrative Sensitive machines are:
+   <img width="965" height="1536" alt="bf5bde60-2ce7-4e5d-86e2-e4b98101efd0" src="https://github.com/user-attachments/assets/52c6efb7-22c1-44da-b10a-9bfc4db4ef81" />
+
+### Thwarting Common AD Attacks
+- While common sense says to just disable unneeded services, several attacks target essential functions of AD that cannot be disabled.
+- Defending against these attacks is usually not as simple as disabling a service.
+
+#### Kerberoast
+- Microsoft provides a feature known as Managed Service Accounts (MSA) to maintain service accounts.
+- A Standalone Managed Service Account (sMSA) is a managed domain account that provides automatic password management, simplified SPN management, and the ability to delegate management to other administrators.
+- Group Managed Service Accounts (gMSA) take this feature a step further by extending the functionality over multiple servers.
+- When this feature is configured, the password for service accounts becomes significantly more difficult to brute force.
+- In addition, the password is also automatically changed after a specified time interval, further reducing the incidence of password brute force attempts.
+
+#### Pass-the-Hash
+- PtH attacks require local administrator privileges to execute.
+- Disabling or locking down the local built-in administrator account on hosts within the domain help prevent adversaries from using the account.
+- In addition, adversaries have a harder time extracting hashes from the local machine, since administrative privilege is needed to pull them out of memory.
+- In addition, using different accounts on local administrator accounts makes it more difficult for an adversary to leverage the local built-in administrator account on each workstation.
+
+#### Pass the Ticket
+- Unfortunately, PtT attacks are impossible to prevent as they are an integral part of AD functionality.
+- If an adversary can compromise an account, they can compromise the TGT of a user.
+- If this attack is discovered, then the ticket can be destroyed by using the klist purge command.
+- Analysis would have to be performed to determine the extent of the access gained by the adversary, but at a minimum, the user account password should be reset.
+
+#### DCSync and Unconstrained Delegation
+- For attacks such as DCSync and Unconstrained Delegation, limit the amount of privileges users have to only those absolutely required to perform their job role.
+- Case in point, standard users should not have Replicating Directory Changes.
+- If delegation is needed in an environment, whitelist the services that can be delegated.
+- In addition, ensure that privileged accounts cannot delegate privileges to prevent attackers from stealing tickets with administrative privileges.
+- The users that have Replication privileges can be found using the following command, where $DOMAIN is the domain’s Fully Qualified Domain Name (FQDN), and $GUID is one of the four GUIDs mentioned previously.
+   - `Get-ACL "AD:$DOMAIN" | Select-Object -Expandproperty access | Where-Object -property ObjectType -eq "$GUID"`
+- Figure 16.3-40 is an example of the output of the command being run with the DS Replication Get Changes GUID of 1131f6ad-9c07-11d1-f79f-00c04fc2dcd2.
+
+<img width="1680" height="880" alt="538541f8-57ed-4573-a7e5-5690bf2fa29c" src="https://github.com/user-attachments/assets/ff9593a8-07d4-49b7-a735-278748c5423f" />
+
+#### Golden/Silver Ticket Attacks
+- If an adversary was able to compromise the KRBTGT password hash, then they have had complete access to the machines within the AD domain, which includes the DC. If the DC has been compromised, then the best course of action is to restore the DC to the last-known good state.
+- To contain the impact of a Golden Ticket attack, the following actions need to be taken:
+   - The KRBTGT account password should be reset
+   - The administrator should force replication
+   - The administrator needs to reset the password again
+- The password needs to be reset twice because AD stores the current and previous password hashes, and in turn, tickets are still valid after one password reset.
+   - Resetting the password twice in quick succession breaks synchronization between DCs, which is why replication needs to be forced between DCs before resetting the password again.
+- Once these actions are performed, if the adversary uses the previous Golden Ticket to generate any TGTs, then an **event ID 4769** is generated.
+
+#### UAC Bypass
+- While there are mechanisms to circumvent UAC, the highest setting should still be configured which is not the default setting.
+- As per MITRE ATT&CK, if the UAC protection level of a computer is set to anything but the highest level, certain Windows programs can elevate privileges or execute some elevated COM objects without prompting the user through the UAC notification box. To monitor UAC Bypass, refer to process auditing logs.
+
+### Implementing Mitigations in AD
+- The mission partner, CDA Corporation, requests CPT assistance securing their networks. They provided the following information:
+   - There should be six domain administrators in the Domain Administrators group:
+      - Administrator
+      - Andrew.Oconnor
+      - Patti.Mcclure
+      - John.Doe
+      - Leonard.Blevins
+      - Trainee (temporary account for the CPT)
+   - The mission partner wants to follow Microsoft’s recommendations for securing their Domain Administrators and Local Administrator accounts.
+1. Open PowerShell as Administrator
+2. Run `Get-ADGroupMember "Domain Admins"
+3. Delete the old user: `Remove-ADUser -Identity Jackie.Ruiz -Confirm:$False`
+4. Remove other user account from Domain Admins Group: `Remove-ADGroupMember -Identity "Doman Admins" -Members Lucia.Hammond -Confirm:$False`
+5. Verify group Members
+6. Check delegation property for Domain Admins Group: `Get-AdGroupMember "Domain Admins" | Get-AdUser -Property AccountNotDelegated | Format-Table Name,AccountNotDelegated`
+7. Disable delegation for all Domain Admins: `Get-AdGroupMember "Domain Admins" | Set-AdUser -AccountNotDelegated $true`
+8. Verify command was successful
+9. Open GPM, right click cda.corp and select **Create a GPO in this domain and Link it here...**
+10. Schedule a task using _trainee_ account: `schtasks /create /RU cda\trainee /RP "Th1s is 0perational Cyber Training!" /SC once /ST 00:00 /TN test_privs /TR notepad.exe`
+11. Delete the task `schtasks /delete /TN test_privs`
+12. Run the same command as _ADMIN_: `schtasks /create /RU cda\administrator /RP "Th1s is 0perational Cyber Training!" /SC once /ST 00:00 /TN test_privs /TR notepad.exe`
+13. Delete the task again
 
 
 
