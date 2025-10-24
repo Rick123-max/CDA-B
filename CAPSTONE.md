@@ -1132,4 +1132,295 @@
 - Monitor access to remotely accessible sites for non standard user connections
 - Limit remote access to specific systemsUpdate passwords from defaults
 
+# MOD 19
+## APT 28 Attacks & Defenses
+### CORESHELL
+- The CORESHELL backdoor is used to download other modules and is installed by the initial exploit’s dropper, which deletes itself after starting CORESHELL.
+- CORESHELL is usually a Dynamic-Link Library (DLL) started using rundll32.
+- The **DLL file has been seen** in the following locations:
+   - **C:\Program Files\Common Files\Microsoft Shared\MSInfo\**
+   - **C:\Users\<user name>\AppData\Local\Microsoft\Help\**
+   - **C:\ProgramData\**
+- The **C2 configuration** was **encrypted in a file** or in the **registry**:
+   - **HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\<path>**
+   - **%ALLUSERSPROFILE%\msd**
+   - **%PROGRAMDATA%\msd**
+- **Persistence** was maintained by using **auto-start registry keys**, including the following:
+   - **HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\**
+   - **HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders\**
+   - **HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\ShellServiceOjbectDelayLoad\**
+   - **HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders\HKCU\Environment\UserInitMprLogonScript = <batchfile>**
+   - **%ALLUSERSPROFILE%\Application Data\Microsoft\Internet Explorer\Quick Launch\**
+   - **%USERPROFILE%\Application Data\Microsoft\Internet Explorer\Quick Launch\**
+- CORESHELL and second stage implants were also composed of various tools to include **keylogger**, **email address and file harvester**, **system information about the local computer**, and **remote communication with C2 servers**.
+- There was also a component designed to infect connected Universal Serial Bus (USB) storage devices so that information and C2 could be achieved with and captured from air-gapped computers that are not on the network when a user transfers the USB device to the air-gapped computer and back to the network again.
+   - This component registered a callback using the **RegisterDeviceNotification** Application Programming Interface (**API**) function to detect when a USB device was inserted into the compromised computer and harvest data from it, or infect the device.
+- Some of the filenames seen for various components of CORESHELL include:
+   - **runrun.exe**
+   - **vmware-manager.exe**
+   - **ctf.exe**
+   - **MicrosoftSup.dll**
+   - **mshelpc.dll**
+   - **winsys.dll**
+   - **advstorshell.exe**
+   - **credssp.dll**
+   - **mfxscom.dll**
+   - **api-ms-win-[random].dll**
+   - **run_x86.exe**
+   - **run_x64.exe**
+   - **psw.exe**
+   - **svchosl.exe**
+   - **svehost.exe**
+   - **servicehost.exe**
+   - **SupUpNvidia.exe**
+
+- Microsoft was also able to analyze and document the network protocols used by second-stage implants for C2, which included Hypertext Transfer Protocol (**HTTP**), **SMTP**, and **POP3**.
+- Initially the backdoor would test network connectivity by sending a series of **HTTP POST requests** to legitimate websites, and then **attempt communication with the configured C2 servers**.
+- The domains used for the C2 servers are designed to blend in with legitimate traffic, or look like **software update sites** to try and trick users from investigating them further.
+- In some cases, the malware had an additional component intended to use the **Open-SSL** (Secure Sockets Layer) library to **encrypt and route C2 communications** through a victim’s normally configured proxy server, such as may be configured for an enterprise or corporate network.
+- Other tools APT28 used that Microsoft documented in this report include:
+   - **WinExe** — A remote command-line execution tool similar to psexec.exe
+   - **Mimikatz** — A tool used to retrieve security tokens and hashes from memory (used for attacks like pass-the-hash)
+
+### Cannon
+- Palo Alto Networks Unit 42 threat research team reported on the **Cannon** malware used by APT28 in late 2018.
+- **Cannon** makes extensive use of **SMTP** and **POP3** (both encrypted and unencrypted protocols) rather than web-based C2 channels other threat actors tend to use.
+- Some of the initial compromises documented by Unit 42 included **Microsoft Word documents** being sent with spearphishing emails to **European government organizations**.
+- The file name included crash list (Lion Air Boeing 737).docx as a lure for victims to open it.
+- This document had **malicious macros and a payload** to download and save additional malware from a C2 server as:
+   - **%TEMP%\~temp.docm**
+   - **%APPDATA%\MSDN\~msdn.exe**
+
+- This additional malware was a variant of APT28 second-stage implants compiled in the **Delphi language** and **compressed** using the Ultimate Packer for Executables (**UPX**) packer.
+- **Cannon** sent various system reconnaissance data to the C2 servers which included the **output from the systeminfo.exe** and **tasklist commands**, as well as taking a s**creenshot of the victim’s host computer screen**.
+- In the cases documented by Unit 42, **Cannon sent emails** to sahro.bella7@post.cz with **various attachments and included a unique system identifier**.
+- The email was sent via **SMTPS** from one of the following accounts:
+   - bishtr.cam47@post.cz
+   - lobrek.chizh@post.cz
+   - cervot.woprov@post.cz
+   - trala.cosh2@post.cz
+- Attachment names included:
+   - i.ini
+   - sysscr.ops
+<img width="723" height="215" alt="05b95e4b-c432-4ee0-a272-3c0d3c6502ae" src="https://github.com/user-attachments/assets/6c266ed2-add2-49de-9410-8e882448b4ec" />
+
+- Once the compromised computer sent system information to the sahro.bella7@post.cz account, the threat actor sent an email to trala.cosh2@post.cz with commands in an American Standard Code for Information Interchange (ASCII) hexadecimal format for the compromised computer to execute.
+- The compromised computer retrieved these commands using POP3S from the trala.cosh2@post.cz account.
+- It is important to note that this historical data shows the tactic APT28 was using and that email addresses used in other campaigns are not the same.
+- One of the persistence mechanisms documented by Unit 42 was the use of DLL side-loading targeted at Microsoft Office products.
+- Recall from the Libraries lesson that DLL side-loading takes advantage of Windows Side-by-Side (SxS, or Win SxS) assembly system to load a duplicate, but vulnerable, DLL to the legitimate one.
+- The SxS system is used to manage multiple, and conflicting versions of the same DLL.
+- The registry key **HKCU\SOFTWARE\Microsoft\Office test\Special\Perf** is used by legitimate Office applications for performance testing, but is **not a normal function** used by most users.
+- Since the HKCU hive is able to be modified by the current user, this mechanism can be used without having elevated privileges necessary to modify keys in the HKLM hive.
+
+### Komplex or XAgent OS X
+- Unit 42 also analyzed and documented APT28 malware used on macOS, which is known as Komplex and XAgent OS X.
+- **Komplex** relies extensively on **HTTP** to **communicate with C2** servers using both **POST and GET HTTP methods**.
+   - The HTTP requests were **Base64** encoded using URL safe algorithms and may have also been encrypted using the **Rivest Cipher 4 (RC4) stream cipher**.
+   - The Komplex dropper is saved as **/tmp/content** and is used to also install additional malware used for persistence.
+   - The payloads downloaded were saved in the following locations:
+      - **/Users/Shared/.local/kextd**
+      - **/Users/Shared/com.apple.updates.plist**
+      - **/Users/Shared/start.sh**
+         - The start.sh script calls launchctl to automatically execute the Komplex backdoor each time the system starts:
+         - `#!/bin/sh launchctl load -w ~/Library/LaunchAgents/com.apple.updates.plist`
+
+- The main Komplex payload, kextd uses system calls to check for any debuggers present, then checks for external connectivity by performing HTTP GET requests to Google’s website before performing any of its malicious functions.
+- The payload communicates with its C2 servers using HTTP POST requests with the following structure:
+   - `/<random path>/<random string>.<valid web file extension>/?<random string>=<encrypted token>`
+- Komplex is capable of reconnaissance and starting a keylogger to obtain credentials.
+
+### Fysbis
+- Fysbis is malware designed for Linux systems and has been seen as both 32-bit and 64-bit ELF binaries.
+- Unit 42 released its analysis of Fysbis in 2016. Some of the IoCs related to the files and binaries Fysbis installed on compromised systems are:
+   - **/bin/rsyncd with root privileges**
+   - **~/.config/dbus-notifier/dbus-inotifier with non-root privileges**
+   - **/bin/ksysdefd with root privileges**
+   - **~/.config/ksysdef/ksysdefd with non-root privileges**
+
+- One of the versions of Fysbis that Unit 42 analyzed did not have the debugging symbols stripped from the binary.
+- Most malware uses techniques to remove debugging data from binaries — called stripped binaries — to hinder analytic and reverse-engineering efforts.
+- APT28 typically uses stripped binaries and the sample analyzed by Unit 42 is likely an oversight that was missed during their development and operational release/use processes.
+- The Fysbis backdoors were not deemed especially advanced, but that is likely due to the lack of security products available for Linux systems.
+- More advanced threat actors typically develop their malware to the state of the security systems present for a particular target so as to not “waste” development time and hold in reserve more prestigious exploitation techniques they have developed so they are not compromised unnecessarily. 
+
+### Drovorub
+- Drovorub is a malware toolset designed for Linux systems and was analyzed and reported on by the NSA and FBI in the August, 2020 Cybersecurity Advisory discussed earlier.
+- Drovorub consists of a kernel module rootkit, file transfer and port forwarding capabilities, and a C2 communication module.
+- Since Drovorub is installed as a kernel module rootkit, it can hide artifacts from commonly installed security products and system analysis tools.
+- The C2 communications can be detected at network boundaries since the rootkit only affects the infected system.
+- The kernel module rootkit is persisted through reboots unless Unified Extensible Firmware Interface (UEFI) secure boot is enabled in Full or Thorough modes of operation.
+- The different components of Drovorub communicate via JavaScript Object Notation (JSON) over WebSockets and use Rivest-Shamire-Adleman (RSA) public key encryption.
+- Drovorub has two components that are installed on compromised systems, the Drovorub-client and the Drovorub-kernel module.
+- The Drovorub-client’s initial configuration contains the server callback URL, a username and password, and an RSA public key for encryption embedded into the binary.
+- Once a successful callback and registration has been completed, the client writes a new JSON-formatted text configuration file to disk, which is hidden by the kernel module.
+- The Drovorub-kernel module creates system call hooks for the functions it needs to be able to hide files, processes, and sockets.
+- The kernel module then hides the client’s running processes, the executable and configuration files, and any network connections or listening ports owned by the client.
+- The Drovorub Cybersecurity Advisory report details how the client and server communications start, specifically using HTTP with the Upgrade request to use a WebSocket, which the server responds to with an HTTP 101 Switching Protocols response and starts the WebSocket handshake.
+<img width="619" height="257" alt="ae1a8aea-6952-4ded-b561-388f651a71dd" src="https://github.com/user-attachments/assets/4ce5d372-c9a8-4128-ac84-c519645d7637" />
+
+- Drovorub has a module designed for tunneling connections through the compromised system, allowing attackers additional access to the networks with which the compromised system is attached.
+- The port forwarding rules, or entries, in the tunnel module are not automatically hidden and the attacker must specifically instruct the kernel module to hide those connections.
+- The Drovorub-client and Drovorub-kernel module use a designated pseudo-device, **/dev/zero**, for communication between the two processes.
+- The **/dev/zero** pseudo-device is not intended for bi-directional Input/Output, but the kernel module hooks the function calls associated with reading and writing to this device, allowing it to re-write how the pseudo-device operates when the communication is between the client and kernel module.
+- The best method recommended in the Cybersecurity Advisory for detecting Drovorub is to use network-based detection techniques using a Network Intrusion Detection System (**NIDS**) to look for the JSON C2 traffic and Yara rules to identify the Drovorub components.
+
+### APT28 | Attacks and ATT&CK
+<img width="1213" height="4417" alt="300723d9-ff5c-40fd-8548-04aa9051fbd5" src="https://github.com/user-attachments/assets/e31d2739-8596-4737-b91c-07ee2bb9b55a" />
+
+#### Campaigns
+- APT28 attack campaigns are highly targeted. Each tool within the campaign has been customized with hardcoded target name space and IP addresses.
+- Domain spoofing and domain typo-squatting techniques have also been utilized to hide in the higher traffic connections from target space.
+- These tactics show a high degree of understanding of their targets as well, and show an intentional effort to decrease uncontrollable spread of their tools.
+- APT28 has been associated with attack campaigns using the following domains for C2 and phishing:
+   - linuxkrnl.net
+   - accounts.qooqle.com
+   - accounts-gooogle.com
+   - misdepatrment.com
+   - actblues.com
+      - misdepatrment and actblues were used for spoofing legitimate departments and donation sites for specific campaigns, while the others were used across multiple spearphishing campaigns.
+- Spearphishing campaigns have also been correlated with APT28 using very targeted verbiage and attachments to increase click through and exploitation.
+   - For example, the DCCC and DNC hack used an attachment named hillary-clinton-favorable-rating.xlsx to lure recipients into opening the document. 
+<img width="965" height="2060" alt="029cd1f7-e16d-4736-afef-09c921f69c9f" src="https://github.com/user-attachments/assets/116b4b36-1d2a-4c0f-8ac6-605bbd1970ab" />
+
+- APT28 has been seen using services like the bit.ly URL shortener to mask URLs for multiple attack campaigns.
+- In some cases a more generic Google account compromise notification has been used to lure unsuspecting targets to compromised and spoofed websites like the following:
+<img width="465" height="409" alt="706a395b-e517-4a07-98cb-88088a699820" src="https://github.com/user-attachments/assets/8715a2b3-e7e7-4b17-8f87-2a5da2689281" />
+
+### Malware Documents Analysis
+1. Open CLI and navigate to the _C:\Users\trainee\Desktop\OfficeMalScanner_ and perform a directory listing
+   - **OfficMalScanner** is a standalone tool that can scan or analyze Office documents for the presence of shellcode, Portable Executable (PE) binaries and Visual Basic (VB) macro code.
+   - This particular tool is able to perform heuristics analysis on older Office documents, but can only uncompress, or inflate, newer Office document formats for manual analysis and identification of binary .bin files in the archive.
+   - The newer Microsoft Open Extensible Markup Language (XML) format based Office documents are compressed archives that contain separate files and directories for things like embedded images, attachments, or other embedded files.
+   - These embedded files, which may be objects like Portable Document Format (PDF) documents, music files, or executables, all have extensions in the uncompressed directory structure that end in .bin.
+   - VB macros in these archives are stored in a file called **vbaProject.bin**.
+   - Older Office formats, pre-2007, use a Microsoft Compound File Binary (CFB), also known as Object Linking and Embedding 2 (OLE2), which contains streams of data for the different components, all in the same complex file.
+   - **OfficeMalScanner** can scan for shellcode heuristics and PE files in the vbaProject.bin file, after it has been extracted from the archive.
+2. Run the following to view help and usage: `OfficeMalScanner.exe`
+   - The relevant options for this workflow are the **scan**, **info**, and **inflate** options.
+   - Notice the warning. Since this exercise is being conducted in a training range, analysis of these documents is not being conducted in a sandboxed environment.
+   - Notice the formula OfficeMalScanner uses to assign its Malicious index rating:
+      - **Executable** files have an index of **20**
+      - **Code** included in the file has an index of **10**
+      - **Strings** that are associated with **Windows API calls**, like memory allocation, have an index of **2O**
+      - **LE** objects have an index of **1**
+         - The combination of these items increases the index **OfficeMalScanner** uses and the higher the index, the more likely the file is actually malicious.
+   - **NOTE**: You should always analyze unknown files in an isolated and sandbox environment to prevent the accidental execution of malware.
+   - The files in this lesson are carefully constructed to be used in the training environment.
+      - **Scan** — Scans for shellcode heuristics and PE files that exist in the OLE file and returns an index on how malicious the file appears to be based on the contents
+      - **Info** — Extracts the various OLE objects that are embedded in the file, including VB macros, and saves them to a directory for further analysis
+      - **Inflate** — Uncompresses the MS Open XML format Office document and saves the various files in a temporary directory; file that end in .bin should be analyzed and OfficeMalScanner can be run on those files individually, if they exist
+3. Change to the `..\M19L1 Document Examples\` directory and run a dir
+4. Run `OfficeMalScanner.exe good.doc scan` and 'OfficeMalScanner.exe good.doc info`
+   - Nothing Malicious was found on this document
+5. Run the same thing on the _bad.doc_
+   - Bad Stuff was found
+6. Look at the Macro files that were found
+7. Run the scans on the _unknown.doc_
+   - This file is in the newer Open XLM format and compressed, so we have to inflate it
+   - Run the INFLATE scan on this document
+
+### Command and Control
+- C2 allows the agent or malware to receive tasking from the APT. Over the years APT28 has had many different tools.
+- The use of SMTP and POP3 as C2 mechanisms was discussed earlier in this lesson.
+- A hunt methodology to identify any malware using SMTP as a C2 mechanism has several aspects and approaches.
+- One way to isolate this mail traffic is to stack the following filters together with the AND operator:
+   - Filter for destination port 25 (and any other outgoing mail ports logging is available for)
+   - Filter for traffic not destined to the internal mail serverFilter for traffic not originating from the internal mail server
+- These filters are combined using the AND operator to specifically filter for mail protocol traffic that is NOT using the internal mail server.
+- If each filter is used separately, the intended effect is much different, where ALL traffic to or from the mail server is filtered.
+- The important part is to ensure the filter chain is specifically scoped to mail protocols.
+- There may be legitimate reasons for this, but typical use would be to authenticate to the internal mail server and the corporate mail server would forward the email and make the necessary connections to external mail servers. 
+1. Open Kibana, Set Timeframe as required, and add the filter for smtp: `event.dataset.keyword is smtp`
+2. Toggle at minimum, the _smtp.from, smtp.to, smtp.subject, smtp.mail_from, smtp.recipeint_to, smtp.last_reply, destination.ip, and source.ip_ fields
+3. Filter for destnination Port 25 (SMTP)
+4. Filter out the internal mail server IP (source and destination)
+5. Pay attention to the _smtp.subject.keyword and smtp.to.keyword_ fields, in this case, they do not match.
+6. Filter on _smtp.to.keyword: violet.king_
+   - Looking in the _smtp.mail_from_ field, we can see all emails coming from _guy.silva@internet.com_ who is not in the domain, so he would not be able to authenticate
+7. Examine the top event:
+   - This shows the following to further investigation:
+      - 172.16.3.2 — internal host
+      - cda-acct-1.cda.corp — internal host
+      - 200.200.200.2 — external mail server
+      - inet-mail.internet.com — external mail server
+
+### POP3 Investigation
+- Now that we have identified the SMTP key data pieces, we can create a hypothesis about the client side, which is POP3
+   - **HYPOTHESIS:** An attacker that uses SMTP for C2 may also use POP3 for the client side of the C2 to mailboxes outside of the domain.
+1. From the Kibana Home dashboard, filter down on `destination.port: 110` and `event.dataset.keyword: network_connection` to see any POP3 traffic
+2. Ensure your timeframe is accurate
+3. Filter out traffic destined for the CDA Servers (174.16.1.0/24)
+4. Examine the _Message_ field in the First log that populated
+   - We can see the same cda-acct-1 (172.16.3.2) speaking to the 200.200.200.2 external email server
+5. Examining the _Logs Over Time_ graph, we can see that there are roughly 150 occurances every 30 minutes (5 times per minute)
+
+### Post Compromise
+- After any threat actor gains initial access, there is a period where the attacker attempts to survey the environment they have gained access to.
+- This includes identifying running processes, user accounts, and domain membership, among many other details, of the host and network configuration.
+- More advanced threats also attempt to identify and disable any monitoring, logging, or anti-virus/anti-malware software that is occurring or installed in order to prevent detection.
+- Both initial and subsequent remote access from an attacker tend to be over a command line or command shell interface since text is less noisy than graphical interfaces which require more network traffic in order to update the remote display and provide updates to things like mouse position.
+- Detection and hunting for post-compromise activity typically includes identifying anomalous processes and network traffic.
+- Some of the indicators that are most often used are:
+   - **Processes that execute out of temporary directories**
+   - **Processes that are executed from shell or scripting engines, like PowerShell, that are not known good**
+   - **Spikes in network traffic, especially after working hours, that are not typical of baseline network activity**
+   - **System inventory and reconnaissance-like commands run by non-system administrators, or intended only for system administrators**
+   - **Hosts probing for connectivity to other organizations, networks, or hosts that do not normally directly communicate**
+   - **Attempts to circumvent security applications and procedures**
+- More advanced actors are very quiet and try to generate as little traffic as possible to prevent detection.
+- Less sophisticated actors are not as refined and may have mistakes, misconfigurations, or break their operational security procedures in order to attempt to troubleshoot problems while they are connected to the compromised host.
+- This generates more network traffic and logging and is much more likely to be found.
+- A sophisticated actor often collects as much info as they can without generating too much traffic, troubleshoot offline, and come back later to continue their operations.
+- As was introduced earlier in the lesson, APT28, in particular, has a very sophisticated malware toolkit and has been operating for many years.
+- The TTPs they use have been developed and refined and they have the capability to operate undetected in networks for long periods of time.
+
+### Phishing Investigation
+<img width="599" height="465" alt="e6bb7913-0bd5-4d3a-80a0-fc4ed064d471" src="https://github.com/user-attachments/assets/705fc50a-abac-4b90-ba6f-3201d19a17d4" />
+
+- Some key items to consider from the email that was sent:
+   - **From**: ieupdate@internet.com
+   - **To**: camron.smith@cda.com
+   - **Time**: Monday Aug 9, 2021 @ 20:48
+   - **Attachment**: ieupdate.zip
+   - **Subject**: Urgent Microsoft Internet Explorer Update Needed
+
+1. From Kibana discover page, filter for smtp data
+2. Adjust your timeframe to the time of the attack
+3. Filter down on the username that was compromised
+4. Expand the log for the incident that matches the given information
+   - Note that this was not TLS encrypted comms and SMTP path included unknown IP addresses outside of CDA network.
+6. Filter for the unknown sender email (smtp.mail_from:ieupdate@internet.com) and remove the _camron.smith_ filter
+7. Adjust timeframe for earlier in the day
+8. To determine what else happened around this timeframe, go to the Home dashboard and adjust timeframe accordingly
+9. Filter for the workstation that the affected user was on (cda-acct-1@cda.corp in this case) from the _Log count by Node_ table
+10. As we know that they utilize phishing, filter down on the _file_create_ dataset
+11. Expand the first log and examine the message field
+
+#### Network Connections
+1. Remove the _file_creation_ dataset and filter for _process_creation_
+   - Looking at the logs, you can see that camron ran the program twice
+2. Remove this filter, and hone down on _network_connection_ events.
+   - Looks like the executable tried to open a network connection to _210.210.210.2_ on port 8080.
+
+### Investigation | Hunt | Compromise
+- Based on the previous investigation, higher headquarters tasked your CPT to conduct a further hunt to characterize any C2 identified, and identify if any post-compromise activities indicative of an APT are present on the network.
+   - Recall the initial investigation identified the cda-acct-1, 172.16.3.2, host as having many suspicious indicators of a compromise.
+   - The SOC identified a period of time on Aug 10, 2021 approximately 22:45 that may have malicious mail protocol activity.
+   - The directed hunt timeframe for this investigation is Aug 10, 2021 @ 22:30 to Aug 10, 2021 @ 23:00.
+- Exclude processes executables or parent processes that include the following in the executable name or as part of the execution path as they are a part of the range.
+   - Simspace
+   - Ruby
+   - Puppet
+   - ue-cmd
+   - <random numbers>.bat
+- Use the Discover - Elastic - Sysmon - Process and Network discover workspace, and any other available dashboard or visualization, existing or newly created, to conduct this portion of the investigation.
+
+1. Open up Kibana, and create a visualization to display Top 20 network protocols (network.protocol.keyword)
+2. 
+
+
+
+
+
 
