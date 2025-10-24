@@ -1416,8 +1416,7 @@
    - <random numbers>.bat
 - Use the Discover - Elastic - Sysmon - Process and Network discover workspace, and any other available dashboard or visualization, existing or newly created, to conduct this portion of the investigation.
 
-1. Open up Kibana, and create a visualization to display Top 20 network protocols (network.protocol.keyword)
-2. 
+## APT 10 Attack & Defenses
 
 
 
