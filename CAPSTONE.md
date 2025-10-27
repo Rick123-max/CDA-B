@@ -1758,3 +1758,14 @@ OpenProcess(
 ### Hunt for APT10
 1. Create new Visualization for any connections going to South Korean IP addresses.
 2. 
+
+
+
+# HYPOTHESIS DEVELOPMENT
+1. Copy Intel and change has to may have
+2. For data sources: google the T-Code, and go down to the **Detection** section and place down any event codes along with a description of them. **INCLUDE EVENT CODE 1 and 4688**
+3. Copy event code list and past into step 3. Look at powerpoint, and paste field names under relevant event codes. Look at MITRE page and add an intel piece for each of the fields that are applicable (.evtx, del, and one more). 3 pieces of intel are needed for eac hypothesis.
+
+# Hunt Information
+1. Nothing from Hypothesis will carry over to this section.
+2. You will be provided all info in the Intelligence section for each hunt.
